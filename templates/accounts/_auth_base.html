@@ -1,10 +1,11 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block body %}
 <div class="min-h-screen grid lg:grid-cols-2">
     <!-- Left brand panel -->
-    <div class="hidden lg:flex flex-col justify-between gradient-primary text-white p-12 relative overflow-hidden">
-        <div class="absolute inset-0 opacity-20" style="background-image:radial-gradient(circle at 20% 30%, white 1px, transparent 1px),radial-gradient(circle at 80% 70%, white 1px, transparent 1px);background-size:50px 50px"></div>
+    <div class="hidden lg:flex flex-col justify-between text-white p-12 relative overflow-hidden bg-cover bg-center" style="background-image:url('{% static 'images/hero-bg.png' %}')">
+        <div class="absolute inset-0 gradient-primary opacity-80 mix-blend-multiply"></div>
         <a href="{% url 'public:home' %}" class="relative flex items-center gap-2">
             <span class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center font-bold text-xl">T</span>
             <span class="text-2xl font-extrabold">{{ SITE_NAME }}</span>

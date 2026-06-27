@@ -1,9 +1,11 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Companies — {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
-<div class="gradient-primary text-white py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="relative text-white py-12 bg-cover bg-center overflow-hidden" style="background-image:url('{% static 'images/cta-bg.png' %}')">
+    <div class="absolute inset-0 gradient-primary opacity-80 mix-blend-multiply"></div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 class="text-3xl font-extrabold">Explore Companies</h1>
         <form method="get" class="mt-4 max-w-md flex gap-2">
             <input name="q" value="{{ request.GET.q }}" placeholder="Search companies" class="flex-1 rounded-xl px-4 py-3 text-slate-800 outline-none">

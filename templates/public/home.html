@@ -1,12 +1,20 @@
 {% extends "base.html" %}
-{% load humanize %}
+{% load humanize static %}
 {% block title %}{{ SITE_NAME }} — AI-Powered Recruitment & Job Portal{% endblock %}
 
 {% block content %}
 <!-- Hero -->
-<section class="relative overflow-hidden">
-    <div class="absolute inset-0 gradient-primary opacity-95"></div>
-    <div class="absolute inset-0 opacity-20" style="background-image:radial-gradient(circle at 20% 30%, white 1px, transparent 1px),radial-gradient(circle at 80% 70%, white 1px, transparent 1px);background-size:60px 60px"></div>
+<section class="relative overflow-hidden"
+         x-data="{ active: 0, slides: 3 }"
+         x-init="setInterval(() => active = (active + 1) % slides, 5000)">
+    <!-- Rotating background slides: 1 -> 2 -> 3 -> back to 1 -->
+    {% for img in "123" %}
+    <div class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
+         style="background-image:url('{% static 'images/hero-bg' %}{{ img }}.png')"
+         x-show="active === {{ forloop.counter0 }}" x-transition.opacity.duration.1000ms></div>
+    {% endfor %}
+    <div class="absolute inset-0 gradient-primary opacity-80 mix-blend-multiply"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/40 to-transparent"></div>
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 text-white">
         <div class="max-w-3xl" data-aos="fade-up">
             <span class="inline-flex items-center gap-2 bg-white/15 px-4 py-1.5 rounded-full text-sm font-medium mb-6">
@@ -37,6 +45,15 @@
                 <a href="{% url 'jobs:list' %}?work_mode=remote" class="hover:text-white underline">Remote</a>
                 <a href="{% url 'jobs:list' %}?job_type=internship" class="hover:text-white underline">Internships</a>
             </div>
+        </div>
+        <!-- Slide indicators -->
+        <div class="flex gap-2 mt-10">
+            {% for img in "123" %}
+            <button type="button" @click="active = {{ forloop.counter0 }}"
+                    class="h-1.5 rounded-full transition-all duration-300"
+                    :class="active === {{ forloop.counter0 }} ? 'w-8 bg-accent' : 'w-3 bg-white/40 hover:bg-white/70'"
+                    aria-label="Go to slide {{ forloop.counter }}"></button>
+            {% endfor %}
         </div>
     </div>
 </section>
@@ -161,12 +178,15 @@
 
 <!-- CTA -->
 <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <div class="rounded-3xl gradient-primary p-10 lg:p-16 text-center text-white relative overflow-hidden">
+    <div class="rounded-3xl p-10 lg:p-16 text-center text-white relative overflow-hidden bg-cover bg-center" style="background-image:url('{% static 'images/cta-bg.png' %}')">
+        <div class="absolute inset-0 gradient-primary opacity-75 mix-blend-multiply"></div>
+        <div class="relative">
         <h2 class="text-3xl lg:text-4xl font-extrabold">Ready to take the next step?</h2>
         <p class="mt-3 text-white/90 max-w-xl mx-auto">Join thousands of candidates and employers building the future of work.</p>
         <div class="mt-8 flex flex-wrap gap-4 justify-center">
             <a href="{% url 'accounts:register' %}" class="bg-white text-primary font-semibold px-8 py-3 rounded-xl hover:bg-slate-100">Create free account</a>
             <a href="{% url 'jobs:list' %}" class="bg-white/15 border border-white/30 text-white font-semibold px-8 py-3 rounded-xl hover:bg-white/25">Browse jobs</a>
+        </div>
         </div>
     </div>
 </section>
