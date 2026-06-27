@@ -3,11 +3,19 @@
 {% block page_title %}Notifications{% endblock %}
 
 {% block dashboard %}
-<div class="max-w-2xl">
-    <div class="flex items-center justify-between mb-6">
-        <h2 class="text-2xl font-extrabold" data-i18n="notif.title">Notifications</h2>
-        <form method="post" action="{% url 'notifications:mark_all_read' %}">{% csrf_token %}<button class="text-sm text-primary hover:underline" data-i18n="notif.mark_all">Mark all read</button></form>
+<div class="max-w-2xl" x-data="{ compose: false, audience: 'all' }">
+    <div class="flex items-center justify-between mb-6 gap-3">
+        <h2 class="text-2xl font-extrabold flex items-center gap-2"><i data-lucide="bell" class="w-6 h-6 text-primary"></i> <span data-i18n="notif.title">Notifications</span></h2>
+        <div class="flex items-center gap-3">
+            {% if user.is_admin_side %}
+            <button @click="compose = true" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg gradient-primary text-white text-sm font-semibold hover:opacity-90 shadow-lg shadow-primary/20">
+                <i data-lucide="send" class="w-4 h-4"></i> <span data-i18n="notif.new">New Notification</span>
+            </button>
+            {% endif %}
+            <form method="post" action="{% url 'notifications:mark_all_read' %}">{% csrf_token %}<button class="text-sm text-primary hover:underline" data-i18n="notif.mark_all">Mark all read</button></form>
+        </div>
     </div>
+
     <div class="space-y-2">
         {% for n in notifications %}
         <a href="{% url 'notifications:mark_read' n.pk %}" class="flex items-start gap-3 p-4 rounded-2xl border {% if n.is_read %}bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700{% else %}bg-primary/5 border-primary/20{% endif %}">
@@ -21,5 +29,65 @@
         </div>
         {% endfor %}
     </div>
+
+    {% if user.is_admin_side %}
+    <!-- Compose modal -->
+    <div x-show="compose" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4" x-transition.opacity>
+        <div class="absolute inset-0 bg-black/50" @click="compose = false"></div>
+        <div class="relative bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-100 dark:border-slate-700 w-full max-w-lg max-h-[90vh] overflow-y-auto" x-transition.scale.origin.center>
+            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-800">
+                <h3 class="font-bold flex items-center gap-2"><i data-lucide="send" class="w-5 h-5 text-primary"></i> <span data-i18n="notif.compose">Send Notification</span></h3>
+                <button @click="compose = false" class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <form method="post" action="{% url 'notifications:compose' %}" class="p-6 space-y-4">
+                {% csrf_token %}
+                <div>
+                    <label class="block text-sm font-semibold mb-1.5" data-i18n="notif.audience">Audience</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <label class="cursor-pointer"><input type="radio" name="audience" value="all" x-model="audience" class="peer sr-only"><div class="text-center text-sm py-2 rounded-xl border border-slate-300 dark:border-slate-600 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary font-medium" data-i18n="notif.aud_all">All</div></label>
+                        <label class="cursor-pointer"><input type="radio" name="audience" value="role" x-model="audience" class="peer sr-only"><div class="text-center text-sm py-2 rounded-xl border border-slate-300 dark:border-slate-600 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary font-medium" data-i18n="notif.aud_role">By role</div></label>
+                        <label class="cursor-pointer"><input type="radio" name="audience" value="user" x-model="audience" class="peer sr-only"><div class="text-center text-sm py-2 rounded-xl border border-slate-300 dark:border-slate-600 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary font-medium" data-i18n="notif.aud_user">Specific</div></label>
+                    </div>
+                </div>
+
+                <div x-show="audience === 'role'" x-transition>
+                    <label class="block text-sm font-semibold mb-1.5" data-i18n="notif.role">Role</label>
+                    <select name="role" class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-2.5 outline-none focus:ring-2 focus:ring-primary/30">
+                        {% for value, label in roles %}<option value="{{ value }}">{{ label }}</option>{% endfor %}
+                    </select>
+                </div>
+                <div x-show="audience === 'user'" x-transition>
+                    <label class="block text-sm font-semibold mb-1.5" data-i18n="notif.user">User</label>
+                    <select name="user" class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-2.5 outline-none focus:ring-2 focus:ring-primary/30">
+                        {% for u in all_users %}<option value="{{ u.pk }}">{{ u.full_name }} ({{ u.email }})</option>{% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1.5" data-i18n="notif.subject">Title</label>
+                    <input name="title" required placeholder="Notification title" data-i18n-placeholder="notif.title_ph" class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-2.5 outline-none focus:ring-2 focus:ring-primary/30">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1.5" data-i18n="notif.message">Message</label>
+                    <textarea name="body" rows="3" placeholder="Write your message..." data-i18n-placeholder="notif.message_ph" class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-2.5 outline-none focus:ring-2 focus:ring-primary/30"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1.5" data-i18n="notif.link">Link (optional)</label>
+                    <input name="url" placeholder="/jobs/ or https://..." class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-2.5 outline-none focus:ring-2 focus:ring-primary/30">
+                </div>
+                <label class="flex items-center gap-2 cursor-pointer select-none text-sm">
+                    <input type="checkbox" name="send_email" class="rounded border-slate-300 text-primary focus:ring-primary/30"> <span data-i18n="notif.also_email">Also send by email</span>
+                </label>
+
+                <div class="flex items-center gap-3 pt-2">
+                    <button class="inline-flex items-center gap-2 px-6 py-3 rounded-xl gradient-primary text-white font-semibold hover:opacity-90 shadow-lg shadow-primary/20">
+                        <i data-lucide="send" class="w-4 h-4"></i> <span data-i18n="notif.send">Send</span>
+                    </button>
+                    <button type="button" @click="compose = false" class="px-6 py-3 rounded-xl border border-slate-300 dark:border-slate-600 font-semibold hover:bg-slate-50 dark:hover:bg-slate-700" data-i18n="manage.cancel">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

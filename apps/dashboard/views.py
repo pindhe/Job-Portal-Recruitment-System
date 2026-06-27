@@ -371,6 +371,21 @@ def admin_users(request):
 
 
 @login_required
+def admin_user_toggle(request, pk):
+    if not request.user.is_admin_side:
+        return redirect("dashboard:home")
+    target = get_object_or_404(User, pk=pk)
+    if target == request.user or target.is_superuser:
+        messages.error(request, "You can't change this account's status.")
+        return redirect("dashboard:admin_users")
+    target.is_active = not target.is_active
+    target.save(update_fields=["is_active"])
+    state = "enabled" if target.is_active else "disabled"
+    messages.success(request, f"{target.full_name} has been {state}.")
+    return redirect(request.META.get("HTTP_REFERER", "dashboard:admin_users"))
+
+
+@login_required
 def admin_jobs(request):
     if not request.user.is_admin_side:
         return redirect("dashboard:home")

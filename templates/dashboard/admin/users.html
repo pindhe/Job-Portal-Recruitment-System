@@ -2,7 +2,7 @@
 {% block page_title %}Users{% endblock %}
 
 {% block dashboard %}
-<div x-data="{ showCreate: {{ open_modal|yesno:'true,false' }} }">
+<div x-data="{ showCreate: {{ open_modal|yesno:'true,false' }}, view: false, u: {} }">
     <!-- Header -->
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
         <div>
@@ -36,8 +36,9 @@
                         <th class="px-5 py-3" data-i18n="tbl.user">User</th>
                         <th class="px-5 py-3" data-i18n="tbl.email">Email</th>
                         <th class="px-5 py-3" data-i18n="tbl.role">Role</th>
-                        <th class="px-5 py-3" data-i18n="tbl.verified">Verified</th>
+                        <th class="px-5 py-3" data-i18n="tbl.status">Status</th>
                         <th class="px-5 py-3" data-i18n="tbl.joined">Joined</th>
+                        <th class="px-5 py-3 text-right" data-i18n="manage.actions">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
@@ -52,11 +53,27 @@
                         </td>
                         <td class="px-5 py-3 text-slate-500">{{ u.email }}</td>
                         <td class="px-5 py-3"><span class="text-xs px-2.5 py-1 rounded-full bg-primary/10 text-primary capitalize font-medium">{{ u.get_role_display }}</span></td>
-                        <td class="px-5 py-3">{% if u.email_verified %}<i data-lucide="badge-check" class="w-4 h-4 text-emerald-500"></i>{% else %}<i data-lucide="x" class="w-4 h-4 text-slate-300"></i>{% endif %}</td>
+                        <td class="px-5 py-3">
+                            {% if u.is_active %}<span class="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> <span data-i18n="adm.active">Active</span></span>
+                            {% else %}<span class="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> <span data-i18n="adm.disabled">Disabled</span></span>{% endif %}
+                        </td>
                         <td class="px-5 py-3 text-slate-500">{{ u.date_joined|date:"M d, Y" }}</td>
+                        <td class="px-5 py-3">
+                            <div class="flex items-center justify-end gap-2">
+                                <button type="button"
+                                        @click="u = { name: '{{ u.full_name|escapejs }}', email: '{{ u.email|escapejs }}', role: '{{ u.get_role_display|escapejs }}', phone: '{{ u.phone|escapejs|default:'—' }}', joined: '{{ u.date_joined|date:'M d, Y'|escapejs }}', initials: '{{ u.initials|escapejs }}', emailVerified: {{ u.email_verified|yesno:'true,false' }}, phoneVerified: {{ u.phone_verified|yesno:'true,false' }}, active: {{ u.is_active|yesno:'true,false' }} }; view = true"
+                                        class="inline-flex items-center gap-1 text-xs px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 font-semibold hover:bg-slate-200 dark:hover:bg-slate-600"><i data-lucide="eye" class="w-3.5 h-3.5"></i> <span data-i18n="adm.view">View</span></button>
+                                {% if u != request.user and not u.is_superuser %}
+                                <a href="{% url 'dashboard:admin_user_toggle' u.pk %}"
+                                   class="inline-flex items-center gap-1 text-xs px-3 py-1.5 rounded-lg font-semibold {% if u.is_active %}bg-red-50 text-danger dark:bg-red-900/20 hover:bg-red-100{% else %}bg-emerald-500 text-white hover:opacity-90{% endif %}">
+                                    {% if u.is_active %}<i data-lucide="user-x" class="w-3.5 h-3.5"></i> <span data-i18n="adm.disable">Disable</span>{% else %}<i data-lucide="user-check" class="w-3.5 h-3.5"></i> <span data-i18n="adm.enable">Enable</span>{% endif %}
+                                </a>
+                                {% endif %}
+                            </div>
+                        </td>
                     </tr>
                     {% empty %}
-                    <tr><td colspan="5" class="px-5 py-12 text-center text-slate-500">
+                    <tr><td colspan="6" class="px-5 py-12 text-center text-slate-500">
                         <span class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-700 text-slate-400 flex items-center justify-center mx-auto mb-3"><i data-lucide="users" class="w-6 h-6"></i></span>
                         <span data-i18n="adm.no_users">No users found.</span>
                     </td></tr>
@@ -113,6 +130,55 @@
                     <button type="button" @click="showCreate = false" class="px-6 py-3 rounded-xl border border-slate-300 dark:border-slate-600 font-semibold hover:bg-slate-50 dark:hover:bg-slate-700" data-i18n="manage.cancel">Cancel</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- View user detail modal -->
+    <div x-show="view" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4" x-transition.opacity>
+        <div class="absolute inset-0 bg-black/50" @click="view = false"></div>
+        <div class="relative bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden" x-transition>
+            <div class="gradient-primary p-6 text-white relative">
+                <button @click="view = false" class="absolute top-4 right-4 p-1 rounded-lg hover:bg-white/20"><i data-lucide="x" class="w-5 h-5"></i></button>
+                <div class="flex items-center gap-4">
+                    <span class="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur text-white text-xl flex items-center justify-center font-bold shrink-0" x-text="u.initials"></span>
+                    <div class="min-w-0">
+                        <h3 class="text-lg font-bold truncate" x-text="u.name"></h3>
+                        <p class="text-sm text-white/80 capitalize" x-text="u.role"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 space-y-4 text-sm">
+                <div class="flex items-center justify-between gap-3">
+                    <span class="text-slate-500" data-i18n="tbl.status">Status</span>
+                    <span x-show="u.active" class="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> <span data-i18n="adm.active">Active</span></span>
+                    <span x-show="!u.active" class="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> <span data-i18n="adm.disabled">Disabled</span></span>
+                </div>
+                <div class="flex items-center justify-between gap-3">
+                    <span class="text-slate-500" data-i18n="tbl.email">Email</span>
+                    <span class="font-medium text-right truncate flex items-center gap-1">
+                        <i x-show="u.emailVerified" data-lucide="badge-check" class="w-4 h-4 text-emerald-500"></i>
+                        <span x-text="u.email"></span>
+                    </span>
+                </div>
+                <div class="flex items-center justify-between gap-3">
+                    <span class="text-slate-500" data-i18n="adm.phone">Phone</span>
+                    <span class="font-medium text-right flex items-center gap-1">
+                        <i x-show="u.phoneVerified" data-lucide="badge-check" class="w-4 h-4 text-emerald-500"></i>
+                        <span x-text="u.phone"></span>
+                    </span>
+                </div>
+                <div class="flex items-center justify-between gap-3">
+                    <span class="text-slate-500" data-i18n="tbl.role">Role</span>
+                    <span class="font-medium capitalize" x-text="u.role"></span>
+                </div>
+                <div class="flex items-center justify-between gap-3">
+                    <span class="text-slate-500" data-i18n="tbl.joined">Joined</span>
+                    <span class="font-medium" x-text="u.joined"></span>
+                </div>
+            </div>
+            <div class="px-6 pb-6">
+                <button @click="view = false" class="w-full px-6 py-3 rounded-xl border border-slate-300 dark:border-slate-600 font-semibold hover:bg-slate-50 dark:hover:bg-slate-700" data-i18n="manage.close">Close</button>
+            </div>
         </div>
     </div>
 </div>

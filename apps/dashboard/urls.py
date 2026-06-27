@@ -30,6 +30,7 @@ urlpatterns = [
     # Admin
     path("admin-panel/", views.admin_dashboard, name="admin"),
     path("admin-panel/users/", views.admin_users, name="admin_users"),
+    path("admin-panel/users/<int:pk>/toggle/", views.admin_user_toggle, name="admin_user_toggle"),
     path("admin-panel/jobs/", views.admin_jobs, name="admin_jobs"),
     path("admin-panel/jobs/<int:pk>/approve/", views.admin_job_approve, name="admin_job_approve"),
     path("admin-panel/jobs/<int:pk>/reject/", views.admin_job_reject, name="admin_job_reject"),
