@@ -1,0 +1,24 @@
+{% extends "dashboard/base.html" %}
+{% block page_title %}AI Cover Letter{% endblock %}
+
+{% block dashboard %}
+<div class="max-w-3xl">
+    <h2 class="text-2xl font-extrabold">AI Cover Letter Generator</h2>
+    <p class="text-slate-500 mb-6">Generate a tailored cover letter in seconds.</p>
+    <form method="post" class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 grid sm:grid-cols-2 gap-4">
+        {% csrf_token %}
+        <div><label class="text-sm font-medium">Job Title</label><input name="job_title" class="w-full rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 px-4 py-3 outline-none focus:ring-2 focus:ring-primary/30"></div>
+        <div><label class="text-sm font-medium">Company</label><input name="company" class="w-full rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 px-4 py-3 outline-none focus:ring-2 focus:ring-primary/30"></div>
+        <div class="sm:col-span-2"><label class="text-sm font-medium">Key Skills (comma separated)</label><input name="skills" class="w-full rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 px-4 py-3 outline-none focus:ring-2 focus:ring-primary/30"></div>
+        <div class="sm:col-span-2"><button class="gradient-primary text-white font-semibold px-6 py-3 rounded-xl">Generate</button></div>
+    </form>
+    {% if letter %}
+    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 mt-6">
+        <div class="flex items-center justify-between mb-3"><h3 class="font-bold">Your Cover Letter</h3>
+            <button onclick="navigator.clipboard.writeText(document.getElementById('letter').innerText)" class="text-sm text-primary inline-flex items-center gap-1"><i data-lucide="copy" class="w-4 h-4"></i> Copy</button>
+        </div>
+        <pre id="letter" class="whitespace-pre-wrap font-sans text-sm text-slate-700 dark:text-slate-300">{{ letter }}</pre>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

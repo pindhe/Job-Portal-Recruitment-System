@@ -341,7 +341,9 @@ def admin_users(request):
         users = users.filter(role=role)
     if q:
         users = users.filter(Q(email__icontains=q) | Q(first_name__icontains=q) | Q(last_name__icontains=q))
-    return render(request, "dashboard/admin/users.html", {"users": users})
+    from apps.accounts.models import Role
+
+    return render(request, "dashboard/admin/users.html", {"users": users, "roles": Role.choices})
 
 
 @login_required

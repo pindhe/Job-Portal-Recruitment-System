@@ -1,0 +1,32 @@
+{% extends "dashboard/base.html" %}
+{% block page_title %}Users{% endblock %}
+
+{% block dashboard %}
+<div class="flex items-center justify-between mb-6">
+    <h2 class="text-2xl font-extrabold">Users</h2>
+    <form method="get" class="flex gap-2">
+        <input name="q" value="{{ request.GET.q }}" placeholder="Search..." class="rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-700 px-3 py-2 text-sm">
+        <select name="role" onchange="this.form.submit()" class="rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-700 px-3 py-2 text-sm">
+            <option value="">All roles</option>
+            {% for value, label in roles %}<option value="{{ value }}" {% if request.GET.role == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
+        </select>
+        <button class="px-4 py-2 rounded-lg gradient-primary text-white text-sm font-semibold">Filter</button>
+    </form>
+</div>
+<div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 overflow-hidden">
+    <table class="w-full text-sm">
+        <thead class="text-left text-slate-500 bg-slate-50 dark:bg-slate-700/50"><tr><th class="px-5 py-3">User</th><th>Email</th><th>Role</th><th>Verified</th><th>Joined</th></tr></thead>
+        <tbody>
+            {% for u in users %}
+            <tr class="border-t border-slate-100 dark:border-slate-700">
+                <td class="px-5 py-3 flex items-center gap-2"><span class="w-8 h-8 rounded-full gradient-primary text-white text-xs flex items-center justify-center font-semibold">{{ u.initials }}</span>{{ u.full_name }}</td>
+                <td class="text-slate-500">{{ u.email }}</td>
+                <td><span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-700 capitalize">{{ u.get_role_display }}</span></td>
+                <td>{% if u.email_verified %}<i data-lucide="badge-check" class="w-4 h-4 text-emerald-500"></i>{% else %}<i data-lucide="x" class="w-4 h-4 text-slate-300"></i>{% endif %}</td>
+                <td class="text-slate-500">{{ u.date_joined|date:"M d, Y" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
