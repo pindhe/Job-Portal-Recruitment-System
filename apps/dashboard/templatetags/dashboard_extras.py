@@ -6,6 +6,22 @@ register = template.Library()
 
 
 @register.simple_tag
+def manage_menu():
+    """Return content-management menu items grouped for the sidebar."""
+    from apps.dashboard.manage import manage_menu_items
+
+    items = manage_menu_items()
+    groups = []
+    for item in items:
+        group = next((g for g in groups if g["name"] == item["group"]), None)
+        if group is None:
+            group = {"name": item["group"], "items": []}
+            groups.append(group)
+        group["items"].append(item)
+    return groups
+
+
+@register.simple_tag
 def nav_link(url_name, icon, label, request, i18n_key=""):
     """Render a sidebar nav link with active-state highlighting."""
     try:

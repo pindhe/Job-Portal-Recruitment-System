@@ -1,0 +1,69 @@
+{% extends "dashboard/base.html" %}
+{% block page_title %}{{ cfg.label_plural }}{% endblock %}
+
+{% block dashboard %}
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div>
+        <h2 class="text-2xl font-extrabold flex items-center gap-2"><i data-lucide="{{ cfg.icon }}" class="w-6 h-6 text-primary"></i> {{ cfg.label_plural }}</h2>
+        <p class="text-slate-500 text-sm">{{ total }} <span data-i18n="manage.total_records">record(s)</span></p>
+    </div>
+    <div class="flex gap-2">
+        <a href="{% url 'dashboard:admin' %}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold hover:border-primary"><i data-lucide="arrow-left" class="w-4 h-4"></i> <span data-i18n="manage.back">Back</span></a>
+        {% if can_create %}
+        <a href="{% url 'dashboard:manage_create' key %}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl gradient-primary text-white text-sm font-semibold hover:opacity-90 shadow-lg shadow-primary/20"><i data-lucide="plus" class="w-4 h-4"></i> <span data-i18n="manage.add">Add new</span></a>
+        {% endif %}
+    </div>
+</div>
+
+<form method="get" class="mb-4 max-w-sm flex items-center bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3">
+    <i data-lucide="search" class="w-4 h-4 text-slate-400"></i>
+    <input name="q" value="{{ q }}" placeholder="Search..." data-i18n-placeholder="manage.search" class="w-full bg-transparent px-2 py-2.5 text-sm outline-none">
+    {% if q %}<a href="{% url 'dashboard:manage_list' key %}" class="text-slate-400 hover:text-danger"><i data-lucide="x" class="w-4 h-4"></i></a>{% endif %}
+</form>
+
+<div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead class="bg-slate-50 dark:bg-slate-900/40 text-slate-500">
+                <tr>
+                    {% for col in columns %}<th class="text-left font-semibold px-4 py-3 whitespace-nowrap">{{ col }}</th>{% endfor %}
+                    <th class="text-right font-semibold px-4 py-3" data-i18n="manage.actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
+                {% for row in rows %}
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/40">
+                    {% for cell in row.cells %}
+                    <td class="px-4 py-3 align-middle">
+                        {% if cell.type == 'bool' %}
+                            {% if cell.value %}<span class="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"><i data-lucide="check" class="w-3 h-3"></i> Yes</span>
+                            {% else %}<span class="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 dark:bg-slate-700"><i data-lucide="x" class="w-3 h-3"></i> No</span>{% endif %}
+                        {% else %}
+                            <span class="text-slate-700 dark:text-slate-200">{{ cell.value|truncatechars:60|default:"—" }}</span>
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                    <td class="px-4 py-3 text-right whitespace-nowrap">
+                        <a href="{% url 'dashboard:manage_update' key row.pk %}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-primary hover:bg-primary/10" title="Edit"><i data-lucide="pencil" class="w-4 h-4"></i></a>
+                        <a href="{% url 'dashboard:manage_delete' key row.pk %}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-danger hover:bg-red-50 dark:hover:bg-red-900/20" title="Delete"><i data-lucide="trash-2" class="w-4 h-4"></i></a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="{{ columns|length|add:1 }}" class="px-4 py-12 text-center text-slate-500">
+                    <span class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-700 text-slate-400 flex items-center justify-center mx-auto mb-3"><i data-lucide="{{ cfg.icon }}" class="w-6 h-6"></i></span>
+                    <span data-i18n="manage.empty">No records found.</span>
+                </td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% if is_paginated %}
+<div class="flex justify-center gap-1 mt-6">
+    {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}{% if q %}&q={{ q }}{% endif %}" class="px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary" data-i18n="common.prev">Prev</a>{% endif %}
+    <span class="px-4 py-2 rounded-lg gradient-primary text-white">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}{% if q %}&q={{ q }}{% endif %}" class="px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary" data-i18n="common.next">Next</a>{% endif %}
+</div>
+{% endif %}
+{% endblock %}

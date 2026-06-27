@@ -1,0 +1,46 @@
+{% extends "dashboard/base.html" %}
+{% block page_title %}{% if is_new %}New{% else %}Edit{% endif %} {{ cfg.label }}{% endblock %}
+
+{% block dashboard %}
+<div class="max-w-3xl">
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-extrabold flex items-center gap-2">
+            <i data-lucide="{{ cfg.icon }}" class="w-6 h-6 text-primary"></i>
+            {% if is_new %}<span data-i18n="manage.new">New</span>{% else %}<span data-i18n="manage.edit">Edit</span>{% endif %} {{ cfg.label }}
+        </h2>
+        <a href="{% url 'dashboard:manage_list' key %}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold hover:border-primary"><i data-lucide="arrow-left" class="w-4 h-4"></i> <span data-i18n="manage.back">Back</span></a>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 p-6 sm:p-8 space-y-5">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+        <div class="flex items-start gap-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl px-3 py-2.5">
+            <i data-lucide="alert-circle" class="w-4 h-4 mt-0.5 shrink-0"></i><div>{{ form.non_field_errors }}</div>
+        </div>
+        {% endif %}
+
+        {% for field in form %}
+        <div>
+            {% if field.field.widget.input_type == 'checkbox' %}
+            <label class="flex items-center gap-3 cursor-pointer select-none">
+                {{ field }}
+                <span class="text-sm font-semibold">{{ field.label }}</span>
+            </label>
+            {% else %}
+            <label class="block text-sm font-semibold mb-1.5">{{ field.label }}{% if field.field.required %} <span class="text-danger">*</span>{% endif %}</label>
+            {{ field }}
+            {% endif %}
+            {% if field.help_text %}<p class="text-xs text-slate-400 mt-1">{{ field.help_text }}</p>{% endif %}
+            {% for error in field.errors %}<p class="text-xs text-red-600 mt-1">{{ error }}</p>{% endfor %}
+        </div>
+        {% endfor %}
+
+        <div class="flex items-center gap-3 pt-2">
+            <button class="inline-flex items-center gap-2 px-6 py-3 rounded-xl gradient-primary text-white font-semibold hover:opacity-90 shadow-lg shadow-primary/20">
+                <i data-lucide="save" class="w-4 h-4"></i> <span data-i18n="manage.save">Save</span>
+            </button>
+            <a href="{% url 'dashboard:manage_list' key %}" class="px-6 py-3 rounded-xl border border-slate-300 dark:border-slate-600 font-semibold hover:bg-slate-50 dark:hover:bg-slate-700" data-i18n="manage.cancel">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

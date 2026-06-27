@@ -1,0 +1,21 @@
+{% extends "dashboard/base.html" %}
+{% block page_title %}Delete {{ cfg.label }}{% endblock %}
+
+{% block dashboard %}
+<div class="max-w-lg mx-auto">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 p-8 text-center">
+        <span class="w-14 h-14 rounded-2xl bg-red-50 dark:bg-red-900/20 text-danger flex items-center justify-center mx-auto"><i data-lucide="trash-2" class="w-7 h-7"></i></span>
+        <h2 class="text-xl font-extrabold mt-4"><span data-i18n="manage.delete_q">Delete this</span> {{ cfg.label }}?</h2>
+        <p class="text-slate-500 mt-2"><span data-i18n="manage.delete_warn">This action cannot be undone. You are about to delete:</span></p>
+        <p class="mt-3 font-semibold bg-slate-50 dark:bg-slate-900/40 rounded-xl px-4 py-3 break-words">{{ obj }}</p>
+
+        <form method="post" class="mt-6 flex items-center justify-center gap-3">
+            {% csrf_token %}
+            <a href="{% url 'dashboard:manage_list' key %}" class="px-6 py-3 rounded-xl border border-slate-300 dark:border-slate-600 font-semibold hover:bg-slate-50 dark:hover:bg-slate-700" data-i18n="manage.cancel">Cancel</a>
+            <button class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-danger text-white font-semibold hover:opacity-90">
+                <i data-lucide="trash-2" class="w-4 h-4"></i> <span data-i18n="manage.delete">Delete</span>
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

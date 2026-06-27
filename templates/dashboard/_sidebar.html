@@ -46,7 +46,20 @@
             {% nav_link 'dashboard:admin' 'gauge' 'Admin Panel' request i18n_key='side.admin_panel' %}
             {% nav_link 'dashboard:admin_users' 'users' 'Users' request i18n_key='side.users' %}
             {% nav_link 'dashboard:admin_jobs' 'briefcase' 'Jobs' request i18n_key='side.jobs' %}
-            <a href="/admin/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700"><i data-lucide="shield" class="w-5 h-5"></i> <span data-i18n="side.django_admin">Django Admin</span></a>
+
+            {% manage_menu as manage_groups %}
+            {% for group in manage_groups %}
+            <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase">{{ group.name }}</p>
+            {% for item in group.items %}
+            <a href="{% url 'dashboard:manage_list' item.key %}"
+               class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition {% if request.resolver_match.kwargs.key == item.key %}gradient-primary text-white font-semibold shadow{% else %}hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300{% endif %}">
+                <i data-lucide="{{ item.icon }}" class="w-5 h-5"></i> <span>{{ item.label }}</span>
+            </a>
+            {% endfor %}
+            {% endfor %}
+
+            <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase" data-i18n="side.system">System</p>
+            <a href="/admin/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300"><i data-lucide="shield" class="w-5 h-5"></i> <span data-i18n="side.django_admin">Django Admin</span></a>
         {% endif %}
 
         <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase" data-i18n="side.settings">Settings</p>

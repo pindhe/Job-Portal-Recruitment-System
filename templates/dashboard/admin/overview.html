@@ -1,5 +1,5 @@
 {% extends "dashboard/base.html" %}
-{% load humanize %}
+{% load humanize dashboard_extras %}
 {% block page_title %}Admin Panel{% endblock %}
 
 {% block dashboard %}
@@ -91,6 +91,20 @@
         <span class="w-11 h-11 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center mb-3"><i data-lucide="user-check" class="w-5 h-5"></i></span>
         <p class="text-2xl font-extrabold">{{ candidates_count|intcomma }}</p>
         <p class="text-sm text-slate-500" data-i18n="dash.candidates">Candidates</p>
+    </div>
+</div>
+
+<!-- Content management shortcuts -->
+<div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 mb-6">
+    <h3 class="font-bold flex items-center gap-2 mb-4"><i data-lucide="sliders-horizontal" class="w-5 h-5 text-primary"></i> <span data-i18n="dash.manage_content">Manage Content</span></h3>
+    {% manage_menu as manage_groups %}
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+        {% for group in manage_groups %}{% for item in group.items %}
+        <a href="{% url 'dashboard:manage_list' item.key %}" class="flex items-center gap-3 p-3 rounded-xl border border-slate-100 dark:border-slate-700 hover:border-primary hover:bg-primary/5 transition">
+            <span class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0"><i data-lucide="{{ item.icon }}" class="w-5 h-5"></i></span>
+            <span class="text-sm font-medium truncate">{{ item.label }}</span>
+        </a>
+        {% endfor %}{% endfor %}
     </div>
 </div>
 
