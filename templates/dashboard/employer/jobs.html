@@ -3,13 +3,13 @@
 
 {% block dashboard %}
 <div class="flex items-center justify-between mb-6">
-    <h2 class="text-2xl font-extrabold">My Jobs</h2>
-    <a href="{% url 'dashboard:job_create' %}" class="gradient-primary text-white font-semibold px-5 py-2.5 rounded-xl inline-flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i> Post a Job</a>
+    <h2 class="text-2xl font-extrabold" data-i18n="dash.my_jobs">My Jobs</h2>
+    <a href="{% url 'dashboard:job_create' %}" class="gradient-primary text-white font-semibold px-5 py-2.5 rounded-xl inline-flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i> <span data-i18n="dash.post_job">Post a Job</span></a>
 </div>
 <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 overflow-hidden">
     <table class="w-full text-sm">
         <thead class="text-left text-slate-500 bg-slate-50 dark:bg-slate-700/50">
-            <tr><th class="px-5 py-3">Title</th><th>Type</th><th>Status</th><th>Applicants</th><th>Posted</th><th></th></tr>
+            <tr><th class="px-5 py-3" data-i18n="tbl.title">Title</th><th data-i18n="tbl.type">Type</th><th data-i18n="tbl.status">Status</th><th data-i18n="tbl.applicants">Applicants</th><th data-i18n="tbl.posted">Posted</th><th></th></tr>
         </thead>
         <tbody>
             {% for job in jobs %}
@@ -20,12 +20,12 @@
                 <td>{{ job.apps }}</td>
                 <td class="text-slate-500">{{ job.created_at|date:"M d" }}</td>
                 <td class="text-right pr-5 space-x-3">
-                    <a href="{% url 'dashboard:job_applicants' job.pk %}" class="text-primary hover:underline">Applicants</a>
-                    <a href="{% url 'dashboard:job_edit' job.pk %}" class="text-slate-500 hover:text-primary">Edit</a>
+                    <a href="{% url 'dashboard:job_applicants' job.pk %}" class="text-primary hover:underline" data-i18n="dash.applicants">Applicants</a>
+                    <a href="{% url 'dashboard:job_edit' job.pk %}" class="text-slate-500 hover:text-primary" data-i18n="common.edit">Edit</a>
                 </td>
             </tr>
             {% empty %}
-            <tr><td colspan="6" class="px-5 py-12 text-center text-slate-500"><i data-lucide="briefcase" class="w-10 h-10 mx-auto text-slate-300"></i><p class="mt-2">No jobs yet. Post your first job!</p></td></tr>
+            <tr><td colspan="6" class="px-5 py-12 text-center text-slate-500"><i data-lucide="briefcase" class="w-10 h-10 mx-auto text-slate-300"></i><p class="mt-2" data-i18n="emp.no_jobs_first">No jobs yet. Post your first job!</p></td></tr>
             {% endfor %}
         </tbody>
     </table>

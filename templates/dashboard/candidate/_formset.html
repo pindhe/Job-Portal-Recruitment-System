@@ -1,6 +1,6 @@
 <section class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700"
          x-data="{ count: {{ formset.total_form_count }} }">
-    <h3 class="font-bold mb-4 flex items-center gap-2"><i data-lucide="{{ icon }}" class="w-5 h-5 text-primary"></i> {{ title }}</h3>
+    <h3 class="font-bold mb-4 flex items-center gap-2"><i data-lucide="{{ icon }}" class="w-5 h-5 text-primary"></i> <span{% if title_key %} data-i18n="{{ title_key }}"{% endif %}>{{ title }}</span></h3>
     {{ formset.management_form }}
     <div class="space-y-4" id="forms-{{ formset.prefix }}">
         {% for f in formset %}
@@ -14,7 +14,7 @@
                 </div>
                 {% endif %}
             {% endfor %}
-            {% if formset.can_delete %}<label class="flex items-center gap-2 text-xs text-danger sm:col-span-2">{{ f.DELETE }} Remove</label>{% endif %}
+            {% if formset.can_delete %}<label class="flex items-center gap-2 text-xs text-danger sm:col-span-2">{{ f.DELETE }} <span data-i18n="res.remove">Remove</span></label>{% endif %}
         </div>
         {% endfor %}
     </div>

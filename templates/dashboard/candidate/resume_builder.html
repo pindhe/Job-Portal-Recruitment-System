@@ -18,39 +18,39 @@
 <form method="post" enctype="multipart/form-data" class="max-w-4xl space-y-6">
     {% csrf_token %}
     <div class="flex items-center justify-between">
-        <div><h2 class="text-2xl font-extrabold">Resume Builder</h2><p class="text-slate-500">Build a profile recruiters love.</p></div>
+        <div><h2 class="text-2xl font-extrabold" data-i18n="dash.resume_builder">Resume Builder</h2><p class="text-slate-500" data-i18n="res.resume_sub">Build a profile recruiters love.</p></div>
         <div class="flex gap-2">
-            <a href="{% url 'dashboard:resume_preview' %}" class="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 font-semibold text-sm">Preview</a>
-            <button class="gradient-primary text-white font-semibold px-5 py-2.5 rounded-xl text-sm">Save Resume</button>
+            <a href="{% url 'dashboard:resume_preview' %}" class="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 font-semibold text-sm" data-i18n="dash.preview">Preview</a>
+            <button class="gradient-primary text-white font-semibold px-5 py-2.5 rounded-xl text-sm" data-i18n="dash.save_resume">Save Resume</button>
         </div>
     </div>
 
     <section class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
-        <h3 class="font-bold mb-4 flex items-center gap-2"><i data-lucide="user" class="w-5 h-5 text-primary"></i> Basic Information</h3>
+        <h3 class="font-bold mb-4 flex items-center gap-2"><i data-lucide="user" class="w-5 h-5 text-primary"></i> <span data-i18n="res.basic_info">Basic Information</span></h3>
         <div class="grid sm:grid-cols-2 gap-4">
-            <div class="sm:col-span-2"><label class="text-sm font-medium">Headline</label>{{ form.headline }}</div>
-            <div class="sm:col-span-2"><label class="text-sm font-medium">Summary</label>{{ form.summary }}</div>
-            <div><label class="text-sm font-medium">Current Title</label>{{ form.current_title }}</div>
-            <div><label class="text-sm font-medium">Location</label>{{ form.location }}</div>
-            <div><label class="text-sm font-medium">Experience (years)</label>{{ form.experience_years }}</div>
-            <div><label class="text-sm font-medium">Expected Salary</label>{{ form.expected_salary }}</div>
-            <div><label class="text-sm font-medium">Availability</label>{{ form.availability }}</div>
-            <div><label class="text-sm font-medium">Date of Birth</label>{{ form.date_of_birth }}</div>
+            <div class="sm:col-span-2"><label class="text-sm font-medium" data-i18n="res.headline">Headline</label>{{ form.headline }}</div>
+            <div class="sm:col-span-2"><label class="text-sm font-medium" data-i18n="res.summary">Summary</label>{{ form.summary }}</div>
+            <div><label class="text-sm font-medium" data-i18n="res.current_title">Current Title</label>{{ form.current_title }}</div>
+            <div><label class="text-sm font-medium" data-i18n="res.location">Location</label>{{ form.location }}</div>
+            <div><label class="text-sm font-medium" data-i18n="res.exp_years">Experience (years)</label>{{ form.experience_years }}</div>
+            <div><label class="text-sm font-medium" data-i18n="res.expected_salary">Expected Salary</label>{{ form.expected_salary }}</div>
+            <div><label class="text-sm font-medium" data-i18n="res.availability">Availability</label>{{ form.availability }}</div>
+            <div><label class="text-sm font-medium" data-i18n="res.dob">Date of Birth</label>{{ form.date_of_birth }}</div>
             <div><label class="text-sm font-medium">LinkedIn</label>{{ form.linkedin }}</div>
             <div><label class="text-sm font-medium">GitHub</label>{{ form.github }}</div>
-            <div class="sm:col-span-2"><label class="text-sm font-medium">Resume File (PDF)</label>{{ form.resume_file }}</div>
-            <label class="flex items-center gap-2 text-sm">{{ form.open_to_remote }} Open to remote work</label>
-            <label class="flex items-center gap-2 text-sm">{{ form.is_public }} Public profile</label>
+            <div class="sm:col-span-2"><label class="text-sm font-medium" data-i18n="res.resume_file">Resume File (PDF)</label>{{ form.resume_file }}</div>
+            <label class="flex items-center gap-2 text-sm">{{ form.open_to_remote }} <span data-i18n="res.open_remote">Open to remote work</span></label>
+            <label class="flex items-center gap-2 text-sm">{{ form.is_public }} <span data-i18n="res.public">Public profile</span></label>
         </div>
     </section>
 
-    {% include "dashboard/candidate/_formset.html" with formset=skills title="Skills" icon="award" %}
-    {% include "dashboard/candidate/_formset.html" with formset=experience title="Experience" icon="briefcase" %}
-    {% include "dashboard/candidate/_formset.html" with formset=education title="Education" icon="graduation-cap" %}
-    {% include "dashboard/candidate/_formset.html" with formset=certs title="Certificates" icon="medal" %}
-    {% include "dashboard/candidate/_formset.html" with formset=langs title="Languages" icon="languages" %}
-    {% include "dashboard/candidate/_formset.html" with formset=projects title="Projects" icon="folder-git-2" %}
+    {% include "dashboard/candidate/_formset.html" with formset=skills title="Skills" title_key="res.skills" icon="award" %}
+    {% include "dashboard/candidate/_formset.html" with formset=experience title="Experience" title_key="res.experience" icon="briefcase" %}
+    {% include "dashboard/candidate/_formset.html" with formset=education title="Education" title_key="res.education" icon="graduation-cap" %}
+    {% include "dashboard/candidate/_formset.html" with formset=certs title="Certificates" title_key="res.certificates" icon="medal" %}
+    {% include "dashboard/candidate/_formset.html" with formset=langs title="Languages" title_key="res.languages" icon="languages" %}
+    {% include "dashboard/candidate/_formset.html" with formset=projects title="Projects" title_key="res.projects" icon="folder-git-2" %}
 
-    <div class="flex justify-end"><button class="gradient-primary text-white font-semibold px-8 py-3 rounded-xl">Save Resume</button></div>
+    <div class="flex justify-end"><button class="gradient-primary text-white font-semibold px-8 py-3 rounded-xl" data-i18n="dash.save_resume">Save Resume</button></div>
 </form>
 {% endblock %}

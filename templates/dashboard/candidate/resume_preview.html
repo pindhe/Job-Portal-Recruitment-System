@@ -4,8 +4,8 @@
 {% block dashboard %}
 <div class="max-w-3xl mx-auto">
     <div class="flex justify-between items-center mb-4 no-print">
-        <a href="{% url 'dashboard:resume_builder' %}" class="text-sm text-slate-500 hover:text-primary inline-flex items-center gap-1"><i data-lucide="arrow-left" class="w-4 h-4"></i> Edit</a>
-        <button onclick="window.print()" class="gradient-primary text-white font-semibold px-5 py-2.5 rounded-xl text-sm inline-flex items-center gap-2"><i data-lucide="printer" class="w-4 h-4"></i> Print / Save PDF</button>
+        <a href="{% url 'dashboard:resume_builder' %}" class="text-sm text-slate-500 hover:text-primary inline-flex items-center gap-1"><i data-lucide="arrow-left" class="w-4 h-4"></i> <span data-i18n="res.edit">Edit</span></a>
+        <button onclick="window.print()" class="gradient-primary text-white font-semibold px-5 py-2.5 rounded-xl text-sm inline-flex items-center gap-2"><i data-lucide="printer" class="w-4 h-4"></i> <span data-i18n="res.print_pdf">Print / Save PDF</span></button>
     </div>
     <div class="bg-white rounded-2xl p-10 shadow-lg text-slate-800" id="resume">
         <div class="border-b-2 border-primary pb-4">
@@ -13,16 +13,16 @@
             <p class="text-primary font-medium">{{ profile.headline|default:profile.current_title }}</p>
             <p class="text-sm text-slate-500 mt-1">{{ user.email }}{% if user.phone %} · {{ user.phone }}{% endif %}{% if profile.location %} · {{ profile.location }}{% endif %}</p>
         </div>
-        {% if profile.summary %}<section class="mt-5"><h2 class="text-sm font-bold uppercase tracking-wider text-primary mb-1">Summary</h2><p class="text-sm text-slate-600">{{ profile.summary }}</p></section>{% endif %}
-        {% if profile.experience.all %}<section class="mt-5"><h2 class="text-sm font-bold uppercase tracking-wider text-primary mb-2">Experience</h2>
-            {% for e in profile.experience.all %}<div class="mb-3"><p class="font-semibold">{{ e.title }} — {{ e.company }}</p><p class="text-xs text-slate-500">{{ e.start_date|default:"" }} – {% if e.is_current %}Present{% else %}{{ e.end_date|default:"" }}{% endif %}</p><p class="text-sm text-slate-600">{{ e.description }}</p></div>{% endfor %}</section>{% endif %}
-        {% if profile.education.all %}<section class="mt-5"><h2 class="text-sm font-bold uppercase tracking-wider text-primary mb-2">Education</h2>
+        {% if profile.summary %}<section class="mt-5"><h2 class="text-sm font-bold uppercase tracking-wider text-primary mb-1" data-i18n="res.summary">Summary</h2><p class="text-sm text-slate-600">{{ profile.summary }}</p></section>{% endif %}
+        {% if profile.experience.all %}<section class="mt-5"><h2 class="text-sm font-bold uppercase tracking-wider text-primary mb-2" data-i18n="res.experience">Experience</h2>
+            {% for e in profile.experience.all %}<div class="mb-3"><p class="font-semibold">{{ e.title }} — {{ e.company }}</p><p class="text-xs text-slate-500">{{ e.start_date|default:"" }} – {% if e.is_current %}<span data-i18n="res.present">Present</span>{% else %}{{ e.end_date|default:"" }}{% endif %}</p><p class="text-sm text-slate-600">{{ e.description }}</p></div>{% endfor %}</section>{% endif %}
+        {% if profile.education.all %}<section class="mt-5"><h2 class="text-sm font-bold uppercase tracking-wider text-primary mb-2" data-i18n="res.education">Education</h2>
             {% for ed in profile.education.all %}<div class="mb-2"><p class="font-semibold">{{ ed.degree }}{% if ed.field_of_study %}, {{ ed.field_of_study }}{% endif %}</p><p class="text-xs text-slate-500">{{ ed.institution }} · {{ ed.start_year }}–{{ ed.end_year }}</p></div>{% endfor %}</section>{% endif %}
-        {% if profile.skills.all %}<section class="mt-5"><h2 class="text-sm font-bold uppercase tracking-wider text-primary mb-2">Skills</h2>
+        {% if profile.skills.all %}<section class="mt-5"><h2 class="text-sm font-bold uppercase tracking-wider text-primary mb-2" data-i18n="res.skills">Skills</h2>
             <div class="flex flex-wrap gap-2">{% for s in profile.skills.all %}<span class="text-xs px-3 py-1 rounded-full bg-primary/10 text-primary">{{ s.name }}</span>{% endfor %}</div></section>{% endif %}
-        {% if profile.certificates.all %}<section class="mt-5"><h2 class="text-sm font-bold uppercase tracking-wider text-primary mb-2">Certificates</h2>
+        {% if profile.certificates.all %}<section class="mt-5"><h2 class="text-sm font-bold uppercase tracking-wider text-primary mb-2" data-i18n="res.certificates">Certificates</h2>
             {% for c in profile.certificates.all %}<p class="text-sm">{{ c.name }}{% if c.issuer %} — {{ c.issuer }}{% endif %}</p>{% endfor %}</section>{% endif %}
-        {% if profile.languages.all %}<section class="mt-5"><h2 class="text-sm font-bold uppercase tracking-wider text-primary mb-2">Languages</h2>
+        {% if profile.languages.all %}<section class="mt-5"><h2 class="text-sm font-bold uppercase tracking-wider text-primary mb-2" data-i18n="res.languages">Languages</h2>
             <p class="text-sm">{% for l in profile.languages.all %}{{ l.name }} ({{ l.proficiency }}){% if not forloop.last %}, {% endif %}{% endfor %}</p></section>{% endif %}
     </div>
 </div>

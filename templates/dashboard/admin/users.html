@@ -3,19 +3,19 @@
 
 {% block dashboard %}
 <div class="flex items-center justify-between mb-6">
-    <h2 class="text-2xl font-extrabold">Users</h2>
+    <h2 class="text-2xl font-extrabold" data-i18n="dash.users">Users</h2>
     <form method="get" class="flex gap-2">
-        <input name="q" value="{{ request.GET.q }}" placeholder="Search..." class="rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-700 px-3 py-2 text-sm">
+        <input name="q" value="{{ request.GET.q }}" placeholder="Search..." data-i18n-placeholder="adm.search_ph" class="rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-700 px-3 py-2 text-sm">
         <select name="role" onchange="this.form.submit()" class="rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-700 px-3 py-2 text-sm">
-            <option value="">All roles</option>
+            <option value="" data-i18n="adm.all_roles">All roles</option>
             {% for value, label in roles %}<option value="{{ value }}" {% if request.GET.role == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
         </select>
-        <button class="px-4 py-2 rounded-lg gradient-primary text-white text-sm font-semibold">Filter</button>
+        <button class="px-4 py-2 rounded-lg gradient-primary text-white text-sm font-semibold" data-i18n="adm.filter">Filter</button>
     </form>
 </div>
 <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 overflow-hidden">
     <table class="w-full text-sm">
-        <thead class="text-left text-slate-500 bg-slate-50 dark:bg-slate-700/50"><tr><th class="px-5 py-3">User</th><th>Email</th><th>Role</th><th>Verified</th><th>Joined</th></tr></thead>
+        <thead class="text-left text-slate-500 bg-slate-50 dark:bg-slate-700/50"><tr><th class="px-5 py-3" data-i18n="tbl.user">User</th><th data-i18n="tbl.email">Email</th><th data-i18n="tbl.role">Role</th><th data-i18n="tbl.verified">Verified</th><th data-i18n="tbl.joined">Joined</th></tr></thead>
         <tbody>
             {% for u in users %}
             <tr class="border-t border-slate-100 dark:border-slate-700">

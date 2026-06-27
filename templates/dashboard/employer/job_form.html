@@ -4,42 +4,42 @@
 {% block dashboard %}
 <form method="post" enctype="multipart/form-data" class="max-w-4xl space-y-6">
     {% csrf_token %}
-    <h2 class="text-2xl font-extrabold">{% if is_new %}Post a New Job{% else %}Edit Job{% endif %}</h2>
+    <h2 class="text-2xl font-extrabold">{% if is_new %}<span data-i18n="form.post_new">Post a New Job</span>{% else %}<span data-i18n="form.edit_job">Edit Job</span>{% endif %}</h2>
     {% if form.non_field_errors %}<div class="text-sm text-red-600">{{ form.non_field_errors }}</div>{% endif %}
 
     <section class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 grid sm:grid-cols-2 gap-4">
-        <div class="sm:col-span-2"><label class="text-sm font-medium">Job Title</label>{{ form.title }}{{ form.title.errors }}</div>
-        <div><label class="text-sm font-medium">Company</label>{{ form.company }}</div>
-        <div><label class="text-sm font-medium">Category</label>{{ form.category }}</div>
-        <div><label class="text-sm font-medium">Job Type</label>{{ form.job_type }}</div>
-        <div><label class="text-sm font-medium">Work Mode</label>{{ form.work_mode }}</div>
-        <div><label class="text-sm font-medium">Experience Level</label>{{ form.experience_level }}</div>
-        <div><label class="text-sm font-medium">Location</label>{{ form.location }}</div>
+        <div class="sm:col-span-2"><label class="text-sm font-medium" data-i18n="form.job_title">Job Title</label>{{ form.title }}{{ form.title.errors }}</div>
+        <div><label class="text-sm font-medium" data-i18n="form.company">Company</label>{{ form.company }}</div>
+        <div><label class="text-sm font-medium" data-i18n="form.category">Category</label>{{ form.category }}</div>
+        <div><label class="text-sm font-medium" data-i18n="form.job_type">Job Type</label>{{ form.job_type }}</div>
+        <div><label class="text-sm font-medium" data-i18n="form.work_mode">Work Mode</label>{{ form.work_mode }}</div>
+        <div><label class="text-sm font-medium" data-i18n="form.experience_level">Experience Level</label>{{ form.experience_level }}</div>
+        <div><label class="text-sm font-medium" data-i18n="form.location">Location</label>{{ form.location }}</div>
     </section>
 
     <section class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 space-y-4">
-        <div><label class="text-sm font-medium">Description</label>{{ form.description }}</div>
-        <div><label class="text-sm font-medium">Responsibilities</label>{{ form.responsibilities }}</div>
-        <div><label class="text-sm font-medium">Requirements</label>{{ form.requirements }}</div>
-        <div><label class="text-sm font-medium">Benefits</label>{{ form.benefits }}</div>
-        <div><label class="text-sm font-medium">Skills (comma separated)</label>{{ form.skills }}</div>
+        <div><label class="text-sm font-medium" data-i18n="form.description">Description</label>{{ form.description }}</div>
+        <div><label class="text-sm font-medium" data-i18n="form.responsibilities">Responsibilities</label>{{ form.responsibilities }}</div>
+        <div><label class="text-sm font-medium" data-i18n="form.requirements">Requirements</label>{{ form.requirements }}</div>
+        <div><label class="text-sm font-medium" data-i18n="form.benefits">Benefits</label>{{ form.benefits }}</div>
+        <div><label class="text-sm font-medium" data-i18n="form.skills_comma">Skills (comma separated)</label>{{ form.skills }}</div>
     </section>
 
     <section class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 grid sm:grid-cols-3 gap-4">
-        <div><label class="text-sm font-medium">Salary Min</label>{{ form.salary_min }}</div>
-        <div><label class="text-sm font-medium">Salary Max</label>{{ form.salary_max }}</div>
-        <div><label class="text-sm font-medium">Currency</label>{{ form.salary_currency }}</div>
-        <div><label class="text-sm font-medium">Vacancies</label>{{ form.vacancies }}</div>
-        <div><label class="text-sm font-medium">Min Experience (yrs)</label>{{ form.min_experience_years }}</div>
-        <div><label class="text-sm font-medium">Deadline</label>{{ form.deadline }}</div>
-        <div><label class="text-sm font-medium">Status</label>{{ form.status }}</div>
-        <label class="flex items-center gap-2 text-sm mt-6">{{ form.is_featured }} Featured</label>
-        <label class="flex items-center gap-2 text-sm mt-6">{{ form.is_urgent }} Urgent</label>
+        <div><label class="text-sm font-medium" data-i18n="form.salary_min">Salary Min</label>{{ form.salary_min }}</div>
+        <div><label class="text-sm font-medium" data-i18n="form.salary_max">Salary Max</label>{{ form.salary_max }}</div>
+        <div><label class="text-sm font-medium" data-i18n="form.currency">Currency</label>{{ form.salary_currency }}</div>
+        <div><label class="text-sm font-medium" data-i18n="form.vacancies">Vacancies</label>{{ form.vacancies }}</div>
+        <div><label class="text-sm font-medium" data-i18n="form.min_exp">Min Experience (yrs)</label>{{ form.min_experience_years }}</div>
+        <div><label class="text-sm font-medium" data-i18n="form.deadline">Deadline</label>{{ form.deadline }}</div>
+        <div><label class="text-sm font-medium" data-i18n="form.status">Status</label>{{ form.status }}</div>
+        <label class="flex items-center gap-2 text-sm mt-6">{{ form.is_featured }} <span data-i18n="form.featured">Featured</span></label>
+        <label class="flex items-center gap-2 text-sm mt-6">{{ form.is_urgent }} <span data-i18n="form.urgent">Urgent</span></label>
     </section>
 
     <div class="flex justify-end gap-2">
-        <a href="{% url 'dashboard:employer_jobs' %}" class="px-5 py-3 rounded-xl border border-slate-300 dark:border-slate-600 font-semibold">Cancel</a>
-        <button class="gradient-primary text-white font-semibold px-8 py-3 rounded-xl">{% if is_new %}Publish Job{% else %}Save Changes{% endif %}</button>
+        <a href="{% url 'dashboard:employer_jobs' %}" class="px-5 py-3 rounded-xl border border-slate-300 dark:border-slate-600 font-semibold" data-i18n="form.cancel">Cancel</a>
+        <button class="gradient-primary text-white font-semibold px-8 py-3 rounded-xl">{% if is_new %}<span data-i18n="form.publish">Publish Job</span>{% else %}<span data-i18n="form.save_changes">Save Changes</span>{% endif %}</button>
     </div>
 </form>
 {% endblock %}

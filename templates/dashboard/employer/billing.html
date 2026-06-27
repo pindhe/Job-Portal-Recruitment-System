@@ -3,21 +3,21 @@
 {% block page_title %}Billing{% endblock %}
 
 {% block dashboard %}
-<h2 class="text-2xl font-extrabold mb-6">Billing & Subscriptions</h2>
+<h2 class="text-2xl font-extrabold mb-6" data-i18n="dash.billing">Billing & Subscriptions</h2>
 
 <div class="grid lg:grid-cols-3 gap-6 mb-6">
     <div class="rounded-2xl p-6 gradient-primary text-white">
-        <p class="text-white/80 text-sm">Current Plan</p>
-        <p class="text-2xl font-extrabold mt-1">{% if active %}{{ active.plan.name }}{% else %}Free{% endif %}</p>
-        {% if active %}<p class="text-white/80 text-sm mt-2">Renews {{ active.expires_at|date:"M d, Y" }}</p>{% endif %}
-        <a href="{% url 'payments:pricing' %}" class="mt-4 inline-block bg-white/20 px-4 py-2 rounded-lg text-sm font-semibold">Upgrade plan</a>
+        <p class="text-white/80 text-sm" data-i18n="dash.current_plan">Current Plan</p>
+        <p class="text-2xl font-extrabold mt-1">{% if active %}{{ active.plan.name }}{% else %}<span data-i18n="bill.free">Free</span>{% endif %}</p>
+        {% if active %}<p class="text-white/80 text-sm mt-2"><span data-i18n="bill.renews">Renews</span> {{ active.expires_at|date:"M d, Y" }}</p>{% endif %}
+        <a href="{% url 'payments:pricing' %}" class="mt-4 inline-block bg-white/20 px-4 py-2 rounded-lg text-sm font-semibold" data-i18n="dash.upgrade">Upgrade plan</a>
     </div>
 </div>
 
 <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 overflow-hidden">
-    <h3 class="font-bold px-5 pt-5">Invoices</h3>
+    <h3 class="font-bold px-5 pt-5" data-i18n="dash.invoices">Invoices</h3>
     <table class="w-full text-sm mt-3">
-        <thead class="text-left text-slate-500 bg-slate-50 dark:bg-slate-700/50"><tr><th class="px-5 py-3">Invoice</th><th>Amount</th><th>Gateway</th><th>Status</th><th>Date</th></tr></thead>
+        <thead class="text-left text-slate-500 bg-slate-50 dark:bg-slate-700/50"><tr><th class="px-5 py-3" data-i18n="tbl.invoice">Invoice</th><th data-i18n="tbl.amount">Amount</th><th data-i18n="tbl.gateway">Gateway</th><th data-i18n="tbl.status">Status</th><th data-i18n="common.date">Date</th></tr></thead>
         <tbody>
             {% for inv in invoices %}
             <tr class="border-t border-slate-100 dark:border-slate-700">
@@ -27,7 +27,7 @@
                 <td><span class="text-xs px-2.5 py-1 rounded-full {% if inv.status == 'paid' %}bg-emerald-100 text-emerald-700{% else %}bg-slate-100 dark:bg-slate-700{% endif %} capitalize">{{ inv.get_status_display }}</span></td>
                 <td class="text-slate-500">{{ inv.created_at|date:"M d, Y" }}</td>
             </tr>
-            {% empty %}<tr><td colspan="5" class="px-5 py-12 text-center text-slate-500">No invoices yet.</td></tr>{% endfor %}
+            {% empty %}<tr><td colspan="5" class="px-5 py-12 text-center text-slate-500" data-i18n="dash.no_invoices">No invoices yet.</td></tr>{% endfor %}
         </tbody>
     </table>
 </div>

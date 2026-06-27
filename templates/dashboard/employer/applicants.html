@@ -3,8 +3,8 @@
 
 {% block dashboard %}
 <div class="mb-6">
-    <a href="{% url 'dashboard:employer_jobs' %}" class="text-sm text-slate-500 hover:text-primary inline-flex items-center gap-1"><i data-lucide="arrow-left" class="w-4 h-4"></i> Back to jobs</a>
-    <h2 class="text-2xl font-extrabold mt-2">Applicants for {{ job.title }}</h2>
+    <a href="{% url 'dashboard:employer_jobs' %}" class="text-sm text-slate-500 hover:text-primary inline-flex items-center gap-1"><i data-lucide="arrow-left" class="w-4 h-4"></i> <span data-i18n="emp.back_to_jobs">Back to jobs</span></a>
+    <h2 class="text-2xl font-extrabold mt-2"><span data-i18n="emp.applicants_for">Applicants for</span> {{ job.title }}</h2>
     <p class="text-slate-500">{{ applications|length }} applicant{{ applications|length|pluralize }} · ranked by AI match score</p>
 </div>
 
@@ -20,10 +20,10 @@
         </div>
         <div class="text-center px-4">
             <div class="text-2xl font-extrabold text-primary">{{ app.ai_match_score }}%</div>
-            <div class="text-xs text-slate-500">AI Match</div>
+            <div class="text-xs text-slate-500" data-i18n="emp.ai_match">AI Match</div>
         </div>
         <div class="flex items-center gap-2">
-            {% if app.resume_file %}<a href="{{ app.resume_file.url }}" target="_blank" class="px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 text-sm inline-flex items-center gap-1"><i data-lucide="file-text" class="w-4 h-4"></i> Resume</a>{% endif %}
+            {% if app.resume_file %}<a href="{{ app.resume_file.url }}" target="_blank" class="px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 text-sm inline-flex items-center gap-1"><i data-lucide="file-text" class="w-4 h-4"></i> <span data-i18n="jobs.resume">Resume</span></a>{% endif %}
             <form method="post" action="{% url 'dashboard:update_application_status' app.pk %}" class="flex items-center gap-2">
                 {% csrf_token %}
                 <select name="status" onchange="this.form.submit()" class="rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-700 px-3 py-2 text-sm">
@@ -34,7 +34,7 @@
     </div>
     {% empty %}
     <div class="text-center py-16 bg-white dark:bg-slate-800 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700">
-        <i data-lucide="users" class="w-12 h-12 mx-auto text-slate-300"></i><p class="mt-3 font-semibold">No applicants yet</p>
+        <i data-lucide="users" class="w-12 h-12 mx-auto text-slate-300"></i><p class="mt-3 font-semibold" data-i18n="emp.no_applicants">No applicants yet</p>
     </div>
     {% endfor %}
 </div>
