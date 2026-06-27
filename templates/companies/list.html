@@ -2,39 +2,106 @@
 {% load static %}
 {% block title %}Companies — {{ SITE_NAME }}{% endblock %}
 
+{% block head %}
+<style>
+    /* Hero background rotation */
+    .comp-hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.2s ease,transform 8s ease;transform:scale(1.05)}
+    .comp-hero-bg.is-active{opacity:1;transform:scale(1.15)}
+    /* Floating orbs */
+    @keyframes compOrb{0%,100%{transform:translate(0,0)}50%{transform:translate(20px,-25px)}}
+    .comp-orb{position:absolute;border-radius:9999px;filter:blur(50px);animation:compOrb 9s ease-in-out infinite}
+    /* Heading entrance */
+    @keyframes compRise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+    .comp-rise{opacity:0;animation:compRise .8s cubic-bezier(.2,.7,.2,1) forwards}
+    .comp-d1{animation-delay:.1s}.comp-d2{animation-delay:.25s}.comp-d3{animation-delay:.4s}.comp-d4{animation-delay:.55s}
+    /* 3D card */
+    .comp-3d{perspective:1000px}
+    .comp-card{transform-style:preserve-3d;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;will-change:transform}
+    .comp-card .comp-pop{transform:translateZ(35px)}
+    .comp-card:hover{box-shadow:0 22px 50px -12px rgba(15,76,129,.35)}
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="relative text-white py-12 bg-cover bg-center overflow-hidden" style="background-image:url('{% static 'images/cta-bg.png' %}')">
-    <div class="absolute inset-0 gradient-primary opacity-80 mix-blend-multiply"></div>
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 class="text-3xl font-extrabold" data-i18n="comp.explore">Explore Companies</h1>
-        <form method="get" class="mt-4 max-w-md flex gap-2">
-            <input name="q" value="{{ request.GET.q }}" placeholder="Search companies" data-i18n-placeholder="comp.search_ph" class="flex-1 rounded-xl px-4 py-3 text-slate-800 outline-none">
-            <button class="bg-white text-primary font-semibold px-6 rounded-xl" data-i18n="common.search">Search</button>
+<!-- HERO -->
+<section class="relative overflow-hidden text-white"
+         x-data="{ active: 0, slides: 3 }"
+         x-init="setInterval(() => active = (active + 1) % slides, 5000)">
+    <!-- rotating backgrounds -->
+    <div class="comp-hero-bg" :class="active === 0 && 'is-active'" style="background-image:url('{% static 'images/hero-bg2.png' %}')"></div>
+    <div class="comp-hero-bg" :class="active === 1 && 'is-active'" style="background-image:url('{% static 'images/hero-bg3.png' %}')"></div>
+    <div class="comp-hero-bg" :class="active === 2 && 'is-active'" style="background-image:url('{% static 'images/hero-bg4.png' %}')"></div>
+    <!-- overlays -->
+    <div class="absolute inset-0 gradient-primary opacity-85 mix-blend-multiply"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-slate-900/30 via-transparent to-slate-900/70"></div>
+    <!-- orbs -->
+    <div class="comp-orb w-72 h-72 bg-accent/30 -top-16 -right-10"></div>
+    <div class="comp-orb w-80 h-80 bg-secondary/30 -bottom-24 -left-16" style="animation-delay:-4s"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+        <span class="comp-rise comp-d1 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 text-sm font-medium backdrop-blur">
+            <i data-lucide="building-2" class="w-4 h-4"></i> <span data-i18n="comp.badge">Trusted by leading organizations</span>
+        </span>
+        <h1 class="comp-rise comp-d2 mt-5 text-4xl sm:text-5xl font-extrabold tracking-tight" data-i18n="comp.explore">Explore Companies</h1>
+        <p class="comp-rise comp-d3 mt-4 text-lg text-white/85 max-w-2xl mx-auto" data-i18n="comp.hero_sub">Discover top companies, recruiters, NGOs and institutions hiring right now — and find where you belong.</p>
+
+        <form method="get" class="comp-rise comp-d4 mt-8 max-w-xl mx-auto flex gap-2">
+            <div class="flex-1 flex items-center bg-white rounded-xl px-3">
+                <i data-lucide="search" class="w-5 h-5 text-slate-400"></i>
+                <input name="q" value="{{ request.GET.q }}" placeholder="Search companies" data-i18n-placeholder="comp.search_ph"
+                       class="flex-1 bg-transparent px-2 py-3.5 text-slate-800 outline-none">
+            </div>
+            <button class="bg-white text-primary font-semibold px-6 rounded-xl hover:opacity-90 transition shadow-lg" data-i18n="common.search">Search</button>
         </form>
+
+        <!-- stats -->
+        <div class="comp-rise comp-d4 mt-10 flex flex-wrap justify-center gap-8 sm:gap-12">
+            <div><p class="text-3xl font-extrabold">{{ total_companies }}+</p><p class="text-sm text-white/75" data-i18n="comp.stat_companies">Companies</p></div>
+            <div><p class="text-3xl font-extrabold">{{ verified_companies }}+</p><p class="text-sm text-white/75" data-i18n="comp.stat_verified">Verified</p></div>
+            <div><p class="text-3xl font-extrabold">{{ open_jobs }}+</p><p class="text-sm text-white/75" data-i18n="comp.stat_jobs">Open jobs</p></div>
+        </div>
     </div>
-</div>
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+</section>
+
+<!-- LISTING -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="comp-3d grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for company in companies %}
-        <a href="{{ company.get_absolute_url }}" class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 hover:shadow-lg hover:border-primary/40 transition">
-            <div class="flex items-center gap-3">
-                {% if company.logo %}<img src="{{ company.logo.url }}" class="w-14 h-14 rounded-xl object-cover">
-                {% else %}<span class="w-14 h-14 rounded-xl gradient-primary text-white flex items-center justify-center font-bold text-xl">{{ company.name|first }}</span>{% endif %}
-                <div><p class="font-bold">{{ company.name }}</p><p class="text-sm text-slate-500">{{ company.industry|default:company.get_org_type_display }}</p></div>
+        <a href="{{ company.get_absolute_url }}"
+           data-aos="fade-up" data-aos-delay="{% widthratio forloop.counter0 1 60 %}"
+           x-data="{ rx: 0, ry: 0 }"
+           @mousemove="ry = (($event.offsetX / $el.offsetWidth - .5) * 10); rx = (($event.offsetY / $el.offsetHeight - .5) * -10)"
+           @mouseleave="rx = 0; ry = 0"
+           :style="`transform: rotateX(${rx}deg) rotateY(${ry}deg)`"
+           class="comp-card group relative bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 hover:border-primary/40 block">
+            <div class="comp-pop flex items-center gap-3">
+                {% if company.logo %}<img src="{{ company.logo.url }}" class="w-14 h-14 rounded-xl object-cover shadow">
+                {% else %}<span class="w-14 h-14 rounded-xl gradient-primary text-white flex items-center justify-center font-bold text-xl shadow">{{ company.name|first }}</span>{% endif %}
+                <div class="min-w-0">
+                    <p class="font-bold truncate flex items-center gap-1">{{ company.name }}{% if company.is_verified %}<i data-lucide="badge-check" class="w-4 h-4 text-secondary shrink-0"></i>{% endif %}</p>
+                    <p class="text-sm text-slate-500 truncate">{{ company.industry|default:company.get_org_type_display }}</p>
+                </div>
             </div>
-            <p class="text-sm text-slate-500 mt-3 line-clamp-2">{{ company.tagline }}</p>
-            <div class="mt-4 flex items-center justify-between text-sm">
+            <p class="comp-pop text-sm text-slate-500 mt-3 line-clamp-2 min-h-[2.5rem]">{{ company.tagline }}</p>
+            <div class="comp-pop mt-4 flex items-center justify-between text-sm pt-4 border-t border-slate-100 dark:border-slate-700">
                 <span class="text-slate-500"><i data-lucide="map-pin" class="w-4 h-4 inline"></i> {{ company.location|default:"—" }}</span>
-                <span class="text-primary font-semibold">{{ company.open_jobs_count }} <span data-i18n="comp.jobs">jobs</span></span>
+                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary/10 text-primary font-semibold">{{ company.open_jobs_count }} <span data-i18n="comp.jobs">jobs</span></span>
             </div>
+            <span class="comp-pop absolute top-5 right-5 w-8 h-8 rounded-full bg-primary/0 group-hover:bg-primary text-primary group-hover:text-white flex items-center justify-center transition"><i data-lucide="arrow-up-right" class="w-4 h-4"></i></span>
         </a>
-        {% empty %}<p class="text-slate-500 col-span-3 text-center py-12" data-i18n="comp.no_positions">No companies yet.</p>{% endfor %}
+        {% empty %}
+        <div class="col-span-3 text-center py-16">
+            <span class="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center mx-auto"><i data-lucide="building-2" class="w-8 h-8"></i></span>
+            <p class="text-slate-500 mt-4" data-i18n="comp.no_positions">No companies yet.</p>
+        </div>
+        {% endfor %}
     </div>
+
     {% if is_paginated %}
-    <div class="flex justify-center gap-1 mt-8">
-        {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}" class="px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700" data-i18n="common.prev">Prev</a>{% endif %}
+    <div class="flex justify-center gap-1 mt-10">
+        {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary" data-i18n="common.prev">Prev</a>{% endif %}
         <span class="px-4 py-2 rounded-lg gradient-primary text-white">{{ page_obj.number }}</span>
-        {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}" class="px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700" data-i18n="common.next">Next</a>{% endif %}
+        {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary" data-i18n="common.next">Next</a>{% endif %}
     </div>
     {% endif %}
 </div>

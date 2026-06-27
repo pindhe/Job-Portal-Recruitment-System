@@ -2,31 +2,91 @@
 {% block title %}Create account — {{ SITE_NAME }}{% endblock %}
 
 {% block auth_content %}
-<h1 class="text-3xl font-extrabold" data-i18n="auth.create_account">Create your account</h1>
-<p class="text-slate-500 mt-1" data-i18n="auth.create_sub">Join thousands building their future.</p>
+<span class="inline-flex items-center justify-center w-12 h-12 rounded-2xl gradient-primary text-white shadow-lg mb-5">
+    <i data-lucide="user-plus" class="w-6 h-6"></i>
+</span>
+<h1 class="text-3xl font-extrabold tracking-tight" data-i18n="auth.create_account">Create your account</h1>
+<p class="text-slate-500 mt-1.5" data-i18n="auth.create_sub">Join thousands building their future.</p>
 
-<form method="post" class="mt-6 space-y-4">
+<form method="post" class="mt-7 space-y-5">
     {% csrf_token %}
-    {% if form.non_field_errors %}<div class="text-sm text-red-600">{{ form.non_field_errors }}</div>{% endif %}
-    <div class="grid grid-cols-2 gap-3" x-data>
-        {% for radio in form.role %}
-        <label class="cursor-pointer">
-            <input type="radio" name="{{ radio.data.name }}" value="{{ radio.data.value }}" class="peer sr-only" {% if forloop.first %}checked{% endif %}>
-            <div class="rounded-xl border border-slate-300 dark:border-slate-600 p-3 text-center text-sm peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary font-medium">
-                {{ radio.choice_label }}
-            </div>
-        </label>
-        {% endfor %}
+    {% if form.non_field_errors %}
+    <div class="flex items-start gap-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl px-3 py-2.5">
+        <i data-lucide="alert-circle" class="w-4 h-4 mt-0.5 shrink-0"></i><div>{{ form.non_field_errors }}</div>
     </div>
+    {% endif %}
+
+    <!-- Role selector -->
+    <div>
+        <label class="block text-sm font-semibold mb-1.5" data-i18n="auth.i_am">I am a...</label>
+        <div class="grid grid-cols-2 gap-3" x-data>
+            {% for radio in form.role %}
+            <label class="cursor-pointer">
+                <input type="radio" name="{{ radio.data.name }}" value="{{ radio.data.value }}" class="peer sr-only" {% if forloop.first %}checked{% endif %}>
+                <div class="rounded-xl border border-slate-300 dark:border-slate-600 p-4 text-center peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary peer-checked:ring-2 peer-checked:ring-primary/20 transition">
+                    <span class="w-9 h-9 mx-auto rounded-lg bg-slate-100 dark:bg-slate-700 peer-checked:bg-primary/10 flex items-center justify-center mb-2">
+                        {% if forloop.first %}<i data-lucide="user-round" class="w-5 h-5"></i>{% else %}<i data-lucide="building-2" class="w-5 h-5"></i>{% endif %}
+                    </span>
+                    <span class="block text-sm font-medium">{{ radio.choice_label }}</span>
+                </div>
+            </label>
+            {% endfor %}
+        </div>
+    </div>
+
     <div class="grid grid-cols-2 gap-3">
-        <div>{{ form.first_name }}{{ form.first_name.errors }}</div>
-        <div>{{ form.last_name }}{{ form.last_name.errors }}</div>
+        <div>
+            <label class="block text-sm font-semibold mb-1.5" data-i18n="auth.first_name">First name</label>
+            {{ form.first_name }}{{ form.first_name.errors }}
+        </div>
+        <div>
+            <label class="block text-sm font-semibold mb-1.5" data-i18n="auth.last_name">Last name</label>
+            {{ form.last_name }}{{ form.last_name.errors }}
+        </div>
     </div>
-    <div>{{ form.email }}{{ form.email.errors }}</div>
-    <div>{{ form.phone }}</div>
-    <div>{{ form.password1 }}{{ form.password1.errors }}</div>
-    <div>{{ form.password2 }}{{ form.password2.errors }}</div>
-    <button class="w-full gradient-primary text-white font-semibold py-3 rounded-xl hover:opacity-90" data-i18n="auth.create_btn">Create Account</button>
+    <div>
+        <label class="block text-sm font-semibold mb-1.5" data-i18n="auth.email">Email</label>
+        {{ form.email }}{{ form.email.errors }}
+    </div>
+    <div>
+        <label class="block text-sm font-semibold mb-1.5" data-i18n="auth.phone">Phone</label>
+        {{ form.phone }}{{ form.phone.errors }}
+    </div>
+    <div>
+        <label class="block text-sm font-semibold mb-1.5" data-i18n="auth.password">Password</label>
+        <div class="relative" x-data="{ show: false }">
+            {{ form.password1 }}
+            <button type="button" tabindex="-1"
+                    @click="show = !show; $el.parentElement.querySelector('input').type = show ? 'text' : 'password'"
+                    class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary">
+                <i data-lucide="eye" class="w-5 h-5" x-show="!show"></i>
+                <i data-lucide="eye-off" class="w-5 h-5" x-show="show" x-cloak></i>
+            </button>
+        </div>
+        {{ form.password1.errors }}
+    </div>
+    <div>
+        <label class="block text-sm font-semibold mb-1.5" data-i18n="auth.confirm_password">Confirm password</label>
+        <div class="relative" x-data="{ show: false }">
+            {{ form.password2 }}
+            <button type="button" tabindex="-1"
+                    @click="show = !show; $el.parentElement.querySelector('input').type = show ? 'text' : 'password'"
+                    class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary">
+                <i data-lucide="eye" class="w-5 h-5" x-show="!show"></i>
+                <i data-lucide="eye-off" class="w-5 h-5" x-show="show" x-cloak></i>
+            </button>
+        </div>
+        {{ form.password2.errors }}
+    </div>
+
+    <button class="w-full gradient-primary text-white font-semibold py-3.5 rounded-xl hover:opacity-90 active:scale-[.99] transition flex items-center justify-center gap-2 shadow-lg shadow-primary/20">
+        <span data-i18n="auth.create_btn">Create Account</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
+    </button>
 </form>
-<p class="text-center text-sm text-slate-500 mt-6"><span data-i18n="auth.have_account">Already have an account?</span> <a href="{% url 'accounts:login' %}" class="text-primary font-semibold hover:underline" data-i18n="auth.signin_link">Sign in</a></p>
+
+<p class="text-center text-sm text-slate-500 mt-7"><span data-i18n="auth.have_account">Already have an account?</span> <a href="{% url 'accounts:login' %}" class="text-primary font-semibold hover:underline" data-i18n="auth.signin_link">Sign in</a></p>
+
+<p class="flex items-center justify-center gap-1.5 text-xs text-slate-400 mt-7">
+    <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> <span data-i18n="auth.secure_note">Your information is encrypted and secure.</span>
+</p>
 {% endblock %}

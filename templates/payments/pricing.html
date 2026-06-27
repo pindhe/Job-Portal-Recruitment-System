@@ -2,30 +2,115 @@
 {% load humanize %}
 {% block title %}Pricing — {{ SITE_NAME }}{% endblock %}
 
+{% block head %}
+<style>
+    @keyframes payOrb{0%,100%{transform:translate(0,0)}50%{transform:translate(18px,-22px)}}
+    .pay-orb{position:absolute;border-radius:9999px;filter:blur(55px);animation:payOrb 9s ease-in-out infinite}
+    @keyframes payRise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+    .pay-rise{opacity:0;animation:payRise .8s cubic-bezier(.2,.7,.2,1) forwards}
+    .pay-d1{animation-delay:.1s}.pay-d2{animation-delay:.25s}.pay-d3{animation-delay:.4s}
+    .pay-card{transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}
+    .pay-card:hover{transform:translateY(-8px);box-shadow:0 28px 55px -18px rgba(15,76,129,.45)}
+    .pay-card.is-popular{box-shadow:0 30px 60px -20px rgba(15,76,129,.5)}
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <div class="text-center max-w-2xl mx-auto mb-12">
-        <h1 class="text-4xl font-extrabold" data-i18n="pay.title">Simple, transparent pricing</h1>
-        <p class="mt-3 text-slate-500" data-i18n="pay.sub">Choose the plan that fits your hiring needs.</p>
+<!-- HERO -->
+<section class="relative overflow-hidden text-white">
+    <div class="absolute inset-0 gradient-primary"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-slate-900/20 via-transparent to-slate-50 dark:to-slate-900"></div>
+    <div class="pay-orb w-72 h-72 bg-accent/30 -top-16 right-10"></div>
+    <div class="pay-orb w-80 h-80 bg-white/20 -bottom-24 -left-10" style="animation-delay:-4s"></div>
+
+    <div class="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32 text-center">
+        <span class="pay-rise pay-d1 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 text-sm font-medium backdrop-blur">
+            <i data-lucide="gem" class="w-4 h-4"></i> <span data-i18n="pay.badge">Plans for every team</span>
+        </span>
+        <h1 class="pay-rise pay-d2 mt-5 text-4xl sm:text-5xl font-extrabold tracking-tight" data-i18n="pay.title">Simple, transparent pricing</h1>
+        <p class="pay-rise pay-d3 mt-4 text-lg text-white/85" data-i18n="pay.sub">Choose the plan that fits your hiring needs.</p>
     </div>
+</section>
+
+<!-- CARDS (pulled up over hero) -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 relative z-10">
     <div class="grid md:grid-cols-3 gap-6 items-stretch">
         {% for plan in plans %}
-        <div class="relative bg-white dark:bg-slate-800 rounded-3xl p-8 border-2 {% if plan.is_popular %}border-primary shadow-xl scale-105{% else %}border-slate-100 dark:border-slate-700{% endif %} flex flex-col" data-aos="fade-up">
-            {% if plan.is_popular %}<span class="absolute -top-3 left-1/2 -translate-x-1/2 gradient-primary text-white text-xs font-bold px-4 py-1 rounded-full" data-i18n="pay.popular">MOST POPULAR</span>{% endif %}
-            <h3 class="font-bold text-lg">{{ plan.name }}</h3>
-            <p class="text-sm text-slate-500 mt-1">{{ plan.description }}</p>
-            <div class="mt-4"><span class="text-4xl font-extrabold">{{ plan.currency }}{{ plan.price|floatformat:0 }}</span><span class="text-slate-500">/{{ plan.get_billing_cycle_display|lower }}</span></div>
+        <div data-aos="fade-up" data-aos-delay="{% widthratio forloop.counter0 1 80 %}"
+             class="pay-card relative bg-white dark:bg-slate-800 rounded-3xl p-8 border-2 flex flex-col {% if plan.is_popular %}is-popular border-primary{% else %}border-slate-100 dark:border-slate-700{% endif %}">
+            {% if plan.is_popular %}<span class="absolute -top-3 left-1/2 -translate-x-1/2 gradient-primary text-white text-xs font-bold px-4 py-1 rounded-full shadow-lg" data-i18n="pay.popular">MOST POPULAR</span>{% endif %}
+
+            <span class="w-12 h-12 rounded-2xl flex items-center justify-center {% if plan.is_popular %}gradient-primary text-white{% else %}bg-primary/10 text-primary{% endif %}">
+                {% if forloop.first %}<i data-lucide="rocket" class="w-6 h-6"></i>
+                {% elif forloop.last %}<i data-lucide="building-2" class="w-6 h-6"></i>
+                {% else %}<i data-lucide="zap" class="w-6 h-6"></i>{% endif %}
+            </span>
+
+            <h3 class="font-bold text-lg mt-4">{{ plan.name }}</h3>
+            <p class="text-sm text-slate-500 mt-1 min-h-[2.5rem]">{{ plan.description }}</p>
+            <div class="mt-4 flex items-end gap-1">
+                <span class="text-4xl font-extrabold">{{ plan.currency }}{{ plan.price|floatformat:0 }}</span>
+                <span class="text-slate-500 mb-1">/{{ plan.get_billing_cycle_display|lower }}</span>
+            </div>
+
             <ul class="mt-6 space-y-3 text-sm flex-1">
-                <li class="flex gap-2"><i data-lucide="check" class="w-5 h-5 text-emerald-500"></i> {{ plan.job_post_limit }} <span data-i18n="pay.job_posts">job posts</span></li>
-                <li class="flex gap-2"><i data-lucide="check" class="w-5 h-5 text-emerald-500"></i> {{ plan.featured_job_limit }} <span data-i18n="pay.featured_jobs">featured jobs</span></li>
-                <li class="flex gap-2"><i data-lucide="check" class="w-5 h-5 text-emerald-500"></i> {{ plan.resume_views_limit }} <span data-i18n="pay.resume_views">resume views</span></li>
-                {% if plan.has_ai_tools %}<li class="flex gap-2"><i data-lucide="check" class="w-5 h-5 text-emerald-500"></i> <span data-i18n="pay.ai_tools">AI hiring tools</span></li>{% endif %}
-                {% if plan.has_analytics %}<li class="flex gap-2"><i data-lucide="check" class="w-5 h-5 text-emerald-500"></i> <span data-i18n="pay.analytics">Advanced analytics</span></li>{% endif %}
-                {% for f in plan.features %}<li class="flex gap-2"><i data-lucide="check" class="w-5 h-5 text-emerald-500"></i> {{ f }}</li>{% endfor %}
+                <li class="flex gap-2"><i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500 shrink-0"></i> <span><strong>{{ plan.job_post_limit }}</strong> <span data-i18n="pay.job_posts">job posts</span></span></li>
+                <li class="flex gap-2"><i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500 shrink-0"></i> <span><strong>{{ plan.featured_job_limit }}</strong> <span data-i18n="pay.featured_jobs">featured jobs</span></span></li>
+                <li class="flex gap-2"><i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500 shrink-0"></i> <span><strong>{{ plan.resume_views_limit }}</strong> <span data-i18n="pay.resume_views">resume views</span></span></li>
+                {% if plan.has_ai_tools %}<li class="flex gap-2"><i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500 shrink-0"></i> <span data-i18n="pay.ai_tools">AI hiring tools</span></li>{% endif %}
+                {% if plan.has_analytics %}<li class="flex gap-2"><i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500 shrink-0"></i> <span data-i18n="pay.analytics">Advanced analytics</span></li>{% endif %}
+                {% for f in plan.features %}<li class="flex gap-2"><i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500 shrink-0"></i> {{ f }}</li>{% endfor %}
             </ul>
-            <a href="{% url 'payments:subscribe' plan.slug %}" class="mt-6 block text-center w-full py-3 rounded-xl font-semibold {% if plan.is_popular %}gradient-primary text-white{% else %}border border-slate-300 dark:border-slate-600{% endif %}"><span data-i18n="pay.choose">Choose</span> {{ plan.name }}</a>
+
+            <a href="{% url 'payments:subscribe' plan.slug %}" class="mt-7 block text-center w-full py-3 rounded-xl font-semibold transition {% if plan.is_popular %}gradient-primary text-white hover:opacity-90 shadow-lg shadow-primary/20{% else %}border border-slate-300 dark:border-slate-600 hover:border-primary hover:text-primary{% endif %}"><span data-i18n="pay.choose">Choose</span> {{ plan.name }}</a>
         </div>
-        {% empty %}<p class="text-slate-500 col-span-3 text-center" data-i18n="pay.none">No plans configured yet.</p>{% endfor %}
+        {% empty %}
+        <div class="col-span-3 text-center py-16 bg-white dark:bg-slate-800 rounded-3xl border border-slate-100 dark:border-slate-700">
+            <span class="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-700 text-slate-400 flex items-center justify-center mx-auto"><i data-lucide="package" class="w-8 h-8"></i></span>
+            <p class="text-slate-500 mt-4" data-i18n="pay.none">No plans configured yet.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Trust badges -->
+    <div class="grid sm:grid-cols-3 gap-4 mt-12">
+        <div class="flex items-center gap-3 bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-700" data-aos="fade-up">
+            <span class="w-11 h-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0"><i data-lucide="shield-check" class="w-5 h-5"></i></span>
+            <div><p class="font-semibold text-sm" data-i18n="pay.trust1_t">Secure payments</p><p class="text-xs text-slate-500" data-i18n="pay.trust1_d">Encrypted & PCI-compliant checkout</p></div>
+        </div>
+        <div class="flex items-center gap-3 bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-700" data-aos="fade-up" data-aos-delay="80">
+            <span class="w-11 h-11 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center shrink-0"><i data-lucide="refresh-ccw" class="w-5 h-5"></i></span>
+            <div><p class="font-semibold text-sm" data-i18n="pay.trust2_t">Cancel anytime</p><p class="text-xs text-slate-500" data-i18n="pay.trust2_d">No long-term contracts or lock-in</p></div>
+        </div>
+        <div class="flex items-center gap-3 bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-700" data-aos="fade-up" data-aos-delay="160">
+            <span class="w-11 h-11 rounded-xl bg-accent/10 text-accent flex items-center justify-center shrink-0"><i data-lucide="headset" class="w-5 h-5"></i></span>
+            <div><p class="font-semibold text-sm" data-i18n="pay.trust3_t">Priority support</p><p class="text-xs text-slate-500" data-i18n="pay.trust3_d">We're here whenever you need us</p></div>
+        </div>
+    </div>
+
+    <!-- Payment methods -->
+    <div class="text-center mt-12">
+        <p class="text-sm text-slate-400" data-i18n="pay.methods">We accept</p>
+        <div class="mt-3 flex flex-wrap justify-center gap-2.5">
+            <span class="px-4 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-sm font-semibold">Stripe</span>
+            <span class="px-4 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-sm font-semibold">PayPal</span>
+            <span class="px-4 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-sm font-semibold">Visa</span>
+            <span class="px-4 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-sm font-semibold">Mastercard</span>
+            <span class="px-4 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-sm font-semibold">Zaad</span>
+            <span class="px-4 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-sm font-semibold">EVC Plus</span>
+            <span class="px-4 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-sm font-semibold">Sahal</span>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="mt-14 mb-16 rounded-3xl gradient-primary text-white p-8 sm:p-10 flex flex-col sm:flex-row items-center justify-between gap-6" data-aos="zoom-in">
+        <div>
+            <h3 class="text-2xl font-extrabold" data-i18n="pay.cta_t">Need a custom enterprise plan?</h3>
+            <p class="mt-1 text-white/85" data-i18n="pay.cta_d">Talk to our team for volume pricing, SSO and dedicated support.</p>
+        </div>
+        <a href="{% url 'public:contact' %}" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-primary font-semibold shadow hover:opacity-90 whitespace-nowrap">
+            <i data-lucide="phone" class="w-4 h-4"></i> <span data-i18n="pay.cta_btn">Contact sales</span>
+        </a>
     </div>
 </div>
 {% endblock %}

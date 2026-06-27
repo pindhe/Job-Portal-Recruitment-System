@@ -1,38 +1,70 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block head %}
+<style>
+    .auth-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.4s ease,transform 9s ease;transform:scale(1.08)}
+    .auth-bg.is-active{opacity:1;transform:scale(1.18)}
+    @keyframes authOrb{0%,100%{transform:translate(0,0)}50%{transform:translate(22px,-26px)}}
+    .auth-orb{position:absolute;border-radius:9999px;filter:blur(60px);animation:authOrb 10s ease-in-out infinite}
+    @keyframes authRise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+    .auth-rise{opacity:0;animation:authRise .8s cubic-bezier(.2,.7,.2,1) forwards}
+    .ad1{animation-delay:.05s}.ad2{animation-delay:.18s}.ad3{animation-delay:.3s}.ad4{animation-delay:.42s}.ad5{animation-delay:.54s}.ad6{animation-delay:.66s}
+</style>
+{% endblock %}
+
 {% block body %}
 <div class="min-h-screen grid lg:grid-cols-2">
     <!-- Left brand panel -->
-    <div class="hidden lg:flex flex-col justify-between text-white p-12 xl:p-16 relative overflow-hidden bg-cover bg-center" style="background-image:url('{% static 'images/hero-bg.png' %}')">
+    <div class="hidden lg:flex flex-col justify-between text-white p-12 xl:p-16 relative overflow-hidden"
+         x-data="{ active: 0, slides: 3 }"
+         x-init="setInterval(() => active = (active + 1) % slides, 5500)">
+        <!-- rotating backgrounds -->
+        <div class="auth-bg" :class="active === 0 && 'is-active'" style="background-image:url('{% static 'images/hero-bg2.png' %}')"></div>
+        <div class="auth-bg" :class="active === 1 && 'is-active'" style="background-image:url('{% static 'images/hero-bg3.png' %}')"></div>
+        <div class="auth-bg" :class="active === 2 && 'is-active'" style="background-image:url('{% static 'images/hero-bg4.png' %}')"></div>
+        <!-- overlays -->
         <div class="absolute inset-0 gradient-primary opacity-90 mix-blend-multiply"></div>
-        <div class="absolute inset-0 bg-gradient-to-b from-slate-900/40 via-transparent to-slate-900/70"></div>
-        <!-- decorative orbs -->
-        <div class="absolute -top-16 -right-16 w-72 h-72 rounded-full bg-accent/30 blur-3xl"></div>
-        <div class="absolute bottom-0 -left-20 w-80 h-80 rounded-full bg-secondary/30 blur-3xl"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-slate-900/50 via-transparent to-slate-900/80"></div>
+        <!-- animated orbs -->
+        <div class="auth-orb w-72 h-72 bg-accent/30 -top-16 -right-16"></div>
+        <div class="auth-orb w-80 h-80 bg-secondary/30 bottom-0 -left-20" style="animation-delay:-5s"></div>
 
-        <a href="{% url 'public:home' %}" class="relative flex items-center gap-2.5 w-fit">
+        <a href="{% url 'public:home' %}" class="auth-rise ad1 relative flex items-center gap-2.5 w-fit">
             <img src="{% static 'images/1.jpg' %}" alt="{{ SITE_NAME }}" class="w-11 h-11 rounded-xl object-cover bg-white shadow-lg">
             <span class="text-2xl font-extrabold tracking-tight">{{ SITE_NAME }}</span>
         </a>
 
         <div class="relative max-w-md">
-            <h2 class="text-4xl xl:text-5xl font-extrabold leading-tight" data-i18n="auth.brand_title">Where talent meets opportunity.</h2>
-            <p class="mt-4 text-white/85 text-lg" data-i18n="auth.brand_sub">AI-powered matching, resume tools, and a seamless hiring experience for candidates, employers and recruiters.</p>
+            <span class="auth-rise ad2 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 text-sm font-medium backdrop-blur">
+                <i data-lucide="sparkles" class="w-4 h-4"></i> <span data-i18n="auth.brand_badge">AI-Powered Recruitment</span>
+            </span>
+            <h2 class="auth-rise ad3 mt-5 text-4xl xl:text-5xl font-extrabold leading-tight" data-i18n="auth.brand_title">Where talent meets opportunity.</h2>
+            <p class="auth-rise ad4 mt-4 text-white/85 text-lg" data-i18n="auth.brand_sub">AI-powered matching, resume tools, and a seamless hiring experience for candidates, employers and recruiters.</p>
 
-            <ul class="mt-8 space-y-3 text-white/90">
-                <li class="flex items-center gap-3"><span class="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center shrink-0"><i data-lucide="check" class="w-4 h-4"></i></span><span data-i18n="auth.feature_match">Smart AI candidate–job matching</span></li>
-                <li class="flex items-center gap-3"><span class="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center shrink-0"><i data-lucide="check" class="w-4 h-4"></i></span><span data-i18n="auth.feature_ats">Instant resume & ATS scoring</span></li>
-                <li class="flex items-center gap-3"><span class="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center shrink-0"><i data-lucide="check" class="w-4 h-4"></i></span><span data-i18n="auth.feature_secure">Enterprise-grade security</span></li>
+            <ul class="auth-rise ad5 mt-8 space-y-3.5 text-white/90">
+                <li class="flex items-center gap-3"><span class="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center shrink-0"><i data-lucide="brain-circuit" class="w-4 h-4"></i></span><span data-i18n="auth.feature_match">Smart AI candidate–job matching</span></li>
+                <li class="flex items-center gap-3"><span class="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center shrink-0"><i data-lucide="scan-line" class="w-4 h-4"></i></span><span data-i18n="auth.feature_ats">Instant resume & ATS scoring</span></li>
+                <li class="flex items-center gap-3"><span class="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center shrink-0"><i data-lucide="shield-check" class="w-4 h-4"></i></span><span data-i18n="auth.feature_secure">Enterprise-grade security</span></li>
             </ul>
+
+            <!-- glass testimonial -->
+            <figure class="auth-rise ad6 mt-8 rounded-2xl bg-white/10 backdrop-blur border border-white/15 p-5">
+                <div class="flex gap-0.5 text-amber-300">
+                    <i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                </div>
+                <blockquote class="mt-3 text-sm text-white/90 italic" data-i18n="auth.quote">"We cut our time-to-hire in half. The AI matching is genuinely impressive."</blockquote>
+                <figcaption class="mt-3 flex items-center gap-2.5">
+                    <span class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center font-bold text-sm">AH</span>
+                    <span class="text-sm"><span class="block font-semibold">Amina Hassan</span><span class="block text-white/70 text-xs" data-i18n="auth.quote_role">HR Lead, Horn Tech</span></span>
+                </figcaption>
+            </figure>
         </div>
 
-        <div class="relative">
-            <div class="flex gap-8 text-sm text-white/80">
-                <div><p class="text-2xl font-bold text-white">10k+</p><span data-i18n="stats.jobs">Jobs</span></div>
-                <div><p class="text-2xl font-bold text-white">5k+</p><span data-i18n="footer.company">Companies</span></div>
-                <div><p class="text-2xl font-bold text-white">98%</p>Match accuracy</div>
-            </div>
+        <div class="auth-rise ad6 relative flex gap-8 text-sm text-white/80">
+            <div><p class="text-2xl font-bold text-white">10k+</p><span data-i18n="stats.jobs">Jobs</span></div>
+            <div><p class="text-2xl font-bold text-white">5k+</p><span data-i18n="footer.company">Companies</span></div>
+            <div><p class="text-2xl font-bold text-white">98%</p><span data-i18n="auth.match_accuracy">Match accuracy</span></div>
         </div>
     </div>
 

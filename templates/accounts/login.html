@@ -2,57 +2,55 @@
 {% block title %}Sign in — {{ SITE_NAME }}{% endblock %}
 
 {% block auth_content %}
-<div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl shadow-slate-200/60 dark:shadow-black/30 border border-slate-100 dark:border-slate-700 p-7 sm:p-9">
-    <span class="inline-flex items-center justify-center w-12 h-12 rounded-2xl gradient-primary text-white shadow-lg mb-5">
-        <i data-lucide="lock-keyhole" class="w-6 h-6"></i>
-    </span>
-    <h1 class="text-3xl font-extrabold tracking-tight" data-i18n="auth.welcome_back">Welcome back</h1>
-    <p class="text-slate-500 mt-1.5" data-i18n="auth.signin_sub">Sign in to your account to continue.</p>
+<span class="inline-flex items-center justify-center w-12 h-12 rounded-2xl gradient-primary text-white shadow-lg mb-5">
+    <i data-lucide="lock-keyhole" class="w-6 h-6"></i>
+</span>
+<h1 class="text-3xl font-extrabold tracking-tight" data-i18n="auth.welcome_back">Welcome back</h1>
+<p class="text-slate-500 mt-1.5" data-i18n="auth.signin_sub">Sign in to your account to continue.</p>
 
-    <form method="post" class="mt-7 space-y-5">
-        {% csrf_token %}
-        {% if form.non_field_errors %}
-        <div class="flex items-start gap-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl px-3 py-2.5">
-            <i data-lucide="alert-circle" class="w-4 h-4 mt-0.5 shrink-0"></i><div>{{ form.non_field_errors }}</div>
-        </div>
-        {% endif %}
-        <div>
-            <label class="block text-sm font-semibold mb-1.5" data-i18n="auth.email">Email</label>
-            {{ form.username }}
-            {{ form.username.errors }}
-        </div>
-        <div>
-            <label class="block text-sm font-semibold mb-1.5" data-i18n="auth.password">Password</label>
-            <div class="relative" x-data="{ show: false }">
-                {{ form.password }}
-                <button type="button" tabindex="-1"
-                        @click="show = !show; $el.parentElement.querySelector('input').type = show ? 'text' : 'password'"
-                        class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary">
-                    <i data-lucide="eye" class="w-5 h-5" x-show="!show"></i>
-                    <i data-lucide="eye-off" class="w-5 h-5" x-show="show" x-cloak></i>
-                </button>
-            </div>
-            {{ form.password.errors }}
-        </div>
-        <div class="flex items-center justify-between text-sm">
-            <label class="flex items-center gap-2 cursor-pointer select-none"><input type="checkbox" name="remember_me" class="rounded border-slate-300 text-primary focus:ring-primary/30"> <span data-i18n="auth.remember">Remember me</span></label>
-            <a href="{% url 'accounts:forgot_password' %}" class="text-primary font-medium hover:underline" data-i18n="auth.forgot">Forgot password?</a>
-        </div>
-        <button class="w-full gradient-primary text-white font-semibold py-3.5 rounded-xl hover:opacity-90 active:scale-[.99] transition flex items-center justify-center gap-2 shadow-lg shadow-primary/20">
-            <span data-i18n="auth.signin_btn">Sign In</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
-        </button>
-    </form>
-
-    <div class="my-6 flex items-center gap-3 text-slate-400 text-sm"><div class="flex-1 h-px bg-slate-200 dark:bg-slate-700"></div><span data-i18n="auth.or_continue">or continue with</span><div class="flex-1 h-px bg-slate-200 dark:bg-slate-700"></div></div>
-    <div class="grid grid-cols-2 gap-3">
-        <button type="button" class="flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 hover:border-slate-400 text-sm font-medium transition"><i data-lucide="chrome" class="w-4 h-4 text-[#EA4335]"></i> Google</button>
-        <button type="button" class="flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 hover:border-slate-400 text-sm font-medium transition"><i data-lucide="linkedin" class="w-4 h-4 text-[#0A66C2]"></i> LinkedIn</button>
+<form method="post" class="mt-7 space-y-5">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+    <div class="flex items-start gap-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl px-3 py-2.5">
+        <i data-lucide="alert-circle" class="w-4 h-4 mt-0.5 shrink-0"></i><div>{{ form.non_field_errors }}</div>
     </div>
+    {% endif %}
+    <div>
+        <label class="block text-sm font-semibold mb-1.5" data-i18n="auth.email">Email</label>
+        {{ form.username }}
+        {{ form.username.errors }}
+    </div>
+    <div>
+        <label class="block text-sm font-semibold mb-1.5" data-i18n="auth.password">Password</label>
+        <div class="relative" x-data="{ show: false }">
+            {{ form.password }}
+            <button type="button" tabindex="-1"
+                    @click="show = !show; $el.parentElement.querySelector('input').type = show ? 'text' : 'password'"
+                    class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary">
+                <i data-lucide="eye" class="w-5 h-5" x-show="!show"></i>
+                <i data-lucide="eye-off" class="w-5 h-5" x-show="show" x-cloak></i>
+            </button>
+        </div>
+        {{ form.password.errors }}
+    </div>
+    <div class="flex items-center justify-between text-sm">
+        <label class="flex items-center gap-2 cursor-pointer select-none"><input type="checkbox" name="remember_me" class="rounded border-slate-300 text-primary focus:ring-primary/30"> <span data-i18n="auth.remember">Remember me</span></label>
+        <a href="{% url 'accounts:forgot_password' %}" class="text-primary font-medium hover:underline" data-i18n="auth.forgot">Forgot password?</a>
+    </div>
+    <button class="w-full gradient-primary text-white font-semibold py-3.5 rounded-xl hover:opacity-90 active:scale-[.99] transition flex items-center justify-center gap-2 shadow-lg shadow-primary/20">
+        <span data-i18n="auth.signin_btn">Sign In</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
+    </button>
+</form>
 
-    <p class="text-center text-sm text-slate-500 mt-7"><span data-i18n="auth.no_account">Don't have an account?</span> <a href="{% url 'accounts:register' %}" class="text-primary font-semibold hover:underline" data-i18n="auth.signup_free">Sign up free</a></p>
+<div class="my-6 flex items-center gap-3 text-slate-400 text-sm"><div class="flex-1 h-px bg-slate-200 dark:bg-slate-700"></div><span data-i18n="auth.or_continue">or continue with</span><div class="flex-1 h-px bg-slate-200 dark:bg-slate-700"></div></div>
+<div class="grid grid-cols-2 gap-3">
+    <button type="button" class="flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 hover:border-slate-400 text-sm font-medium transition"><i data-lucide="chrome" class="w-4 h-4 text-[#EA4335]"></i> Google</button>
+    <button type="button" class="flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 hover:border-slate-400 text-sm font-medium transition"><i data-lucide="linkedin" class="w-4 h-4 text-[#0A66C2]"></i> LinkedIn</button>
 </div>
 
-<p class="flex items-center justify-center gap-1.5 text-xs text-slate-400 mt-5">
+<p class="text-center text-sm text-slate-500 mt-7"><span data-i18n="auth.no_account">Don't have an account?</span> <a href="{% url 'accounts:register' %}" class="text-primary font-semibold hover:underline" data-i18n="auth.signup_free">Sign up free</a></p>
+
+<p class="flex items-center justify-center gap-1.5 text-xs text-slate-400 mt-7">
     <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> <span data-i18n="auth.secure_note">Your information is encrypted and secure.</span>
 </p>
 {% endblock %}

@@ -1,23 +1,7 @@
 {% load static %}
 <footer class="bg-slate-900 text-slate-300 mt-16 relative">
-    <!-- Top CTA strip -->
-    <div class="border-b border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col lg:flex-row items-center justify-between gap-6">
-            <div>
-                <h3 class="text-2xl font-extrabold text-white" data-i18n="footer.newsletter_title">Get the latest jobs in your inbox</h3>
-                <p class="text-slate-400 text-sm mt-1" data-i18n="footer.newsletter_sub">Join our newsletter — no spam, unsubscribe anytime.</p>
-            </div>
-            <form method="post" action="{% url 'public:newsletter' %}" class="flex gap-2 w-full max-w-md">
-                {% csrf_token %}
-                <input type="email" name="email" required placeholder="Enter your email" data-i18n-placeholder="footer.email_placeholder"
-                       class="flex-1 rounded-xl bg-slate-800 border border-slate-700 px-4 py-3 text-sm text-white outline-none focus:border-secondary">
-                <button class="px-5 py-3 rounded-xl gradient-primary text-white text-sm font-semibold whitespace-nowrap" data-i18n="footer.subscribe">Subscribe</button>
-            </form>
-        </div>
-    </div>
-
     <!-- Main columns -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-6 gap-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
         <div class="col-span-2">
             <a href="{% url 'public:home' %}" class="flex items-center gap-2 mb-4">
                 <img src="{% static 'images/1.jpg' %}" alt="{{ SITE_NAME }}" class="w-9 h-9 rounded-xl object-cover bg-white">
@@ -41,22 +25,11 @@
         </div>
 
         <div>
-            <h4 class="text-white font-semibold mb-3 text-sm" data-i18n="footer.for_candidates">For Candidates</h4>
-            <ul class="space-y-2 text-sm">
-                <li><a href="{% url 'jobs:list' %}" class="hover:text-white" data-i18n="footer.browse_jobs">Browse Jobs</a></li>
-                <li><a href="{% url 'jobs:list' %}?work_mode=remote" class="hover:text-white" data-i18n="footer.remote_jobs">Remote Jobs</a></li>
-                <li><a href="{% url 'ai:resume_checker' %}" class="hover:text-white" data-i18n="footer.resume_checker">Resume Checker</a></li>
-                <li><a href="{% url 'ai:career_advisor' %}" class="hover:text-white" data-i18n="footer.career_advisor">Career Advisor</a></li>
-                <li><a href="{% url 'accounts:register' %}" class="hover:text-white" data-i18n="footer.create_profile">Create Profile</a></li>
-            </ul>
-        </div>
-        <div>
             <h4 class="text-white font-semibold mb-3 text-sm" data-i18n="footer.for_employers">For Employers</h4>
             <ul class="space-y-2 text-sm">
                 <li><a href="{% url 'accounts:register' %}" class="hover:text-white" data-i18n="footer.post_job">Post a Job</a></li>
                 <li><a href="{% url 'companies:list' %}" class="hover:text-white" data-i18n="nav.companies">Companies</a></li>
                 <li><a href="{% url 'payments:pricing' %}" class="hover:text-white" data-i18n="footer.pricing">Pricing</a></li>
-                <li><a href="{% url 'api:docs' %}" class="hover:text-white" data-i18n="footer.api_docs">API Docs</a></li>
             </ul>
         </div>
         <div>
@@ -66,14 +39,6 @@
                 <li><a href="{% url 'public:blog_list' %}" class="hover:text-white" data-i18n="footer.blog">Blog</a></li>
                 <li><a href="{% url 'public:faqs' %}" class="hover:text-white" data-i18n="footer.faqs">FAQs</a></li>
                 <li><a href="{% url 'public:contact' %}" class="hover:text-white" data-i18n="footer.contact">Contact</a></li>
-            </ul>
-        </div>
-        <div>
-            <h4 class="text-white font-semibold mb-3 text-sm" data-i18n="footer.categories">Categories</h4>
-            <ul class="space-y-2 text-sm">
-                {% for cat in nav_categories|slice:":5" %}
-                <li><a href="{% url 'jobs:list' %}?category={{ cat.slug }}" class="hover:text-white">{{ cat.name }}</a></li>
-                {% empty %}<li><a href="{% url 'jobs:list' %}" class="hover:text-white" data-i18n="footer.all_jobs">All Jobs</a></li>{% endfor %}
             </ul>
         </div>
     </div>
