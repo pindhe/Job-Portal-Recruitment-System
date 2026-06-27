@@ -1,0 +1,32 @@
+{% extends "accounts/_auth_base.html" %}
+{% block title %}Sign in — {{ SITE_NAME }}{% endblock %}
+
+{% block auth_content %}
+<h1 class="text-3xl font-extrabold">Welcome back</h1>
+<p class="text-slate-500 mt-1">Sign in to your account to continue.</p>
+
+<form method="post" class="mt-8 space-y-4">
+    {% csrf_token %}
+    <div>
+        <label class="block text-sm font-medium mb-1">Email</label>
+        {{ form.username }}
+    </div>
+    <div>
+        <label class="block text-sm font-medium mb-1">Password</label>
+        {{ form.password }}
+    </div>
+    <div class="flex items-center justify-between text-sm">
+        <label class="flex items-center gap-2"><input type="checkbox" name="remember_me" class="rounded text-primary"> Remember me</label>
+        <a href="{% url 'accounts:forgot_password' %}" class="text-primary hover:underline">Forgot password?</a>
+    </div>
+    <button class="w-full gradient-primary text-white font-semibold py-3 rounded-xl hover:opacity-90">Sign In</button>
+</form>
+
+<div class="my-6 flex items-center gap-3 text-slate-400 text-sm"><div class="flex-1 h-px bg-slate-200 dark:bg-slate-700"></div>or continue with<div class="flex-1 h-px bg-slate-200 dark:bg-slate-700"></div></div>
+<div class="grid grid-cols-2 gap-3">
+    <button class="flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 text-sm font-medium"><i data-lucide="chrome" class="w-4 h-4"></i> Google</button>
+    <button class="flex items-center justify-center gap-2 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 text-sm font-medium"><i data-lucide="linkedin" class="w-4 h-4"></i> LinkedIn</button>
+</div>
+
+<p class="text-center text-sm text-slate-500 mt-8">Don't have an account? <a href="{% url 'accounts:register' %}" class="text-primary font-semibold hover:underline">Sign up free</a></p>
+{% endblock %}

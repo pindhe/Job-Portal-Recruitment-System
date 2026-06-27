@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" x-data="{ dark: localStorage.getItem('theme') === 'dark' }"
+      :class="{ 'dark': dark }" x-init="$watch('dark', v => localStorage.setItem('theme', v ? 'dark' : 'light'))">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block meta_description %}AI-powered recruitment & job portal platform connecting talent with opportunity.{% endblock %}">
+    <title>{% block title %}{{ SITE_NAME }}{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        primary: '{{ THEME.primary }}',
+                        secondary: '{{ THEME.secondary }}',
+                        accent: '{{ THEME.accent }}',
+                        success: '{{ THEME.success }}',
+                        danger: '{{ THEME.danger }}',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <style>
+        [x-cloak]{display:none!important}
+        ::-webkit-scrollbar{width:10px;height:10px}
+        ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:8px}
+        .dark ::-webkit-scrollbar-thumb{background:#475569}
+        .glass{backdrop-filter:blur(12px);background:rgba(255,255,255,.7)}
+        .dark .glass{background:rgba(15,23,42,.7)}
+        .gradient-primary{background:linear-gradient(135deg,{{ THEME.primary }} 0%,{{ THEME.secondary }} 100%)}
+    </style>
+    {% block head %}{% endblock %}
+</head>
+<body class="font-sans bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 antialiased min-h-screen flex flex-col">
+{% block body %}
+    {% include "partials/navbar.html" %}
+    <main class="flex-1">
+        {% include "partials/messages.html" %}
+        {% block content %}{% endblock %}
+    </main>
+    {% include "partials/footer.html" %}
+{% endblock %}
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        AOS.init({ duration: 600, once: true, offset: 40 });
+        if (window.lucide) lucide.createIcons();
+    });
+    document.addEventListener('alpine:initialized', () => { if (window.lucide) lucide.createIcons(); });
+</script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

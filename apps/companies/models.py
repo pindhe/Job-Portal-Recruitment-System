@@ -60,6 +60,11 @@ class Company(BaseModel):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        from django.urls import reverse
+
+        return reverse("companies:detail", kwargs={"slug": self.slug})
+
     @property
     def open_jobs_count(self):
         return self.jobs.filter(status="published").count()

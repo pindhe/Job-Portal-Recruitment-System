@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Find Jobs — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<div class="gradient-primary text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-3xl font-extrabold">Find Your Next Role</h1>
+        <form method="get" class="mt-6 bg-white rounded-2xl p-2 flex flex-col md:flex-row gap-2 shadow-xl">
+            <div class="flex items-center flex-1 px-3">
+                <i data-lucide="search" class="w-5 h-5 text-slate-400"></i>
+                <input name="q" value="{{ params.q }}" placeholder="Title, skill or company" class="w-full px-3 py-3 text-slate-800 outline-none">
+            </div>
+            <div class="flex items-center flex-1 px-3 border-t md:border-t-0 md:border-l border-slate-200">
+                <i data-lucide="map-pin" class="w-5 h-5 text-slate-400"></i>
+                <input name="location" value="{{ params.location }}" placeholder="Location" class="w-full px-3 py-3 text-slate-800 outline-none">
+            </div>
+            <button class="gradient-primary text-white font-semibold px-8 py-3 rounded-xl">Search</button>
+        </form>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 grid lg:grid-cols-4 gap-8">
+    <!-- Filters -->
+    <aside class="lg:col-span-1">
+        <form method="get" class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-700 space-y-5 sticky top-20">
+            <input type="hidden" name="q" value="{{ params.q }}">
+            <div>
+                <h3 class="font-semibold mb-2 text-sm">Category</h3>
+                <select name="category" class="w-full rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-700 px-3 py-2 text-sm">
+                    <option value="">All categories</option>
+                    {% for c in categories %}<option value="{{ c.slug }}" {% if params.category == c.slug %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+                </select>
+            </div>
+            <div>
+                <h3 class="font-semibold mb-2 text-sm">Job Type</h3>
+                <select name="job_type" class="w-full rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-700 px-3 py-2 text-sm">
+                    <option value="">Any type</option>
+                    {% for value, label in job_types %}<option value="{{ value }}" {% if params.job_type == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
+                </select>
+            </div>
+            <div>
+                <h3 class="font-semibold mb-2 text-sm">Work Mode</h3>
+                <select name="work_mode" class="w-full rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-700 px-3 py-2 text-sm">
+                    <option value="">Any mode</option>
+                    {% for value, label in work_modes %}<option value="{{ value }}" {% if params.work_mode == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
+                </select>
+            </div>
+            <button class="w-full gradient-primary text-white font-semibold py-2.5 rounded-lg">Apply Filters</button>
+            <a href="{% url 'jobs:list' %}" class="block text-center text-sm text-slate-500 hover:text-primary">Clear all</a>
+        </form>
+    </aside>
+
+    <!-- Results -->
+    <div class="lg:col-span-3">
+        <div class="flex items-center justify-between mb-5">
+            <p class="text-slate-500 text-sm">{{ paginator.count }} job{{ paginator.count|pluralize }} found</p>
+            <form method="get" class="flex items-center gap-2 text-sm">
+                {% for k, v in params.items %}{% if k != 'sort' %}<input type="hidden" name="{{ k }}" value="{{ v }}">{% endif %}{% endfor %}
+                <span class="text-slate-500">Sort:</span>
+                <select name="sort" onchange="this.form.submit()" class="rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-700 px-3 py-1.5">
+                    <option value="">Newest</option>
+                    <option value="oldest" {% if params.sort == 'oldest' %}selected{% endif %}>Oldest</option>
+                    <option value="salary" {% if params.sort == 'salary' %}selected{% endif %}>Highest salary</option>
+                </select>
+            </form>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-5">
+            {% for job in jobs %}{% include "jobs/_job_card.html" with job=job %}{% empty %}
+            <div class="col-span-2 text-center py-20 bg-white dark:bg-slate-800 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700">
+                <i data-lucide="search-x" class="w-12 h-12 mx-auto text-slate-300"></i>
+                <p class="mt-4 font-semibold">No jobs match your search</p>
+                <p class="text-slate-500 text-sm">Try adjusting your filters or keywords.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if is_paginated %}
+        <div class="flex justify-center gap-1 mt-8">
+            {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}" class="px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary">Prev</a>{% endif %}
+            <span class="px-4 py-2 rounded-lg gradient-primary text-white">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}" class="px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary">Next</a>{% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

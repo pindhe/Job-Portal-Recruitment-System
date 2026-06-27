@@ -1,0 +1,66 @@
+{% load static %}
+<header x-data="{ open: false }" class="sticky top-0 z-40 glass border-b border-slate-200 dark:border-slate-800">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <div class="flex items-center gap-8">
+                <a href="{% url 'public:home' %}" class="flex items-center gap-2">
+                    <span class="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center text-white font-bold">T</span>
+                    <span class="text-xl font-extrabold tracking-tight">{{ SITE_NAME }}</span>
+                </a>
+                <div class="hidden md:flex items-center gap-1 text-sm font-medium">
+                    <a href="{% url 'jobs:list' %}" class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Find Jobs</a>
+                    <a href="{% url 'companies:list' %}" class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Companies</a>
+                    <a href="{% url 'public:blog_list' %}" class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Career Advice</a>
+                    <a href="{% url 'payments:pricing' %}" class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Pricing</a>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <button @click="dark = !dark" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" title="Toggle theme">
+                    <i data-lucide="moon" class="w-5 h-5" x-show="!dark"></i>
+                    <i data-lucide="sun" class="w-5 h-5" x-show="dark" x-cloak></i>
+                </button>
+
+                {% if user.is_authenticated %}
+                    <a href="{% url 'notifications:list' %}" class="relative p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+                        <i data-lucide="bell" class="w-5 h-5"></i>
+                        {% if unread_count %}<span class="absolute -top-0.5 -right-0.5 bg-danger text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">{{ unread_count }}</span>{% endif %}
+                    </a>
+                    <div x-data="{ menu: false }" class="relative">
+                        <button @click="menu = !menu" class="flex items-center gap-2 p-1 pr-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800">
+                            {% if user.avatar %}
+                                <img src="{{ user.avatar.url }}" class="w-8 h-8 rounded-full object-cover">
+                            {% else %}
+                                <span class="w-8 h-8 rounded-full gradient-primary text-white text-sm flex items-center justify-center font-semibold">{{ user.initials }}</span>
+                            {% endif %}
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </button>
+                        <div x-show="menu" @click.outside="menu = false" x-transition x-cloak
+                             class="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 py-2">
+                            <div class="px-4 py-2 border-b border-slate-100 dark:border-slate-700">
+                                <p class="font-semibold text-sm truncate">{{ user.full_name }}</p>
+                                <p class="text-xs text-slate-500 capitalize">{{ user.get_role_display }}</p>
+                            </div>
+                            <a href="{% url 'dashboard:home' %}" class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-slate-50 dark:hover:bg-slate-700"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard</a>
+                            <a href="{% url 'accounts:settings' %}" class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-slate-50 dark:hover:bg-slate-700"><i data-lucide="settings" class="w-4 h-4"></i> Settings</a>
+                            <a href="{% url 'accounts:logout' %}" class="flex items-center gap-2 px-4 py-2 text-sm text-danger hover:bg-slate-50 dark:hover:bg-slate-700"><i data-lucide="log-out" class="w-4 h-4"></i> Sign out</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <a href="{% url 'accounts:login' %}" class="hidden sm:inline-flex px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Sign in</a>
+                    <a href="{% url 'accounts:register' %}" class="px-4 py-2 text-sm font-semibold rounded-lg gradient-primary text-white shadow hover:opacity-90">Get Started</a>
+                {% endif %}
+
+                <button @click="open = !open" class="md:hidden p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <i data-lucide="menu" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+        <div x-show="open" x-cloak class="md:hidden pb-4 space-y-1 text-sm font-medium">
+            <a href="{% url 'jobs:list' %}" class="block px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Find Jobs</a>
+            <a href="{% url 'companies:list' %}" class="block px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Companies</a>
+            <a href="{% url 'public:blog_list' %}" class="block px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Career Advice</a>
+            <a href="{% url 'payments:pricing' %}" class="block px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Pricing</a>
+        </div>
+    </nav>
+</header>

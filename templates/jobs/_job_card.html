@@ -1,0 +1,29 @@
+{% load humanize %}
+<div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-700 hover:shadow-lg hover:border-primary/40 transition group">
+    <div class="flex items-start justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+            {% if job.company.logo %}
+                <img src="{{ job.company.logo.url }}" class="w-12 h-12 rounded-xl object-cover">
+            {% else %}
+                <span class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold text-lg">{{ job.company.name|first }}</span>
+            {% endif %}
+            <div class="min-w-0">
+                <a href="{{ job.get_absolute_url }}" class="font-bold text-base truncate block group-hover:text-primary">{{ job.title }}</a>
+                <p class="text-sm text-slate-500 truncate">{{ job.company.name }}</p>
+            </div>
+        </div>
+        <div class="flex flex-col items-end gap-1">
+            {% if job.is_urgent %}<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-300">URGENT</span>{% endif %}
+            {% if job.is_featured %}<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-600 dark:bg-amber-900/40 dark:text-amber-300">FEATURED</span>{% endif %}
+        </div>
+    </div>
+    <div class="flex flex-wrap gap-2 mt-4 text-xs">
+        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-700"><i data-lucide="briefcase" class="w-3.5 h-3.5"></i>{{ job.get_job_type_display }}</span>
+        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-700"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i>{{ job.location|default:"Remote" }}</span>
+        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-700"><i data-lucide="signal" class="w-3.5 h-3.5"></i>{{ job.get_experience_level_display }}</span>
+    </div>
+    <div class="flex items-center justify-between mt-4 pt-4 border-t border-slate-100 dark:border-slate-700">
+        <span class="text-sm font-semibold text-primary">{{ job.salary_display }}</span>
+        <span class="text-xs text-slate-400">{% if job.published_at %}{{ job.published_at|naturaltime }}{% endif %}</span>
+    </div>
+</div>

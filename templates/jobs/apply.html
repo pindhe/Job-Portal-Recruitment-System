@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Apply — {{ job.title }}{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <a href="{{ job.get_absolute_url }}" class="text-sm text-slate-500 hover:text-primary inline-flex items-center gap-1"><i data-lucide="arrow-left" class="w-4 h-4"></i> Back to job</a>
+    <div class="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-slate-100 dark:border-slate-700 mt-4">
+        <h1 class="text-2xl font-extrabold">Apply for {{ job.title }}</h1>
+        <p class="text-slate-500">{{ job.company.name }} · {{ job.location|default:"Remote" }}</p>
+        <form method="post" enctype="multipart/form-data" class="mt-6 space-y-5">
+            {% csrf_token %}
+            <div>
+                <label class="block text-sm font-medium mb-1">Cover Letter</label>
+                {{ form.cover_letter }}
+                {{ form.cover_letter.errors }}
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">Resume {% if user.candidate_profile.resume_file %}<span class="text-xs text-slate-400">(leave empty to use your profile resume)</span>{% endif %}</label>
+                {{ form.resume_file }}
+            </div>
+            <button class="w-full gradient-primary text-white font-semibold py-3 rounded-xl hover:opacity-90">Submit Application</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

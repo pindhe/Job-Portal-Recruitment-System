@@ -1,0 +1,32 @@
+{% extends "accounts/_auth_base.html" %}
+{% block title %}Create account — {{ SITE_NAME }}{% endblock %}
+
+{% block auth_content %}
+<h1 class="text-3xl font-extrabold">Create your account</h1>
+<p class="text-slate-500 mt-1">Join thousands building their future.</p>
+
+<form method="post" class="mt-6 space-y-4">
+    {% csrf_token %}
+    {% if form.non_field_errors %}<div class="text-sm text-red-600">{{ form.non_field_errors }}</div>{% endif %}
+    <div class="grid grid-cols-2 gap-3" x-data>
+        {% for radio in form.role %}
+        <label class="cursor-pointer">
+            <input type="radio" name="{{ radio.data.name }}" value="{{ radio.data.value }}" class="peer sr-only" {% if forloop.first %}checked{% endif %}>
+            <div class="rounded-xl border border-slate-300 dark:border-slate-600 p-3 text-center text-sm peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary font-medium">
+                {{ radio.choice_label }}
+            </div>
+        </label>
+        {% endfor %}
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+        <div>{{ form.first_name }}{{ form.first_name.errors }}</div>
+        <div>{{ form.last_name }}{{ form.last_name.errors }}</div>
+    </div>
+    <div>{{ form.email }}{{ form.email.errors }}</div>
+    <div>{{ form.phone }}</div>
+    <div>{{ form.password1 }}{{ form.password1.errors }}</div>
+    <div>{{ form.password2 }}{{ form.password2.errors }}</div>
+    <button class="w-full gradient-primary text-white font-semibold py-3 rounded-xl hover:opacity-90">Create Account</button>
+</form>
+<p class="text-center text-sm text-slate-500 mt-6">Already have an account? <a href="{% url 'accounts:login' %}" class="text-primary font-semibold hover:underline">Sign in</a></p>
+{% endblock %}

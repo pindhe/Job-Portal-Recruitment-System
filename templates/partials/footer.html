@@ -1,0 +1,53 @@
+{% load static %}
+<footer class="bg-slate-900 text-slate-300 mt-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-5 gap-8">
+        <div class="col-span-2">
+            <a href="{% url 'public:home' %}" class="flex items-center gap-2 mb-4">
+                <span class="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center text-white font-bold">T</span>
+                <span class="text-xl font-extrabold text-white">{{ SITE_NAME }}</span>
+            </a>
+            <p class="text-sm text-slate-400 max-w-xs">The AI-powered recruitment platform connecting world-class talent with companies, recruiters, universities, NGOs and governments.</p>
+            <form method="post" action="{% url 'public:newsletter' %}" class="mt-4 flex gap-2 max-w-sm">
+                {% csrf_token %}
+                <input type="email" name="email" required placeholder="Your email"
+                       class="flex-1 rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-white outline-none focus:border-secondary">
+                <button class="px-4 py-2 rounded-lg gradient-primary text-white text-sm font-semibold">Subscribe</button>
+            </form>
+        </div>
+        <div>
+            <h4 class="text-white font-semibold mb-3 text-sm">For Candidates</h4>
+            <ul class="space-y-2 text-sm">
+                <li><a href="{% url 'jobs:list' %}" class="hover:text-white">Browse Jobs</a></li>
+                <li><a href="{% url 'ai:resume_checker' %}" class="hover:text-white">Resume Checker</a></li>
+                <li><a href="{% url 'ai:career_advisor' %}" class="hover:text-white">Career Advisor</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="text-white font-semibold mb-3 text-sm">For Employers</h4>
+            <ul class="space-y-2 text-sm">
+                <li><a href="{% url 'payments:pricing' %}" class="hover:text-white">Pricing</a></li>
+                <li><a href="{% url 'companies:list' %}" class="hover:text-white">Companies</a></li>
+                <li><a href="{% url 'accounts:register' %}" class="hover:text-white">Post a Job</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="text-white font-semibold mb-3 text-sm">Company</h4>
+            <ul class="space-y-2 text-sm">
+                <li><a href="{% url 'public:about' %}" class="hover:text-white">About</a></li>
+                <li><a href="{% url 'public:faqs' %}" class="hover:text-white">FAQs</a></li>
+                <li><a href="{% url 'public:contact' %}" class="hover:text-white">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-400">
+            <p>&copy; {% now "Y" %} {{ SITE_NAME }}. All rights reserved.</p>
+            <div class="flex gap-4">
+                <a href="#" class="hover:text-white"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                <a href="#" class="hover:text-white"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                <a href="#" class="hover:text-white"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                <a href="#" class="hover:text-white"><i data-lucide="github" class="w-5 h-5"></i></a>
+            </div>
+        </div>
+    </div>
+</footer>

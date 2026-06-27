@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="min-h-screen grid lg:grid-cols-2">
+    <!-- Left brand panel -->
+    <div class="hidden lg:flex flex-col justify-between gradient-primary text-white p-12 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-20" style="background-image:radial-gradient(circle at 20% 30%, white 1px, transparent 1px),radial-gradient(circle at 80% 70%, white 1px, transparent 1px);background-size:50px 50px"></div>
+        <a href="{% url 'public:home' %}" class="relative flex items-center gap-2">
+            <span class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center font-bold text-xl">T</span>
+            <span class="text-2xl font-extrabold">{{ SITE_NAME }}</span>
+        </a>
+        <div class="relative">
+            <h2 class="text-4xl font-extrabold leading-tight">Where talent meets opportunity.</h2>
+            <p class="mt-4 text-white/80 max-w-md">AI-powered matching, resume tools, and a seamless hiring experience for candidates, employers and recruiters.</p>
+        </div>
+        <div class="relative flex gap-8 text-sm text-white/80">
+            <div><p class="text-2xl font-bold text-white">10k+</p>Jobs</div>
+            <div><p class="text-2xl font-bold text-white">5k+</p>Companies</div>
+            <div><p class="text-2xl font-bold text-white">98%</p>Match accuracy</div>
+        </div>
+    </div>
+    <!-- Right form panel -->
+    <div class="flex items-center justify-center p-6 sm:p-12 bg-slate-50 dark:bg-slate-900">
+        <div class="w-full max-w-md">
+            {% include "partials/messages.html" %}
+            {% block auth_content %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}

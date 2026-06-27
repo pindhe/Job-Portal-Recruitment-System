@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}{{ SITE_NAME }} — AI-Powered Recruitment & Job Portal{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="relative overflow-hidden">
+    <div class="absolute inset-0 gradient-primary opacity-95"></div>
+    <div class="absolute inset-0 opacity-20" style="background-image:radial-gradient(circle at 20% 30%, white 1px, transparent 1px),radial-gradient(circle at 80% 70%, white 1px, transparent 1px);background-size:60px 60px"></div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 text-white">
+        <div class="max-w-3xl" data-aos="fade-up">
+            <span class="inline-flex items-center gap-2 bg-white/15 px-4 py-1.5 rounded-full text-sm font-medium mb-6">
+                <i data-lucide="sparkles" class="w-4 h-4"></i> AI-powered matching & resume tools
+            </span>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
+                Find your <span class="text-accent">dream job</span> or your next <span class="text-accent">great hire</span>
+            </h1>
+            <p class="mt-6 text-lg text-white/90 max-w-2xl">
+                The enterprise recruitment platform for companies, recruiters, universities, NGOs and governments — powered by intelligent candidate matching.
+            </p>
+
+            <form action="{% url 'jobs:list' %}" method="get" class="mt-8 bg-white rounded-2xl p-2 flex flex-col sm:flex-row gap-2 shadow-2xl">
+                <div class="flex items-center flex-1 px-3">
+                    <i data-lucide="search" class="w-5 h-5 text-slate-400"></i>
+                    <input name="q" placeholder="Job title, keyword or company" class="w-full px-3 py-3 text-slate-800 outline-none">
+                </div>
+                <div class="flex items-center flex-1 px-3 border-t sm:border-t-0 sm:border-l border-slate-200">
+                    <i data-lucide="map-pin" class="w-5 h-5 text-slate-400"></i>
+                    <input name="location" placeholder="Location" class="w-full px-3 py-3 text-slate-800 outline-none">
+                </div>
+                <button class="gradient-primary text-white font-semibold px-8 py-3 rounded-xl hover:opacity-90">Search Jobs</button>
+            </form>
+            <div class="mt-6 flex flex-wrap gap-4 text-sm text-white/80">
+                <span>Popular:</span>
+                <a href="{% url 'jobs:list' %}?q=developer" class="hover:text-white underline">Developer</a>
+                <a href="{% url 'jobs:list' %}?q=designer" class="hover:text-white underline">Designer</a>
+                <a href="{% url 'jobs:list' %}?work_mode=remote" class="hover:text-white underline">Remote</a>
+                <a href="{% url 'jobs:list' %}?job_type=internship" class="hover:text-white underline">Internships</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-10">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg border border-slate-100 dark:border-slate-700" data-aos="fade-up">
+            <i data-lucide="briefcase" class="w-7 h-7 text-primary mb-2"></i>
+            <p class="text-3xl font-extrabold">{{ stats.jobs|intcomma }}</p><p class="text-slate-500 text-sm">Active Jobs</p>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg border border-slate-100 dark:border-slate-700" data-aos="fade-up" data-aos-delay="100">
+            <i data-lucide="building-2" class="w-7 h-7 text-secondary mb-2"></i>
+            <p class="text-3xl font-extrabold">{{ stats.companies|intcomma }}</p><p class="text-slate-500 text-sm">Companies</p>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg border border-slate-100 dark:border-slate-700" data-aos="fade-up" data-aos-delay="200">
+            <i data-lucide="users" class="w-7 h-7 text-accent mb-2"></i>
+            <p class="text-3xl font-extrabold">{{ stats.candidates|intcomma }}</p><p class="text-slate-500 text-sm">Candidates</p>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg border border-slate-100 dark:border-slate-700" data-aos="fade-up" data-aos-delay="300">
+            <i data-lucide="send" class="w-7 h-7 text-success mb-2"></i>
+            <p class="text-3xl font-extrabold">{{ stats.applications|intcomma }}</p><p class="text-slate-500 text-sm">Applications</p>
+        </div>
+    </div>
+</section>
+
+<!-- Categories -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="flex items-end justify-between mb-8">
+        <div><h2 class="text-3xl font-extrabold">Popular Categories</h2><p class="text-slate-500 mt-1">Explore opportunities by field</p></div>
+        <a href="{% url 'jobs:list' %}" class="text-primary font-semibold text-sm hover:underline">View all →</a>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {% for cat in categories %}
+        <a href="{% url 'jobs:list' %}?category={{ cat.slug }}" data-aos="zoom-in"
+           class="group bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-700 hover:border-primary hover:shadow-lg transition flex items-center gap-4">
+            <span class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center group-hover:gradient-primary group-hover:text-white transition">
+                <i data-lucide="{{ cat.icon|default:'layers' }}" class="w-6 h-6"></i>
+            </span>
+            <div><p class="font-semibold">{{ cat.name }}</p><p class="text-xs text-slate-500">{{ cat.n }} job{{ cat.n|pluralize }}</p></div>
+        </a>
+        {% empty %}<p class="text-slate-500">Categories coming soon.</p>{% endfor %}
+    </div>
+</section>
+
+<!-- Featured Jobs -->
+<section class="bg-slate-100 dark:bg-slate-800/40 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-end justify-between mb-8">
+            <div><h2 class="text-3xl font-extrabold">Featured Jobs</h2><p class="text-slate-500 mt-1">Hand-picked opportunities for you</p></div>
+            <a href="{% url 'jobs:list' %}" class="text-primary font-semibold text-sm hover:underline">Browse all jobs →</a>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {% for job in featured_jobs %}{% include "jobs/_job_card.html" with job=job %}{% empty %}
+            <p class="text-slate-500">No jobs posted yet. Check back soon!</p>{% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- AI Features -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="text-secondary font-semibold text-sm uppercase tracking-wider">Powered by AI</span>
+        <h2 class="text-3xl font-extrabold mt-2">Smarter hiring, smarter job search</h2>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+        <div class="rounded-2xl p-8 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700" data-aos="fade-up">
+            <span class="w-12 h-12 rounded-xl gradient-primary text-white flex items-center justify-center mb-4"><i data-lucide="file-check-2" class="w-6 h-6"></i></span>
+            <h3 class="font-bold text-lg">AI Resume & ATS Checker</h3>
+            <p class="text-slate-500 mt-2 text-sm">Instant ATS score, keyword gaps, and optimization tips to get past recruiters.</p>
+        </div>
+        <div class="rounded-2xl p-8 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700" data-aos="fade-up" data-aos-delay="100">
+            <span class="w-12 h-12 rounded-xl gradient-primary text-white flex items-center justify-center mb-4"><i data-lucide="target" class="w-6 h-6"></i></span>
+            <h3 class="font-bold text-lg">AI Candidate Matching</h3>
+            <p class="text-slate-500 mt-2 text-sm">Smart match scores rank the best candidates for every role automatically.</p>
+        </div>
+        <div class="rounded-2xl p-8 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700" data-aos="fade-up" data-aos-delay="200">
+            <span class="w-12 h-12 rounded-xl gradient-primary text-white flex items-center justify-center mb-4"><i data-lucide="compass" class="w-6 h-6"></i></span>
+            <h3 class="font-bold text-lg">AI Career Advisor</h3>
+            <p class="text-slate-500 mt-2 text-sm">Personalized job recommendations and skill-gap analysis for your growth.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Top Companies -->
+{% if top_companies %}
+<section class="bg-slate-100 dark:bg-slate-800/40 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-extrabold mb-8">Top Companies Hiring</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {% for c in top_companies %}
+            <a href="{{ c.get_absolute_url|default:'#' }}" class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 hover:shadow-lg transition text-center">
+                {% if c.logo %}<img src="{{ c.logo.url }}" class="w-14 h-14 mx-auto rounded-xl object-cover mb-3">
+                {% else %}<span class="w-14 h-14 mx-auto rounded-xl gradient-primary text-white flex items-center justify-center font-bold text-xl mb-3">{{ c.name|first }}</span>{% endif %}
+                <p class="font-semibold truncate">{{ c.name }}</p>
+                <p class="text-xs text-slate-500">{{ c.n }} open role{{ c.n|pluralize }}</p>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Testimonials -->
+{% if testimonials %}
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <h2 class="text-3xl font-extrabold mb-8 text-center">Loved by professionals</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+        {% for t in testimonials %}
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700" data-aos="fade-up">
+            <div class="flex gap-1 text-accent mb-3">{% for i in "12345" %}{% if forloop.counter <= t.rating %}<i data-lucide="star" class="w-4 h-4 fill-current"></i>{% endif %}{% endfor %}</div>
+            <p class="text-slate-600 dark:text-slate-300 italic">"{{ t.quote }}"</p>
+            <div class="mt-4 flex items-center gap-3">
+                <span class="w-10 h-10 rounded-full gradient-primary text-white flex items-center justify-center font-semibold">{{ t.name|first }}</span>
+                <div><p class="font-semibold text-sm">{{ t.name }}</p><p class="text-xs text-slate-500">{{ t.role }}{% if t.company %}, {{ t.company }}{% endif %}</p></div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<!-- CTA -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="rounded-3xl gradient-primary p-10 lg:p-16 text-center text-white relative overflow-hidden">
+        <h2 class="text-3xl lg:text-4xl font-extrabold">Ready to take the next step?</h2>
+        <p class="mt-3 text-white/90 max-w-xl mx-auto">Join thousands of candidates and employers building the future of work.</p>
+        <div class="mt-8 flex flex-wrap gap-4 justify-center">
+            <a href="{% url 'accounts:register' %}" class="bg-white text-primary font-semibold px-8 py-3 rounded-xl hover:bg-slate-100">Create free account</a>
+            <a href="{% url 'jobs:list' %}" class="bg-white/15 border border-white/30 text-white font-semibold px-8 py-3 rounded-xl hover:bg-white/25">Browse jobs</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
