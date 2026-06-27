@@ -3,15 +3,64 @@
 {% block page_title %}Admin Panel{% endblock %}
 
 {% block dashboard %}
-<div class="mb-6"><h2 class="text-2xl font-extrabold" data-i18n="dash.platform_analytics">Platform Analytics</h2><p class="text-slate-500">Real-time overview of the entire platform.</p></div>
-
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-    {% include "dashboard/_stat_card.html" with icon="users" value=users_count label="Total Users" key="dash.total_users" color="bg-primary/10 text-primary" %}
-    {% include "dashboard/_stat_card.html" with icon="building-2" value=companies_count label="Companies" key="dash.companies" color="bg-secondary/10 text-secondary" %}
-    {% include "dashboard/_stat_card.html" with icon="briefcase" value=jobs_count label="Jobs" key="dash.jobs" color="bg-amber-100 text-amber-600" %}
-    {% include "dashboard/_stat_card.html" with icon="send" value=applications_count label="Applications" key="dash.applications" color="bg-emerald-100 text-emerald-600" %}
+<!-- Header -->
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div>
+        <h2 class="text-2xl font-extrabold flex items-center gap-2"><i data-lucide="gauge" class="w-6 h-6 text-primary"></i> <span data-i18n="dash.platform_analytics">Platform Analytics</span></h2>
+        <p class="text-slate-500"><span data-i18n="dash.welcome_admin">Welcome back,</span> {{ user.first_name|default:user.email }} · {% now "l, M j, Y" %}</p>
+    </div>
+    <div class="flex flex-wrap gap-2">
+        <a href="{% url 'dashboard:admin_users' %}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold hover:border-primary hover:text-primary transition"><i data-lucide="users" class="w-4 h-4"></i> <span data-i18n="dash.manage_users">Manage Users</span></a>
+        <a href="{% url 'dashboard:admin_jobs' %}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold hover:border-primary hover:text-primary transition"><i data-lucide="briefcase" class="w-4 h-4"></i> <span data-i18n="dash.review_jobs">Review Jobs</span></a>
+        <a href="/admin/" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl gradient-primary text-white text-sm font-semibold hover:opacity-90 shadow-lg shadow-primary/20"><i data-lucide="shield" class="w-4 h-4"></i> <span data-i18n="side.django_admin">Django Admin</span></a>
+    </div>
 </div>
 
+<!-- Stat cards -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div class="relative overflow-hidden bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-700 hover:shadow-lg transition" data-aos="fade-up">
+        <div class="flex items-start justify-between">
+            <div>
+                <p class="text-3xl font-extrabold">{{ users_count|intcomma }}</p>
+                <p class="text-sm text-slate-500 mt-1" data-i18n="dash.total_users">Total Users</p>
+            </div>
+            <span class="w-11 h-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center"><i data-lucide="users" class="w-5 h-5"></i></span>
+        </div>
+        <span class="absolute -bottom-4 -right-4 w-20 h-20 rounded-full bg-primary/5"></span>
+    </div>
+    <div class="relative overflow-hidden bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-700 hover:shadow-lg transition" data-aos="fade-up" data-aos-delay="60">
+        <div class="flex items-start justify-between">
+            <div>
+                <p class="text-3xl font-extrabold">{{ companies_count|intcomma }}</p>
+                <p class="text-sm text-slate-500 mt-1" data-i18n="dash.companies">Companies</p>
+            </div>
+            <span class="w-11 h-11 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center"><i data-lucide="building-2" class="w-5 h-5"></i></span>
+        </div>
+        <span class="absolute -bottom-4 -right-4 w-20 h-20 rounded-full bg-secondary/5"></span>
+    </div>
+    <div class="relative overflow-hidden bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-700 hover:shadow-lg transition" data-aos="fade-up" data-aos-delay="120">
+        <div class="flex items-start justify-between">
+            <div>
+                <p class="text-3xl font-extrabold">{{ jobs_count|intcomma }}</p>
+                <p class="text-sm text-slate-500 mt-1" data-i18n="dash.jobs">Jobs</p>
+            </div>
+            <span class="w-11 h-11 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center"><i data-lucide="briefcase" class="w-5 h-5"></i></span>
+        </div>
+        <span class="absolute -bottom-4 -right-4 w-20 h-20 rounded-full bg-amber-500/5"></span>
+    </div>
+    <div class="relative overflow-hidden bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-700 hover:shadow-lg transition" data-aos="fade-up" data-aos-delay="180">
+        <div class="flex items-start justify-between">
+            <div>
+                <p class="text-3xl font-extrabold">{{ applications_count|intcomma }}</p>
+                <p class="text-sm text-slate-500 mt-1" data-i18n="dash.applications">Applications</p>
+            </div>
+            <span class="w-11 h-11 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center"><i data-lucide="send" class="w-5 h-5"></i></span>
+        </div>
+        <span class="absolute -bottom-4 -right-4 w-20 h-20 rounded-full bg-emerald-500/5"></span>
+    </div>
+</div>
+
+<!-- Charts -->
 <div class="grid lg:grid-cols-3 gap-6 mb-6">
     <div class="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
         <h3 class="font-bold mb-4" data-i18n="dash.growth">Growth (last 6 months)</h3>
@@ -23,38 +72,63 @@
     </div>
 </div>
 
-<div class="grid lg:grid-cols-3 gap-6 mb-6">
-    <div class="rounded-2xl p-6 gradient-primary text-white">
-        <i data-lucide="dollar-sign" class="w-8 h-8 mb-2 opacity-80"></i>
-        <p class="text-3xl font-extrabold">${{ revenue|floatformat:0|intcomma }}</p>
-        <p class="text-white/80 text-sm" data-i18n="dash.revenue">Total Revenue</p>
+<!-- Revenue band -->
+<div class="grid lg:grid-cols-4 gap-6 mb-6">
+    <div class="lg:col-span-2 relative overflow-hidden rounded-2xl p-6 gradient-primary text-white">
+        <div class="relative">
+            <i data-lucide="dollar-sign" class="w-8 h-8 mb-2 opacity-80"></i>
+            <p class="text-4xl font-extrabold">${{ revenue|floatformat:0|intcomma }}</p>
+            <p class="text-white/80 text-sm" data-i18n="dash.revenue">Total Revenue</p>
+        </div>
+        <i data-lucide="trending-up" class="absolute right-4 bottom-4 w-24 h-24 opacity-15"></i>
     </div>
-    {% include "dashboard/_stat_card.html" with icon="gem" value=subscriptions_count label="Active Subscriptions" key="dash.active_subs" color="bg-primary/10 text-primary" %}
-    {% include "dashboard/_stat_card.html" with icon="user-check" value=candidates_count label="Candidates" key="dash.candidates" color="bg-secondary/10 text-secondary" %}
+    <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-700 flex flex-col justify-center">
+        <span class="w-11 h-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-3"><i data-lucide="gem" class="w-5 h-5"></i></span>
+        <p class="text-2xl font-extrabold">{{ subscriptions_count|intcomma }}</p>
+        <p class="text-sm text-slate-500" data-i18n="dash.active_subs">Active Subscriptions</p>
+    </div>
+    <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-700 flex flex-col justify-center">
+        <span class="w-11 h-11 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center mb-3"><i data-lucide="user-check" class="w-5 h-5"></i></span>
+        <p class="text-2xl font-extrabold">{{ candidates_count|intcomma }}</p>
+        <p class="text-sm text-slate-500" data-i18n="dash.candidates">Candidates</p>
+    </div>
 </div>
 
+<!-- Panels -->
 <div class="grid lg:grid-cols-2 gap-6">
     <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
-        <div class="flex items-center justify-between mb-4"><h3 class="font-bold" data-i18n="dash.pending_approvals">Pending Job Approvals</h3></div>
-        <div class="space-y-3">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold flex items-center gap-2"><i data-lucide="clock" class="w-5 h-5 text-amber-500"></i> <span data-i18n="dash.pending_approvals">Pending Job Approvals</span></h3>
+            <a href="{% url 'dashboard:admin_jobs' %}" class="text-sm text-primary hover:underline" data-i18n="dash.view_all">View all</a>
+        </div>
+        <div class="space-y-2">
             {% for job in pending_jobs %}
-            <div class="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700/50">
-                <div><p class="text-sm font-medium">{{ job.title }}</p><p class="text-xs text-slate-500">{{ job.company.name }}</p></div>
-                <a href="{% url 'dashboard:admin_job_approve' job.pk %}" class="text-xs px-3 py-1.5 rounded-lg gradient-primary text-white font-semibold" data-i18n="dash.approve">Approve</a>
+            <div class="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700/50 transition">
+                <div class="min-w-0"><p class="text-sm font-medium truncate">{{ job.title }}</p><p class="text-xs text-slate-500 truncate">{{ job.company.name }}</p></div>
+                <a href="{% url 'dashboard:admin_job_approve' job.pk %}" class="shrink-0 inline-flex items-center gap-1 text-xs px-3 py-1.5 rounded-lg gradient-primary text-white font-semibold"><i data-lucide="check" class="w-3.5 h-3.5"></i> <span data-i18n="dash.approve">Approve</span></a>
             </div>
-            {% empty %}<p class="text-slate-500 text-sm text-center py-6"><span data-i18n="dash.no_pending">No pending approvals</span> 🎉</p>{% endfor %}
+            {% empty %}
+            <div class="text-center py-10">
+                <span class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-900/20 text-emerald-500 flex items-center justify-center mx-auto"><i data-lucide="check-check" class="w-6 h-6"></i></span>
+                <p class="text-slate-500 text-sm mt-3" data-i18n="dash.no_pending">No pending approvals</p>
+            </div>
+            {% endfor %}
         </div>
     </div>
     <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
-        <div class="flex items-center justify-between mb-4"><h3 class="font-bold" data-i18n="dash.new_users">New Users</h3><a href="{% url 'dashboard:admin_users' %}" class="text-sm text-primary hover:underline" data-i18n="dash.all_users">All users</a></div>
-        <div class="space-y-3">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold flex items-center gap-2"><i data-lucide="user-plus" class="w-5 h-5 text-primary"></i> <span data-i18n="dash.new_users">New Users</span></h3>
+            <a href="{% url 'dashboard:admin_users' %}" class="text-sm text-primary hover:underline" data-i18n="dash.all_users">All users</a>
+        </div>
+        <div class="space-y-1">
             {% for u in recent_users %}
-            <div class="flex items-center gap-3">
-                <span class="w-9 h-9 rounded-full gradient-primary text-white text-xs flex items-center justify-center font-semibold">{{ u.initials }}</span>
-                <div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">{{ u.full_name }}</p><p class="text-xs text-slate-500">{{ u.email }}</p></div>
-                <span class="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 capitalize">{{ u.get_role_display }}</span>
+            <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700/50 transition">
+                {% if u.avatar %}<img src="{{ u.avatar.url }}" class="w-9 h-9 rounded-full object-cover">
+                {% else %}<span class="w-9 h-9 rounded-full gradient-primary text-white text-xs flex items-center justify-center font-semibold shrink-0">{{ u.initials }}</span>{% endif %}
+                <div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">{{ u.full_name|default:u.email }}</p><p class="text-xs text-slate-500 truncate">{{ u.email }}</p></div>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 capitalize shrink-0">{{ u.get_role_display }}</span>
             </div>
-            {% endfor %}
+            {% empty %}<p class="text-slate-500 text-sm text-center py-10" data-i18n="dash.no_users">No users yet.</p>{% endfor %}
         </div>
     </div>
 </div>
@@ -79,7 +153,7 @@
     new Chart(document.getElementById('roles'), {
         type: 'doughnut',
         data: { labels: rb.map(r=>r.role), datasets: [{ data: rb.map(r=>r.n), backgroundColor: ['{{ THEME.primary }}','{{ THEME.secondary }}','{{ THEME.accent }}','{{ THEME.success }}','{{ THEME.danger }}','#94a3b8','#a78bfa','#f472b6'] }] },
-        options: { plugins: { legend: { position: 'bottom' } } }
+        options: { plugins: { legend: { position: 'bottom' } }, cutout: '62%' }
     });
 </script>
 {% endblock %}
