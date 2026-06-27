@@ -3,15 +3,15 @@
 
 {% block dashboard %}
 <div class="mb-6">
-    <h2 class="text-2xl font-extrabold">Welcome back, {{ user.first_name|default:user.full_name }} 👋</h2>
-    <p class="text-slate-500">Here's what's happening with your job search.</p>
+    <h2 class="text-2xl font-extrabold"><span data-i18n="dash.welcome">Welcome back</span>, {{ user.first_name|default:user.full_name }} 👋</h2>
+    <p class="text-slate-500" data-i18n="dash.candidate_sub">Here's what's happening with your job search.</p>
 </div>
 
 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-    {% include "dashboard/_stat_card.html" with icon="send" value=applications_count label="Applications" color="bg-primary/10 text-primary" %}
-    {% include "dashboard/_stat_card.html" with icon="bookmark" value=saved_count label="Saved Jobs" color="bg-secondary/10 text-secondary" %}
-    {% include "dashboard/_stat_card.html" with icon="star" value=shortlisted_count label="Shortlisted" color="bg-amber-100 text-amber-600" %}
-    {% include "dashboard/_stat_card.html" with icon="calendar-check" value=interview_count label="Interviews" color="bg-emerald-100 text-emerald-600" %}
+    {% include "dashboard/_stat_card.html" with icon="send" value=applications_count label="Applications" key="dash.applications" color="bg-primary/10 text-primary" %}
+    {% include "dashboard/_stat_card.html" with icon="bookmark" value=saved_count label="Saved Jobs" key="dash.saved_jobs" color="bg-secondary/10 text-secondary" %}
+    {% include "dashboard/_stat_card.html" with icon="star" value=shortlisted_count label="Shortlisted" key="dash.shortlisted" color="bg-amber-100 text-amber-600" %}
+    {% include "dashboard/_stat_card.html" with icon="calendar-check" value=interview_count label="Interviews" key="dash.interviews" color="bg-emerald-100 text-emerald-600" %}
 </div>
 
 <div class="grid lg:grid-cols-3 gap-6">
@@ -19,8 +19,8 @@
         <!-- Recent applications -->
         <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="font-bold">Recent Applications</h3>
-                <a href="{% url 'dashboard:applied_jobs' %}" class="text-sm text-primary hover:underline">View all</a>
+                <h3 class="font-bold" data-i18n="dash.recent_apps">Recent Applications</h3>
+                <a href="{% url 'dashboard:applied_jobs' %}" class="text-sm text-primary hover:underline" data-i18n="dash.view_all">View all</a>
             </div>
             <div class="space-y-3">
                 {% for app in applications %}
@@ -34,7 +34,7 @@
                 {% empty %}
                 <div class="text-center py-8 text-slate-500">
                     <i data-lucide="inbox" class="w-10 h-10 mx-auto text-slate-300"></i>
-                    <p class="mt-2 text-sm">No applications yet. <a href="{% url 'jobs:list' %}" class="text-primary">Start applying →</a></p>
+                    <p class="mt-2 text-sm"><span data-i18n="dash.no_apps">No applications yet.</span> <a href="{% url 'jobs:list' %}" class="text-primary" data-i18n="dash.start_applying">Start applying →</a></p>
                 </div>
                 {% endfor %}
             </div>
@@ -43,7 +43,7 @@
         <!-- Recommended -->
         <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="font-bold">Recommended For You</h3>
+                <h3 class="font-bold" data-i18n="dash.recommended">Recommended For You</h3>
                 <span class="text-xs px-2 py-0.5 rounded-full bg-secondary/10 text-secondary font-semibold">AI</span>
             </div>
             <div class="space-y-3">
@@ -53,7 +53,7 @@
                     <div class="min-w-0 flex-1"><p class="font-medium truncate">{{ job.title }}</p><p class="text-xs text-slate-500">{{ job.company.name }} · {{ job.location|default:"Remote" }}</p></div>
                     <span class="text-xs text-primary font-semibold">{{ job.salary_display }}</span>
                 </a>
-                {% empty %}<p class="text-slate-500 text-sm text-center py-6">No recommendations yet.</p>{% endfor %}
+                {% empty %}<p class="text-slate-500 text-sm text-center py-6" data-i18n="dash.no_recommend">No recommendations yet.</p>{% endfor %}
             </div>
         </div>
     </div>
@@ -61,21 +61,21 @@
     <!-- Profile completion -->
     <div class="space-y-6">
         <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 text-center">
-            <h3 class="font-bold mb-4">Profile Completion</h3>
+            <h3 class="font-bold mb-4" data-i18n="dash.profile_completion">Profile Completion</h3>
             <div class="relative w-32 h-32 mx-auto">
                 <svg class="w-32 h-32 -rotate-90"><circle cx="64" cy="64" r="56" stroke="#e2e8f0" stroke-width="12" fill="none"/>
                     <circle cx="64" cy="64" r="56" stroke="{{ THEME.secondary }}" stroke-width="12" fill="none" stroke-linecap="round"
                             stroke-dasharray="352" style="stroke-dashoffset: calc(352 - (352 * {{ completion }} / 100))"/></svg>
                 <span class="absolute inset-0 flex items-center justify-center text-2xl font-extrabold">{{ completion }}%</span>
             </div>
-            <a href="{% url 'dashboard:resume_builder' %}" class="mt-4 inline-block w-full gradient-primary text-white font-semibold py-2.5 rounded-xl">Complete Profile</a>
+            <a href="{% url 'dashboard:resume_builder' %}" class="mt-4 inline-block w-full gradient-primary text-white font-semibold py-2.5 rounded-xl" data-i18n="dash.complete_profile">Complete Profile</a>
         </div>
         <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
-            <h3 class="font-bold mb-3">Quick Actions</h3>
+            <h3 class="font-bold mb-3" data-i18n="dash.quick_actions">Quick Actions</h3>
             <div class="space-y-2 text-sm">
-                <a href="{% url 'ai:resume_checker' %}" class="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700/50"><i data-lucide="file-check-2" class="w-4 h-4 text-primary"></i> Check ATS score</a>
-                <a href="{% url 'ai:cover_letter' %}" class="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700/50"><i data-lucide="pen-line" class="w-4 h-4 text-primary"></i> Generate cover letter</a>
-                <a href="{% url 'ai:career_advisor' %}" class="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700/50"><i data-lucide="compass" class="w-4 h-4 text-primary"></i> Get career advice</a>
+                <a href="{% url 'ai:resume_checker' %}" class="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700/50"><i data-lucide="file-check-2" class="w-4 h-4 text-primary"></i> <span data-i18n="dash.check_ats">Check ATS score</span></a>
+                <a href="{% url 'ai:cover_letter' %}" class="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700/50"><i data-lucide="pen-line" class="w-4 h-4 text-primary"></i> <span data-i18n="dash.gen_cover">Generate cover letter</span></a>
+                <a href="{% url 'ai:career_advisor' %}" class="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700/50"><i data-lucide="compass" class="w-4 h-4 text-primary"></i> <span data-i18n="dash.get_advice">Get career advice</span></a>
             </div>
         </div>
     </div>

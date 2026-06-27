@@ -5,5 +5,5 @@
         </span>
     </div>
     <p class="text-3xl font-extrabold mt-4">{{ value }}</p>
-    <p class="text-slate-500 text-sm">{{ label }}</p>
+    <p class="text-slate-500 text-sm"{% if key %} data-i18n="{{ key }}"{% endif %}>{{ label }}</p>
 </div>

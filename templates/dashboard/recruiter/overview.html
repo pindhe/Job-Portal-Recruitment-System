@@ -2,22 +2,22 @@
 {% block page_title %}Recruiter Dashboard{% endblock %}
 
 {% block dashboard %}
-<div class="mb-6"><h2 class="text-2xl font-extrabold">Recruiter Pipeline</h2><p class="text-slate-500">Track candidates across your assigned roles.</p></div>
+<div class="mb-6"><h2 class="text-2xl font-extrabold" data-i18n="dash.recruiter_pipeline">Recruiter Pipeline</h2><p class="text-slate-500" data-i18n="dash.recruiter_sub">Track candidates across your assigned roles.</p></div>
 
 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-    {% include "dashboard/_stat_card.html" with icon="briefcase" value=assigned_count label="Assigned Jobs" color="bg-primary/10 text-primary" %}
-    {% include "dashboard/_stat_card.html" with icon="users" value=applications_count label="Candidates" color="bg-secondary/10 text-secondary" %}
-    {% include "dashboard/_stat_card.html" with icon="calendar-check" value=interview_count label="Interviews" color="bg-amber-100 text-amber-600" %}
-    {% include "dashboard/_stat_card.html" with icon="check-circle" value=hired_count label="Hired" color="bg-emerald-100 text-emerald-600" %}
+    {% include "dashboard/_stat_card.html" with icon="briefcase" value=assigned_count label="Assigned Jobs" key="dash.assigned_jobs" color="bg-primary/10 text-primary" %}
+    {% include "dashboard/_stat_card.html" with icon="users" value=applications_count label="Candidates" key="dash.candidates" color="bg-secondary/10 text-secondary" %}
+    {% include "dashboard/_stat_card.html" with icon="calendar-check" value=interview_count label="Interviews" key="dash.interviews" color="bg-amber-100 text-amber-600" %}
+    {% include "dashboard/_stat_card.html" with icon="check-circle" value=hired_count label="Hired" key="dash.hired" color="bg-emerald-100 text-emerald-600" %}
 </div>
 
 <div class="grid lg:grid-cols-3 gap-6">
     <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
-        <h3 class="font-bold mb-4">Pipeline</h3>
+        <h3 class="font-bold mb-4" data-i18n="dash.pipeline">Pipeline</h3>
         <canvas id="pipe" height="160"></canvas>
     </div>
     <div class="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
-        <h3 class="font-bold mb-4">Recent Candidates</h3>
+        <h3 class="font-bold mb-4" data-i18n="dash.recent_candidates">Recent Candidates</h3>
         <div class="space-y-3">
             {% for app in recent_applications %}
             <div class="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700/50">
@@ -27,10 +27,10 @@
                 </div>
                 <div class="flex items-center gap-3">
                     <span class="text-xs font-bold text-primary">{{ app.ai_match_score }}%</span>
-                    <a href="{% url 'dashboard:job_applicants' app.job.pk %}" class="text-xs text-primary hover:underline">Open</a>
+                    <a href="{% url 'dashboard:job_applicants' app.job.pk %}" class="text-xs text-primary hover:underline" data-i18n="dash.open">Open</a>
                 </div>
             </div>
-            {% empty %}<p class="text-slate-500 text-sm">No candidates assigned yet.</p>{% endfor %}
+            {% empty %}<p class="text-slate-500 text-sm" data-i18n="dash.no_candidates">No candidates assigned yet.</p>{% endfor %}
         </div>
     </div>
 </div>

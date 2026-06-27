@@ -3,13 +3,13 @@
 {% block page_title %}Admin Panel{% endblock %}
 
 {% block dashboard %}
-<div class="mb-6"><h2 class="text-2xl font-extrabold">Platform Analytics</h2><p class="text-slate-500">Real-time overview of the entire platform.</p></div>
+<div class="mb-6"><h2 class="text-2xl font-extrabold" data-i18n="dash.platform_analytics">Platform Analytics</h2><p class="text-slate-500">Real-time overview of the entire platform.</p></div>
 
 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-    {% include "dashboard/_stat_card.html" with icon="users" value=users_count label="Total Users" color="bg-primary/10 text-primary" %}
-    {% include "dashboard/_stat_card.html" with icon="building-2" value=companies_count label="Companies" color="bg-secondary/10 text-secondary" %}
-    {% include "dashboard/_stat_card.html" with icon="briefcase" value=jobs_count label="Jobs" color="bg-amber-100 text-amber-600" %}
-    {% include "dashboard/_stat_card.html" with icon="send" value=applications_count label="Applications" color="bg-emerald-100 text-emerald-600" %}
+    {% include "dashboard/_stat_card.html" with icon="users" value=users_count label="Total Users" key="dash.total_users" color="bg-primary/10 text-primary" %}
+    {% include "dashboard/_stat_card.html" with icon="building-2" value=companies_count label="Companies" key="dash.companies" color="bg-secondary/10 text-secondary" %}
+    {% include "dashboard/_stat_card.html" with icon="briefcase" value=jobs_count label="Jobs" key="dash.jobs" color="bg-amber-100 text-amber-600" %}
+    {% include "dashboard/_stat_card.html" with icon="send" value=applications_count label="Applications" key="dash.applications" color="bg-emerald-100 text-emerald-600" %}
 </div>
 
 <div class="grid lg:grid-cols-3 gap-6 mb-6">

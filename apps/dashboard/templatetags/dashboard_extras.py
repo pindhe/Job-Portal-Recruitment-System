@@ -6,10 +6,10 @@ register = template.Library()
 
 
 @register.simple_tag
-def nav_link(url_name, icon, label, request, *args):
+def nav_link(url_name, icon, label, request, i18n_key=""):
     """Render a sidebar nav link with active-state highlighting."""
     try:
-        url = reverse(url_name, args=args)
+        url = reverse(url_name)
     except NoReverseMatch:
         url = "#"
     active = request.path == url
@@ -18,6 +18,8 @@ def nav_link(url_name, icon, label, request, *args):
         cls = f"{base} gradient-primary text-white font-semibold shadow"
     else:
         cls = f"{base} hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300"
+    attr = f' data-i18n="{i18n_key}"' if i18n_key else ""
     return mark_safe(
-        f'<a href="{url}" class="{cls}"><i data-lucide="{icon}" class="w-5 h-5"></i> {label}</a>'
+        f'<a href="{url}" class="{cls}"><i data-lucide="{icon}" class="w-5 h-5"></i> '
+        f'<span{attr}>{label}</span></a>'
     )

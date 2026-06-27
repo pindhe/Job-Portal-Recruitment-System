@@ -10,49 +10,49 @@
     </div>
 
     <nav class="p-4 space-y-1 text-sm overflow-y-auto" style="height: calc(100vh - 4rem)">
-        {% nav_link 'dashboard:home' 'layout-dashboard' 'Dashboard' request %}
+        {% nav_link 'dashboard:home' 'layout-dashboard' 'Dashboard' request i18n_key='dash.dashboard' %}
 
         {% if user.role == 'candidate' %}
-            <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase">Job Search</p>
-            {% nav_link 'jobs:list' 'search' 'Browse Jobs' request %}
-            {% nav_link 'dashboard:applied_jobs' 'send' 'Applied Jobs' request %}
-            {% nav_link 'dashboard:saved_jobs' 'bookmark' 'Saved Jobs' request %}
-            <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase">My Profile</p>
-            {% nav_link 'dashboard:resume_builder' 'file-text' 'Resume Builder' request %}
-            {% nav_link 'dashboard:resume_preview' 'file-search' 'Preview Resume' request %}
-            <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase">AI Tools</p>
-            {% nav_link 'ai:resume_checker' 'file-check-2' 'ATS Checker' request %}
-            {% nav_link 'ai:cover_letter' 'pen-line' 'Cover Letter' request %}
-            {% nav_link 'ai:career_advisor' 'compass' 'Career Advisor' request %}
+            <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase" data-i18n="side.job_search">Job Search</p>
+            {% nav_link 'jobs:list' 'search' 'Browse Jobs' request i18n_key='side.browse_jobs' %}
+            {% nav_link 'dashboard:applied_jobs' 'send' 'Applied Jobs' request i18n_key='side.applied_jobs' %}
+            {% nav_link 'dashboard:saved_jobs' 'bookmark' 'Saved Jobs' request i18n_key='side.saved_jobs' %}
+            <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase" data-i18n="side.my_profile">My Profile</p>
+            {% nav_link 'dashboard:resume_builder' 'file-text' 'Resume Builder' request i18n_key='side.resume_builder' %}
+            {% nav_link 'dashboard:resume_preview' 'file-search' 'Preview Resume' request i18n_key='side.preview_resume' %}
+            <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase" data-i18n="side.ai_tools">AI Tools</p>
+            {% nav_link 'ai:resume_checker' 'file-check-2' 'ATS Checker' request i18n_key='side.ats_checker' %}
+            {% nav_link 'ai:cover_letter' 'pen-line' 'Cover Letter' request i18n_key='side.cover_letter' %}
+            {% nav_link 'ai:career_advisor' 'compass' 'Career Advisor' request i18n_key='side.career_advisor' %}
 
         {% elif user.role == 'employer' or user.role == 'hr_manager' %}
-            <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase">Recruiting</p>
-            {% nav_link 'dashboard:employer_jobs' 'briefcase' 'My Jobs' request %}
-            {% nav_link 'dashboard:job_create' 'plus-circle' 'Post a Job' request %}
-            {% nav_link 'dashboard:company_edit' 'building-2' 'Company Profile' request %}
-            <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase">Account</p>
-            {% nav_link 'dashboard:billing' 'credit-card' 'Billing' request %}
-            {% nav_link 'payments:pricing' 'gem' 'Plans' request %}
+            <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase" data-i18n="side.recruiting">Recruiting</p>
+            {% nav_link 'dashboard:employer_jobs' 'briefcase' 'My Jobs' request i18n_key='side.my_jobs' %}
+            {% nav_link 'dashboard:job_create' 'plus-circle' 'Post a Job' request i18n_key='side.post_job' %}
+            {% nav_link 'dashboard:company_edit' 'building-2' 'Company Profile' request i18n_key='side.company_profile' %}
+            <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase" data-i18n="side.account">Account</p>
+            {% nav_link 'dashboard:billing' 'credit-card' 'Billing' request i18n_key='side.billing' %}
+            {% nav_link 'payments:pricing' 'gem' 'Plans' request i18n_key='side.plans' %}
 
         {% elif user.role == 'recruiter' %}
-            <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase">Recruiting</p>
-            {% nav_link 'dashboard:recruiter' 'users' 'Pipeline' request %}
-            {% nav_link 'jobs:list' 'search' 'Browse Jobs' request %}
+            <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase" data-i18n="side.recruiting">Recruiting</p>
+            {% nav_link 'dashboard:recruiter' 'users' 'Pipeline' request i18n_key='side.pipeline' %}
+            {% nav_link 'jobs:list' 'search' 'Browse Jobs' request i18n_key='side.browse_jobs' %}
 
         {% endif %}
 
         {% if user.is_admin_side %}
-            <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase">Administration</p>
-            {% nav_link 'dashboard:admin' 'gauge' 'Admin Panel' request %}
-            {% nav_link 'dashboard:admin_users' 'users' 'Users' request %}
-            {% nav_link 'dashboard:admin_jobs' 'briefcase' 'Jobs' request %}
-            <a href="/admin/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700"><i data-lucide="shield" class="w-5 h-5"></i> Django Admin</a>
+            <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase" data-i18n="side.administration">Administration</p>
+            {% nav_link 'dashboard:admin' 'gauge' 'Admin Panel' request i18n_key='side.admin_panel' %}
+            {% nav_link 'dashboard:admin_users' 'users' 'Users' request i18n_key='side.users' %}
+            {% nav_link 'dashboard:admin_jobs' 'briefcase' 'Jobs' request i18n_key='side.jobs' %}
+            <a href="/admin/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700"><i data-lucide="shield" class="w-5 h-5"></i> <span data-i18n="side.django_admin">Django Admin</span></a>
         {% endif %}
 
-        <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase">Settings</p>
-        {% nav_link 'accounts:settings' 'settings' 'Settings' request %}
-        {% nav_link 'notifications:list' 'bell' 'Notifications' request %}
-        <a href="{% url 'accounts:logout' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-danger hover:bg-red-50 dark:hover:bg-red-900/20"><i data-lucide="log-out" class="w-5 h-5"></i> Sign out</a>
+        <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase" data-i18n="side.settings">Settings</p>
+        {% nav_link 'accounts:settings' 'settings' 'Settings' request i18n_key='side.settings' %}
+        {% nav_link 'notifications:list' 'bell' 'Notifications' request i18n_key='side.notifications' %}
+        <a href="{% url 'accounts:logout' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-danger hover:bg-red-50 dark:hover:bg-red-900/20"><i data-lucide="log-out" class="w-5 h-5"></i> <span data-i18n="side.signout">Sign out</span></a>
     </nav>
 </aside>
 <div x-show="sidebar" @click="sidebar = false" x-cloak class="fixed inset-0 z-30 bg-black/40 lg:hidden"></div>
