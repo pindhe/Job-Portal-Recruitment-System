@@ -17,7 +17,7 @@
                     <span><i data-lucide="briefcase" class="w-4 h-4 inline"></i> {{ company.get_org_type_display }}</span>
                     {% if company.industry %}<span><i data-lucide="layers" class="w-4 h-4 inline"></i> {{ company.industry }}</span>{% endif %}
                     {% if company.location %}<span><i data-lucide="map-pin" class="w-4 h-4 inline"></i> {{ company.location }}</span>{% endif %}
-                    {% if company.website %}<a href="{{ company.website }}" class="text-primary hover:underline"><i data-lucide="globe" class="w-4 h-4 inline"></i> Website</a>{% endif %}
+                    {% if company.website %}<a href="{{ company.website }}" class="text-primary hover:underline"><i data-lucide="globe" class="w-4 h-4 inline"></i> <span data-i18n="comp.website">Website</span></a>{% endif %}
                 </div>
             </div>
         </div>
