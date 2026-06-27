@@ -3,17 +3,17 @@
 
 {% block content %}
 <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <h1 class="text-4xl font-extrabold text-center">Get in touch</h1>
-    <p class="text-center text-slate-500 mt-2">We'd love to hear from you.</p>
+    <h1 class="text-4xl font-extrabold text-center" data-i18n="contact.title">Get in touch</h1>
+    <p class="text-center text-slate-500 mt-2" data-i18n="contact.sub">We'd love to hear from you.</p>
     <form method="post" class="mt-8 bg-white dark:bg-slate-800 rounded-2xl p-8 border border-slate-100 dark:border-slate-700 space-y-4">
         {% csrf_token %}
         <div class="grid sm:grid-cols-2 gap-4">
-            <input name="name" required placeholder="Your name" class="rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 px-4 py-3 outline-none focus:ring-2 focus:ring-primary/30">
-            <input name="email" type="email" required placeholder="Email" class="rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 px-4 py-3 outline-none focus:ring-2 focus:ring-primary/30">
+            <input name="name" required placeholder="Your name" data-i18n-placeholder="contact.name" class="rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 px-4 py-3 outline-none focus:ring-2 focus:ring-primary/30">
+            <input name="email" type="email" required placeholder="Email" data-i18n-placeholder="contact.email" class="rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 px-4 py-3 outline-none focus:ring-2 focus:ring-primary/30">
         </div>
-        <input name="subject" placeholder="Subject" class="w-full rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 px-4 py-3 outline-none focus:ring-2 focus:ring-primary/30">
-        <textarea name="message" rows="5" required placeholder="Your message" class="w-full rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 px-4 py-3 outline-none focus:ring-2 focus:ring-primary/30"></textarea>
-        <button class="w-full gradient-primary text-white font-semibold py-3 rounded-xl">Send Message</button>
+        <input name="subject" placeholder="Subject" data-i18n-placeholder="contact.subject" class="w-full rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 px-4 py-3 outline-none focus:ring-2 focus:ring-primary/30">
+        <textarea name="message" rows="5" required placeholder="Your message" data-i18n-placeholder="contact.message" class="w-full rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 px-4 py-3 outline-none focus:ring-2 focus:ring-primary/30"></textarea>
+        <button class="w-full gradient-primary text-white font-semibold py-3 rounded-xl" data-i18n="contact.send">Send Message</button>
     </form>
 </div>
 {% endblock %}

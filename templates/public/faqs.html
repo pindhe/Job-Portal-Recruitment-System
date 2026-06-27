@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <h1 class="text-4xl font-extrabold text-center">Frequently Asked Questions</h1>
+    <h1 class="text-4xl font-extrabold text-center" data-i18n="faq.title">Frequently Asked Questions</h1>
     <div class="mt-10 space-y-3">
         {% for faq in faqs %}
         <div x-data="{ open: false }" class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 overflow-hidden">
@@ -12,7 +12,7 @@
             </button>
             <div x-show="open" x-cloak class="px-5 pb-5 text-slate-600 dark:text-slate-300 text-sm">{{ faq.answer|linebreaks }}</div>
         </div>
-        {% empty %}<p class="text-slate-500 text-center">No FAQs yet.</p>{% endfor %}
+        {% empty %}<p class="text-slate-500 text-center" data-i18n="faq.none">No FAQs yet.</p>{% endfor %}
     </div>
 </div>
 {% endblock %}

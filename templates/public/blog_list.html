@@ -3,8 +3,8 @@
 
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <h1 class="text-4xl font-extrabold">Career Advice & Insights</h1>
-    <p class="text-slate-500 mt-2">Tips to grow your career and hire better.</p>
+    <h1 class="text-4xl font-extrabold" data-i18n="blog.title">Career Advice & Insights</h1>
+    <p class="text-slate-500 mt-2" data-i18n="blog.sub">Tips to grow your career and hire better.</p>
     <div class="grid md:grid-cols-3 gap-6 mt-10">
         {% for post in posts %}
         <a href="{{ post.get_absolute_url }}" class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 hover:shadow-lg transition">
@@ -16,7 +16,7 @@
                 <p class="text-xs text-slate-400 mt-3">{{ post.created_at|date:"M d, Y" }}</p>
             </div>
         </a>
-        {% empty %}<p class="text-slate-500 col-span-3 text-center py-12">No posts yet.</p>{% endfor %}
+        {% empty %}<p class="text-slate-500 col-span-3 text-center py-12" data-i18n="blog.none">No posts yet.</p>{% endfor %}
     </div>
 </div>
 {% endblock %}

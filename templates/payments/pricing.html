@@ -5,27 +5,27 @@
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
     <div class="text-center max-w-2xl mx-auto mb-12">
-        <h1 class="text-4xl font-extrabold">Simple, transparent pricing</h1>
-        <p class="mt-3 text-slate-500">Choose the plan that fits your hiring needs.</p>
+        <h1 class="text-4xl font-extrabold" data-i18n="pay.title">Simple, transparent pricing</h1>
+        <p class="mt-3 text-slate-500" data-i18n="pay.sub">Choose the plan that fits your hiring needs.</p>
     </div>
     <div class="grid md:grid-cols-3 gap-6 items-stretch">
         {% for plan in plans %}
         <div class="relative bg-white dark:bg-slate-800 rounded-3xl p-8 border-2 {% if plan.is_popular %}border-primary shadow-xl scale-105{% else %}border-slate-100 dark:border-slate-700{% endif %} flex flex-col" data-aos="fade-up">
-            {% if plan.is_popular %}<span class="absolute -top-3 left-1/2 -translate-x-1/2 gradient-primary text-white text-xs font-bold px-4 py-1 rounded-full">MOST POPULAR</span>{% endif %}
+            {% if plan.is_popular %}<span class="absolute -top-3 left-1/2 -translate-x-1/2 gradient-primary text-white text-xs font-bold px-4 py-1 rounded-full" data-i18n="pay.popular">MOST POPULAR</span>{% endif %}
             <h3 class="font-bold text-lg">{{ plan.name }}</h3>
             <p class="text-sm text-slate-500 mt-1">{{ plan.description }}</p>
             <div class="mt-4"><span class="text-4xl font-extrabold">{{ plan.currency }}{{ plan.price|floatformat:0 }}</span><span class="text-slate-500">/{{ plan.get_billing_cycle_display|lower }}</span></div>
             <ul class="mt-6 space-y-3 text-sm flex-1">
-                <li class="flex gap-2"><i data-lucide="check" class="w-5 h-5 text-emerald-500"></i> {{ plan.job_post_limit }} job posts</li>
-                <li class="flex gap-2"><i data-lucide="check" class="w-5 h-5 text-emerald-500"></i> {{ plan.featured_job_limit }} featured jobs</li>
-                <li class="flex gap-2"><i data-lucide="check" class="w-5 h-5 text-emerald-500"></i> {{ plan.resume_views_limit }} resume views</li>
-                {% if plan.has_ai_tools %}<li class="flex gap-2"><i data-lucide="check" class="w-5 h-5 text-emerald-500"></i> AI hiring tools</li>{% endif %}
-                {% if plan.has_analytics %}<li class="flex gap-2"><i data-lucide="check" class="w-5 h-5 text-emerald-500"></i> Advanced analytics</li>{% endif %}
+                <li class="flex gap-2"><i data-lucide="check" class="w-5 h-5 text-emerald-500"></i> {{ plan.job_post_limit }} <span data-i18n="pay.job_posts">job posts</span></li>
+                <li class="flex gap-2"><i data-lucide="check" class="w-5 h-5 text-emerald-500"></i> {{ plan.featured_job_limit }} <span data-i18n="pay.featured_jobs">featured jobs</span></li>
+                <li class="flex gap-2"><i data-lucide="check" class="w-5 h-5 text-emerald-500"></i> {{ plan.resume_views_limit }} <span data-i18n="pay.resume_views">resume views</span></li>
+                {% if plan.has_ai_tools %}<li class="flex gap-2"><i data-lucide="check" class="w-5 h-5 text-emerald-500"></i> <span data-i18n="pay.ai_tools">AI hiring tools</span></li>{% endif %}
+                {% if plan.has_analytics %}<li class="flex gap-2"><i data-lucide="check" class="w-5 h-5 text-emerald-500"></i> <span data-i18n="pay.analytics">Advanced analytics</span></li>{% endif %}
                 {% for f in plan.features %}<li class="flex gap-2"><i data-lucide="check" class="w-5 h-5 text-emerald-500"></i> {{ f }}</li>{% endfor %}
             </ul>
-            <a href="{% url 'payments:subscribe' plan.slug %}" class="mt-6 block text-center w-full py-3 rounded-xl font-semibold {% if plan.is_popular %}gradient-primary text-white{% else %}border border-slate-300 dark:border-slate-600{% endif %}">Choose {{ plan.name }}</a>
+            <a href="{% url 'payments:subscribe' plan.slug %}" class="mt-6 block text-center w-full py-3 rounded-xl font-semibold {% if plan.is_popular %}gradient-primary text-white{% else %}border border-slate-300 dark:border-slate-600{% endif %}"><span data-i18n="pay.choose">Choose</span> {{ plan.name }}</a>
         </div>
-        {% empty %}<p class="text-slate-500 col-span-3 text-center">No plans configured yet.</p>{% endfor %}
+        {% empty %}<p class="text-slate-500 col-span-3 text-center" data-i18n="pay.none">No plans configured yet.</p>{% endfor %}
     </div>
 </div>
 {% endblock %}

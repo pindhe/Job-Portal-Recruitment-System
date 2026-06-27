@@ -24,9 +24,9 @@
         {% if company.about %}<p class="mt-5 text-slate-600 dark:text-slate-300 whitespace-pre-line">{{ company.about }}</p>{% endif %}
     </div>
 
-    <h2 class="text-xl font-extrabold mt-8 mb-4">Open Positions ({{ jobs|length }})</h2>
+    <h2 class="text-xl font-extrabold mt-8 mb-4"><span data-i18n="comp.open_positions">Open Positions</span> ({{ jobs|length }})</h2>
     <div class="grid sm:grid-cols-2 gap-5 pb-12">
-        {% for job in jobs %}{% include "jobs/_job_card.html" with job=job %}{% empty %}<p class="text-slate-500">No open positions right now.</p>{% endfor %}
+        {% for job in jobs %}{% include "jobs/_job_card.html" with job=job %}{% empty %}<p class="text-slate-500" data-i18n="comp.no_positions">No open positions right now.</p>{% endfor %}
     </div>
 </div>
 {% endblock %}
