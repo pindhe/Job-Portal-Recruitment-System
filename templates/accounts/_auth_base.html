@@ -7,7 +7,7 @@
     <div class="hidden lg:flex flex-col justify-between text-white p-12 relative overflow-hidden bg-cover bg-center" style="background-image:url('{% static 'images/hero-bg.png' %}')">
         <div class="absolute inset-0 gradient-primary opacity-80 mix-blend-multiply"></div>
         <a href="{% url 'public:home' %}" class="relative flex items-center gap-2">
-            <span class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center font-bold text-xl">T</span>
+            <img src="{% static 'images/1.jpg' %}" alt="{{ SITE_NAME }}" class="w-10 h-10 rounded-xl object-cover bg-white">
             <span class="text-2xl font-extrabold">{{ SITE_NAME }}</span>
         </a>
         <div class="relative">

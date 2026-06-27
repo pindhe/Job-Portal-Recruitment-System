@@ -20,12 +20,12 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-6 gap-8">
         <div class="col-span-2">
             <a href="{% url 'public:home' %}" class="flex items-center gap-2 mb-4">
-                <span class="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center text-white font-bold">T</span>
+                <img src="{% static 'images/1.jpg' %}" alt="{{ SITE_NAME }}" class="w-9 h-9 rounded-xl object-cover bg-white">
                 <span class="text-xl font-extrabold text-white">{{ SITE_NAME }}</span>
             </a>
             <p class="text-sm text-slate-400 max-w-xs" data-i18n="footer.desc">The AI-powered recruitment platform connecting world-class talent with companies, recruiters, universities, NGOs and governments.</p>
             <div class="mt-5 space-y-2 text-sm text-slate-400">
-                <p class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-secondary"></i> support@{{ SITE_NAME|lower }}.com</p>
+                <p class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-secondary"></i> support@airecruitment.com</p>
                 <p class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4 text-secondary"></i> +252 61 000 0000</p>
                 <p class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-secondary"></i> Mogadishu, Somalia</p>
             </div>

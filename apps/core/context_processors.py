@@ -22,7 +22,7 @@ def site_settings(request):
         pass
 
     return {
-        "SITE_NAME": getattr(settings, "SITE_NAME", "TalentSphere"),
+        "SITE_NAME": getattr(settings, "SITE_NAME", "AI Recruitment Platform"),
         "THEME": getattr(settings, "THEME", {}),
         "LANGUAGES": getattr(settings, "LANGUAGES", []),
         "nav_categories": nav_categories,

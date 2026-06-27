@@ -1,9 +1,9 @@
-{% load dashboard_extras %}
+{% load dashboard_extras static %}
 <aside class="fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 transform transition-transform lg:translate-x-0"
        :class="sidebar ? 'translate-x-0' : '-translate-x-full'">
     <div class="h-16 flex items-center gap-2 px-6 border-b border-slate-200 dark:border-slate-700">
         <a href="{% url 'public:home' %}" class="flex items-center gap-2">
-            <span class="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center text-white font-bold">T</span>
+            <img src="{% static 'images/1.jpg' %}" alt="{{ SITE_NAME }}" class="w-9 h-9 rounded-xl object-cover bg-white">
             <span class="text-lg font-extrabold">{{ SITE_NAME }}</span>
         </a>
         <button @click="sidebar = false" class="lg:hidden ml-auto p-1"><i data-lucide="x" class="w-5 h-5"></i></button>

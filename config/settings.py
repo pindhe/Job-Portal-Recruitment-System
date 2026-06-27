@@ -262,7 +262,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
 # Branding / theme tokens surfaced to templates
-SITE_NAME = os.getenv("SITE_NAME", "TalentSphere")
+SITE_NAME = os.getenv("SITE_NAME", "AI Recruitment Platform")
 THEME = {
     "primary": "#0F4C81",
     "secondary": "#14B8A6",

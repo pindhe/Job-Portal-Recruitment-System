@@ -1,4 +1,4 @@
-# TalentSphere — AI-Powered Recruitment & Job Portal Platform
+# AI Recruitment Platform — AI-Powered Recruitment & Job Portal
 
 An enterprise-grade, AI-powered recruitment and job portal built with **Django (Python)**.
 It supports companies, recruiters, universities, NGOs, government organizations and job
