@@ -32,6 +32,7 @@ urlpatterns = [
     path("admin-panel/users/", views.admin_users, name="admin_users"),
     path("admin-panel/jobs/", views.admin_jobs, name="admin_jobs"),
     path("admin-panel/jobs/<int:pk>/approve/", views.admin_job_approve, name="admin_job_approve"),
+    path("admin-panel/jobs/<int:pk>/reject/", views.admin_job_reject, name="admin_job_reject"),
 
     # Generic content management (CRUD)
     path("admin-panel/manage/<str:key>/", manage.manage_list, name="manage_list"),

@@ -2,31 +2,118 @@
 {% block page_title %}Users{% endblock %}
 
 {% block dashboard %}
-<div class="flex items-center justify-between mb-6">
-    <h2 class="text-2xl font-extrabold" data-i18n="dash.users">Users</h2>
-    <form method="get" class="flex gap-2">
-        <input name="q" value="{{ request.GET.q }}" placeholder="Search..." data-i18n-placeholder="adm.search_ph" class="rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-700 px-3 py-2 text-sm">
-        <select name="role" onchange="this.form.submit()" class="rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-700 px-3 py-2 text-sm">
-            <option value="" data-i18n="adm.all_roles">All roles</option>
-            {% for value, label in roles %}<option value="{{ value }}" {% if request.GET.role == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
-        </select>
-        <button class="px-4 py-2 rounded-lg gradient-primary text-white text-sm font-semibold" data-i18n="adm.filter">Filter</button>
-    </form>
-</div>
-<div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 overflow-hidden">
-    <table class="w-full text-sm">
-        <thead class="text-left text-slate-500 bg-slate-50 dark:bg-slate-700/50"><tr><th class="px-5 py-3" data-i18n="tbl.user">User</th><th data-i18n="tbl.email">Email</th><th data-i18n="tbl.role">Role</th><th data-i18n="tbl.verified">Verified</th><th data-i18n="tbl.joined">Joined</th></tr></thead>
-        <tbody>
-            {% for u in users %}
-            <tr class="border-t border-slate-100 dark:border-slate-700">
-                <td class="px-5 py-3 flex items-center gap-2"><span class="w-8 h-8 rounded-full gradient-primary text-white text-xs flex items-center justify-center font-semibold">{{ u.initials }}</span>{{ u.full_name }}</td>
-                <td class="text-slate-500">{{ u.email }}</td>
-                <td><span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-700 capitalize">{{ u.get_role_display }}</span></td>
-                <td>{% if u.email_verified %}<i data-lucide="badge-check" class="w-4 h-4 text-emerald-500"></i>{% else %}<i data-lucide="x" class="w-4 h-4 text-slate-300"></i>{% endif %}</td>
-                <td class="text-slate-500">{{ u.date_joined|date:"M d, Y" }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div x-data="{ showCreate: {{ open_modal|yesno:'true,false' }} }">
+    <!-- Header -->
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
+        <div>
+            <h2 class="text-2xl font-extrabold flex items-center gap-2"><i data-lucide="users" class="w-6 h-6 text-primary"></i> <span data-i18n="dash.users">Users</span></h2>
+            <p class="text-slate-500 text-sm">{{ total_users }} <span data-i18n="adm.total_users">total users</span></p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+            <form method="get" class="flex gap-2">
+                <div class="flex items-center bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg px-3">
+                    <i data-lucide="search" class="w-4 h-4 text-slate-400"></i>
+                    <input name="q" value="{{ request.GET.q }}" placeholder="Search..." data-i18n-placeholder="adm.search_ph" class="bg-transparent px-2 py-2 text-sm outline-none">
+                </div>
+                <select name="role" onchange="this.form.submit()" class="rounded-lg border border-slate-300 dark:border-slate-600 dark:bg-slate-800 px-3 py-2 text-sm">
+                    <option value="" data-i18n="adm.all_roles">All roles</option>
+                    {% for value, label in roles %}<option value="{{ value }}" {% if request.GET.role == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
+                </select>
+                <button class="px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold hover:border-primary" data-i18n="adm.filter">Filter</button>
+            </form>
+            <button @click="showCreate = true" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg gradient-primary text-white text-sm font-semibold hover:opacity-90 shadow-lg shadow-primary/20">
+                <i data-lucide="user-plus" class="w-4 h-4"></i> <span data-i18n="adm.add_user">Add User</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead class="text-left text-slate-500 bg-slate-50 dark:bg-slate-700/50">
+                    <tr>
+                        <th class="px-5 py-3" data-i18n="tbl.user">User</th>
+                        <th class="px-5 py-3" data-i18n="tbl.email">Email</th>
+                        <th class="px-5 py-3" data-i18n="tbl.role">Role</th>
+                        <th class="px-5 py-3" data-i18n="tbl.verified">Verified</th>
+                        <th class="px-5 py-3" data-i18n="tbl.joined">Joined</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
+                    {% for u in users %}
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/40">
+                        <td class="px-5 py-3">
+                            <div class="flex items-center gap-2">
+                                {% if u.avatar %}<img src="{{ u.avatar.url }}" class="w-8 h-8 rounded-full object-cover">
+                                {% else %}<span class="w-8 h-8 rounded-full gradient-primary text-white text-xs flex items-center justify-center font-semibold shrink-0">{{ u.initials }}</span>{% endif %}
+                                <span class="font-medium">{{ u.full_name }}</span>
+                            </div>
+                        </td>
+                        <td class="px-5 py-3 text-slate-500">{{ u.email }}</td>
+                        <td class="px-5 py-3"><span class="text-xs px-2.5 py-1 rounded-full bg-primary/10 text-primary capitalize font-medium">{{ u.get_role_display }}</span></td>
+                        <td class="px-5 py-3">{% if u.email_verified %}<i data-lucide="badge-check" class="w-4 h-4 text-emerald-500"></i>{% else %}<i data-lucide="x" class="w-4 h-4 text-slate-300"></i>{% endif %}</td>
+                        <td class="px-5 py-3 text-slate-500">{{ u.date_joined|date:"M d, Y" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="5" class="px-5 py-12 text-center text-slate-500">
+                        <span class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-700 text-slate-400 flex items-center justify-center mx-auto mb-3"><i data-lucide="users" class="w-6 h-6"></i></span>
+                        <span data-i18n="adm.no_users">No users found.</span>
+                    </td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Create user modal -->
+    <div x-show="showCreate" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4" x-transition.opacity>
+        <div class="absolute inset-0 bg-black/50" @click="showCreate = false"></div>
+        <div class="relative bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-100 dark:border-slate-700 w-full max-w-lg max-h-[90vh] overflow-y-auto"
+             x-transition.scale.origin.center>
+            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-800">
+                <h3 class="font-bold flex items-center gap-2"><i data-lucide="user-plus" class="w-5 h-5 text-primary"></i> <span data-i18n="adm.create_user">Create User</span></h3>
+                <button @click="showCreate = false" class="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <form method="post" class="p-6 space-y-4">
+                {% csrf_token %}
+                {% if form.non_field_errors %}<div class="text-sm text-red-600">{{ form.non_field_errors }}</div>{% endif %}
+                <div>
+                    <label class="block text-sm font-semibold mb-1.5" data-i18n="adm.role">Role</label>
+                    {{ form.role }}
+                    {% for e in form.role.errors %}<p class="text-xs text-red-600 mt-1">{{ e }}</p>{% endfor %}
+                    <p class="text-xs text-slate-400 mt-1" data-i18n="adm.role_hint">Choose Candidate, Employer, Recruiter or staff role.</p>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-sm font-semibold mb-1.5" data-i18n="auth.first_name">First name</label>
+                        {{ form.first_name }}{% for e in form.first_name.errors %}<p class="text-xs text-red-600 mt-1">{{ e }}</p>{% endfor %}
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1.5" data-i18n="auth.last_name">Last name</label>
+                        {{ form.last_name }}{% for e in form.last_name.errors %}<p class="text-xs text-red-600 mt-1">{{ e }}</p>{% endfor %}
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1.5" data-i18n="auth.email">Email</label>
+                    {{ form.email }}{% for e in form.email.errors %}<p class="text-xs text-red-600 mt-1">{{ e }}</p>{% endfor %}
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1.5" data-i18n="auth.phone">Phone</label>
+                    {{ form.phone }}{% for e in form.phone.errors %}<p class="text-xs text-red-600 mt-1">{{ e }}</p>{% endfor %}
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1.5" data-i18n="auth.password">Password</label>
+                    {{ form.password }}{% for e in form.password.errors %}<p class="text-xs text-red-600 mt-1">{{ e }}</p>{% endfor %}
+                </div>
+                <div class="flex items-center gap-3 pt-2">
+                    <button class="inline-flex items-center gap-2 px-6 py-3 rounded-xl gradient-primary text-white font-semibold hover:opacity-90 shadow-lg shadow-primary/20">
+                        <i data-lucide="check" class="w-4 h-4"></i> <span data-i18n="adm.create">Create</span>
+                    </button>
+                    <button type="button" @click="showCreate = false" class="px-6 py-3 rounded-xl border border-slate-300 dark:border-slate-600 font-semibold hover:bg-slate-50 dark:hover:bg-slate-700" data-i18n="manage.cancel">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock %}

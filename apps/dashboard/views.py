@@ -334,6 +334,21 @@ def _monthly_counts(model, field="created_at"):
 def admin_users(request):
     if not request.user.is_admin_side:
         return redirect("dashboard:home")
+
+    from apps.accounts.forms import AdminUserForm
+    from apps.accounts.models import Role
+
+    form = AdminUserForm()
+    open_modal = False
+    if request.method == "POST":
+        form = AdminUserForm(request.POST)
+        if form.is_valid():
+            new_user = form.save()
+            messages.success(request, f"{new_user.get_role_display()} '{new_user.full_name}' created.")
+            return redirect("dashboard:admin_users")
+        open_modal = True
+        messages.error(request, "Please correct the errors in the form.")
+
     users = User.objects.all().order_by("-date_joined")
     role = request.GET.get("role")
     q = request.GET.get("q")
@@ -341,9 +356,18 @@ def admin_users(request):
         users = users.filter(role=role)
     if q:
         users = users.filter(Q(email__icontains=q) | Q(first_name__icontains=q) | Q(last_name__icontains=q))
-    from apps.accounts.models import Role
 
-    return render(request, "dashboard/admin/users.html", {"users": users, "roles": Role.choices})
+    return render(
+        request,
+        "dashboard/admin/users.html",
+        {
+            "users": users,
+            "roles": Role.choices,
+            "form": form,
+            "open_modal": open_modal,
+            "total_users": User.objects.count(),
+        },
+    )
 
 
 @login_required
@@ -351,7 +375,22 @@ def admin_jobs(request):
     if not request.user.is_admin_side:
         return redirect("dashboard:home")
     jobs = Job.objects.select_related("company").order_by("-created_at")
-    return render(request, "dashboard/admin/jobs.html", {"jobs": jobs})
+    status = request.GET.get("status")
+    if status:
+        jobs = jobs.filter(status=status)
+    base = Job.objects.all()
+    counts = {
+        "all": base.count(),
+        "pending": base.filter(status=Job.Status.PENDING).count(),
+        "published": base.filter(status=Job.Status.PUBLISHED).count(),
+        "rejected": base.filter(status=Job.Status.REJECTED).count(),
+        "draft": base.filter(status=Job.Status.DRAFT).count(),
+    }
+    return render(
+        request,
+        "dashboard/admin/jobs.html",
+        {"jobs": jobs, "counts": counts, "current_status": status or ""},
+    )
 
 
 @login_required
@@ -363,4 +402,29 @@ def admin_job_approve(request, pk):
     job.published_at = timezone.now()
     job.save(update_fields=["status", "published_at"])
     messages.success(request, f"'{job.title}' approved and published.")
-    return redirect("dashboard:admin_jobs")
+    if job.posted_by:
+        notify(
+            job.posted_by,
+            title="Job approved",
+            body=f"Your job '{job.title}' has been approved and is now live.",
+            url=job.get_absolute_url(),
+        )
+    return redirect(request.META.get("HTTP_REFERER", "dashboard:admin_jobs"))
+
+
+@login_required
+def admin_job_reject(request, pk):
+    if not request.user.is_admin_side:
+        return redirect("dashboard:home")
+    job = get_object_or_404(Job, pk=pk)
+    job.status = Job.Status.REJECTED
+    job.save(update_fields=["status"])
+    messages.success(request, f"'{job.title}' has been rejected.")
+    if job.posted_by:
+        notify(
+            job.posted_by,
+            title="Job rejected",
+            body=f"Your job '{job.title}' was not approved. Please review and resubmit.",
+            url=job.get_absolute_url(),
+        )
+    return redirect(request.META.get("HTTP_REFERER", "dashboard:admin_jobs"))

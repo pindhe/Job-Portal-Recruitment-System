@@ -1,14 +1,177 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}About — {{ SITE_NAME }}{% endblock %}
 
+{% block head %}
+<style>
+    @keyframes abRise { 0% { opacity:0; transform: translateY(40px); } 100% { opacity:1; transform: translateY(0); } }
+    @keyframes abOrb { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(40px,-30px) scale(1.15); } 66% { transform: translate(-30px,25px) scale(.9); } }
+    .ab-rise { opacity:0; animation: abRise .9s cubic-bezier(.22,1,.36,1) forwards; }
+    .ab-rise.d1{animation-delay:.15s}.ab-rise.d2{animation-delay:.3s}.ab-rise.d3{animation-delay:.45s}
+    .ab-orb { position:absolute; border-radius:9999px; filter: blur(60px); opacity:.5; pointer-events:none; }
+    .ab-card { transition: transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s ease; }
+    .ab-card:hover { transform: translateY(-6px); box-shadow: 0 26px 50px -22px rgba(15,23,42,.4); }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <h1 class="text-4xl font-extrabold"><span data-i18n="about.title">About</span> {{ SITE_NAME }}</h1>
-    <p class="mt-4 text-lg text-slate-600 dark:text-slate-300">{{ SITE_NAME }} <span data-i18n="about.intro">is a world-class AI-powered recruitment platform built to connect candidates with companies, recruiters, universities, NGOs and government organizations across the globe.</span></p>
-    <div class="grid sm:grid-cols-3 gap-6 mt-10">
-        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700"><i data-lucide="target" class="w-8 h-8 text-primary"></i><h3 class="font-bold mt-3" data-i18n="about.mission">Our Mission</h3><p class="text-sm text-slate-500 mt-1" data-i18n="about.mission_desc">Make hiring fair, fast and intelligent for everyone.</p></div>
-        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700"><i data-lucide="sparkles" class="w-8 h-8 text-secondary"></i><h3 class="font-bold mt-3" data-i18n="about.ai_first">AI First</h3><p class="text-sm text-slate-500 mt-1" data-i18n="about.ai_first_desc">Smart matching, resume tools and analytics built in.</p></div>
-        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700"><i data-lucide="shield-check" class="w-8 h-8 text-accent"></i><h3 class="font-bold mt-3" data-i18n="about.enterprise">Enterprise Grade</h3><p class="text-sm text-slate-500 mt-1" data-i18n="about.enterprise_desc">Secure, scalable and compliant by design.</p></div>
+<!-- Hero -->
+<section class="relative overflow-hidden"
+         x-data="{ active: 0, slides: 4 }"
+         x-init="setInterval(() => active = (active + 1) % slides, 5000)">
+    {% for img in "1234" %}
+    <div class="absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-in-out"
+         style="background-image:url('{% static 'images/hero-bg' %}{{ img }}.png')"
+         :class="active === {{ forloop.counter0 }} ? 'opacity-100 scale-105' : 'opacity-0 scale-100'"></div>
+    {% endfor %}
+    <div class="absolute inset-0 gradient-primary opacity-80 mix-blend-multiply"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-slate-900/75 via-slate-900/50 to-slate-900/85"></div>
+
+    <div class="ab-orb w-72 h-72 bg-accent/60 -top-10 -left-10" style="animation: abOrb 14s ease-in-out infinite;"></div>
+    <div class="ab-orb w-80 h-80 bg-secondary/60 bottom-0 right-0" style="animation: abOrb 18s ease-in-out infinite reverse;"></div>
+
+    <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-28 text-center text-white">
+        <span class="ab-rise inline-flex items-center gap-2 bg-white/15 backdrop-blur px-4 py-1.5 rounded-full text-sm font-medium mb-6 border border-white/20">
+            <i data-lucide="building-2" class="w-4 h-4 text-accent"></i> <span data-i18n="about.badge">About Us</span>
+        </span>
+        <h1 class="ab-rise d1 text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight" style="text-shadow:0 12px 40px rgba(0,0,0,.45)">
+            <span data-i18n="about.title">About</span> {{ SITE_NAME }}
+        </h1>
+        <p class="ab-rise d2 mt-6 text-lg sm:text-xl text-white/90 max-w-2xl mx-auto" data-i18n="about.intro">
+            is a world-class AI-powered recruitment platform built to connect candidates with companies, recruiters, universities, NGOs and government organizations across the globe.
+        </p>
+    </div>
+    <div class="relative">
+        <svg class="w-full h-12 sm:h-16 text-slate-50 dark:text-slate-900" viewBox="0 0 1440 80" preserveAspectRatio="none" fill="currentColor">
+            <path d="M0,40 C360,90 1080,-10 1440,40 L1440,80 L0,80 Z"></path>
+        </svg>
+    </div>
+</section>
+
+<!-- Stats -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-2">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div data-aos="fade-up" class="ab-card bg-white dark:bg-slate-800 rounded-2xl p-6 text-center border border-slate-100 dark:border-slate-700">
+            <p class="text-3xl font-extrabold text-primary">10K+</p>
+            <p class="text-sm text-slate-500 mt-1" data-i18n="about.stat_jobs">Jobs posted</p>
+        </div>
+        <div data-aos="fade-up" data-aos-delay="80" class="ab-card bg-white dark:bg-slate-800 rounded-2xl p-6 text-center border border-slate-100 dark:border-slate-700">
+            <p class="text-3xl font-extrabold text-secondary">2K+</p>
+            <p class="text-sm text-slate-500 mt-1" data-i18n="about.stat_companies">Companies</p>
+        </div>
+        <div data-aos="fade-up" data-aos-delay="160" class="ab-card bg-white dark:bg-slate-800 rounded-2xl p-6 text-center border border-slate-100 dark:border-slate-700">
+            <p class="text-3xl font-extrabold text-accent">50K+</p>
+            <p class="text-sm text-slate-500 mt-1" data-i18n="about.stat_candidates">Candidates</p>
+        </div>
+        <div data-aos="fade-up" data-aos-delay="240" class="ab-card bg-white dark:bg-slate-800 rounded-2xl p-6 text-center border border-slate-100 dark:border-slate-700">
+            <p class="text-3xl font-extrabold text-primary">25+</p>
+            <p class="text-sm text-slate-500 mt-1" data-i18n="about.stat_countries">Countries</p>
+        </div>
+    </div>
+</div>
+
+<!-- Mission / Vision / Story -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="grid lg:grid-cols-2 gap-10 items-center">
+        <div data-aos="fade-right">
+            <span class="text-sm font-semibold text-secondary uppercase tracking-wide" data-i18n="about.story_tag">Our Story</span>
+            <h2 class="text-3xl font-extrabold mt-2" data-i18n="about.story_title">Hiring, reimagined with intelligence</h2>
+            <p class="mt-4 text-slate-600 dark:text-slate-300" data-i18n="about.story_p1">We started with a simple belief: finding the right job or the right person shouldn't be slow, biased or frustrating. By combining human expertise with powerful AI, we make recruitment fair, fast and accurate for everyone.</p>
+            <p class="mt-3 text-slate-600 dark:text-slate-300" data-i18n="about.story_p2">Today, organizations of every size — from startups to governments — trust our platform to discover talent, while millions of candidates use our tools to build their careers.</p>
+            <div class="mt-6 flex flex-wrap gap-3">
+                <a href="{% url 'jobs:list' %}" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl gradient-primary text-white font-semibold hover:opacity-90 transition">
+                    <i data-lucide="briefcase" class="w-4 h-4"></i> <span data-i18n="about.cta_jobs">Browse Jobs</span>
+                </a>
+                <a href="{% url 'public:contact' %}" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-slate-300 dark:border-slate-600 font-semibold hover:border-primary hover:text-primary transition">
+                    <i data-lucide="mail" class="w-4 h-4"></i> <span data-i18n="about.cta_contact">Contact Us</span>
+                </a>
+            </div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4" data-aos="fade-left">
+            <div class="ab-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
+                <span class="w-11 h-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center"><i data-lucide="target" class="w-5 h-5"></i></span>
+                <h3 class="font-bold mt-4" data-i18n="about.mission">Our Mission</h3>
+                <p class="text-sm text-slate-500 mt-1" data-i18n="about.mission_desc">Make hiring fair, fast and intelligent for everyone.</p>
+            </div>
+            <div class="ab-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 sm:mt-8">
+                <span class="w-11 h-11 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center"><i data-lucide="eye" class="w-5 h-5"></i></span>
+                <h3 class="font-bold mt-4" data-i18n="about.vision">Our Vision</h3>
+                <p class="text-sm text-slate-500 mt-1" data-i18n="about.vision_desc">A world where everyone can access the right opportunity.</p>
+            </div>
+            <div class="ab-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
+                <span class="w-11 h-11 rounded-xl bg-accent/10 text-accent flex items-center justify-center"><i data-lucide="sparkles" class="w-5 h-5"></i></span>
+                <h3 class="font-bold mt-4" data-i18n="about.ai_first">AI First</h3>
+                <p class="text-sm text-slate-500 mt-1" data-i18n="about.ai_first_desc">Smart matching, resume tools and analytics built in.</p>
+            </div>
+            <div class="ab-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 sm:mt-8">
+                <span class="w-11 h-11 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center"><i data-lucide="shield-check" class="w-5 h-5"></i></span>
+                <h3 class="font-bold mt-4" data-i18n="about.enterprise">Enterprise Grade</h3>
+                <p class="text-sm text-slate-500 mt-1" data-i18n="about.enterprise_desc">Secure, scalable and compliant by design.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Values -->
+<div class="bg-white dark:bg-slate-800/40 border-y border-slate-100 dark:border-slate-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="text-center max-w-2xl mx-auto" data-aos="fade-up">
+            <h2 class="text-3xl font-extrabold" data-i18n="about.values_title">What we stand for</h2>
+            <p class="mt-3 text-slate-500" data-i18n="about.values_sub">The principles that guide every decision we make.</p>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
+            <div data-aos="fade-up" class="text-center">
+                <span class="w-14 h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto"><i data-lucide="scale" class="w-6 h-6"></i></span>
+                <h3 class="font-bold mt-4" data-i18n="about.value1_t">Fairness</h3>
+                <p class="text-sm text-slate-500 mt-1" data-i18n="about.value1_d">Equal opportunity, free of bias.</p>
+            </div>
+            <div data-aos="fade-up" data-aos-delay="80" class="text-center">
+                <span class="w-14 h-14 rounded-2xl bg-secondary/10 text-secondary flex items-center justify-center mx-auto"><i data-lucide="lightbulb" class="w-6 h-6"></i></span>
+                <h3 class="font-bold mt-4" data-i18n="about.value2_t">Innovation</h3>
+                <p class="text-sm text-slate-500 mt-1" data-i18n="about.value2_d">Always pushing what's possible.</p>
+            </div>
+            <div data-aos="fade-up" data-aos-delay="160" class="text-center">
+                <span class="w-14 h-14 rounded-2xl bg-accent/10 text-accent flex items-center justify-center mx-auto"><i data-lucide="heart-handshake" class="w-6 h-6"></i></span>
+                <h3 class="font-bold mt-4" data-i18n="about.value3_t">Trust</h3>
+                <p class="text-sm text-slate-500 mt-1" data-i18n="about.value3_d">Security and privacy by default.</p>
+            </div>
+            <div data-aos="fade-up" data-aos-delay="240" class="text-center">
+                <span class="w-14 h-14 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center mx-auto"><i data-lucide="users" class="w-6 h-6"></i></span>
+                <h3 class="font-bold mt-4" data-i18n="about.value4_t">People First</h3>
+                <p class="text-sm text-slate-500 mt-1" data-i18n="about.value4_d">Real humans behind every match.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if partners %}
+<!-- Partners -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <p class="text-center text-sm font-semibold text-slate-400 uppercase tracking-wide" data-i18n="about.partners">Trusted by leading organizations</p>
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
+        {% for p in partners %}
+        <div class="opacity-70 hover:opacity-100 transition" data-aos="zoom-in">
+            {% if p.logo %}<img src="{{ p.logo.url }}" alt="{{ p.name }}" class="h-9 object-contain grayscale hover:grayscale-0 transition">
+            {% else %}<span class="font-bold text-slate-400">{{ p.name }}</span>{% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<!-- CTA -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+    <div class="rounded-3xl gradient-primary text-white p-8 sm:p-12 text-center" data-aos="zoom-in">
+        <h2 class="text-2xl sm:text-3xl font-extrabold" data-i18n="about.cta_title">Ready to take the next step?</h2>
+        <p class="mt-2 text-white/85 max-w-xl mx-auto" data-i18n="about.cta_sub">Join thousands of candidates and companies building their future with us.</p>
+        <div class="mt-6 flex flex-wrap justify-center gap-3">
+            <a href="{% url 'accounts:register' %}" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-primary font-semibold shadow hover:opacity-90">
+                <i data-lucide="user-plus" class="w-4 h-4"></i> <span data-i18n="about.cta_join">Get started free</span>
+            </a>
+            <a href="{% url 'payments:pricing' %}" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/15 hover:bg-white/25 font-semibold backdrop-blur">
+                <i data-lucide="gem" class="w-4 h-4"></i> <span data-i18n="about.cta_pricing">View pricing</span>
+            </a>
+        </div>
     </div>
 </div>
 {% endblock %}

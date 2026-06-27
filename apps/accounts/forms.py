@@ -63,6 +63,56 @@ class EmailLoginForm(AuthenticationForm):
     remember_me = forms.BooleanField(required=False)
 
 
+# Roles an admin may assign when creating users from the dashboard.
+ADMIN_ASSIGNABLE_ROLES = [
+    (Role.CANDIDATE, "Candidate"),
+    (Role.EMPLOYER, "Employer"),
+    (Role.RECRUITER, "Recruiter"),
+    (Role.HR_MANAGER, "HR Manager"),
+    (Role.SUPPORT_AGENT, "Support Agent"),
+    (Role.ACCOUNTANT, "Accountant"),
+    (Role.MODERATOR, "Moderator"),
+    (Role.ADMIN, "Admin"),
+]
+
+
+class AdminUserForm(forms.ModelForm):
+    """Create a user (employer / recruiter / candidate / staff) from the admin panel."""
+
+    role = forms.ChoiceField(choices=ADMIN_ASSIGNABLE_ROLES, widget=forms.Select(attrs={"class": INPUT}))
+    password = forms.CharField(
+        min_length=8,
+        widget=forms.PasswordInput(attrs={"class": INPUT, "placeholder": "Temporary password (min 8 chars)"}),
+    )
+
+    class Meta:
+        model = User
+        fields = ["first_name", "last_name", "email", "phone", "role"]
+        widgets = {
+            "first_name": forms.TextInput(attrs={"class": INPUT, "placeholder": "First name"}),
+            "last_name": forms.TextInput(attrs={"class": INPUT, "placeholder": "Last name"}),
+            "email": forms.EmailInput(attrs={"class": INPUT, "placeholder": "you@example.com"}),
+            "phone": forms.TextInput(attrs={"class": INPUT, "placeholder": "Phone (optional)"}),
+        }
+
+    def clean_email(self):
+        email = self.cleaned_data["email"].lower()
+        if User.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError("A user with this email already exists.")
+        return email
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        user.email_verified = True
+        user.is_active = True
+        if self.cleaned_data["role"] in {Role.ADMIN, Role.SUPPORT_AGENT, Role.ACCOUNTANT, Role.MODERATOR}:
+            user.is_staff = True
+        if commit:
+            user.save()
+        return user
+
+
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = User

@@ -2,21 +2,74 @@
 {% block page_title %}Jobs{% endblock %}
 
 {% block dashboard %}
-<h2 class="text-2xl font-extrabold mb-6" data-i18n="adm.all_jobs">All Jobs</h2>
+<div class="mb-6">
+    <h2 class="text-2xl font-extrabold flex items-center gap-2"><i data-lucide="briefcase" class="w-6 h-6 text-primary"></i> <span data-i18n="adm.all_jobs">All Jobs</span></h2>
+    <p class="text-slate-500 text-sm" data-i18n="adm.jobs_sub">Review, approve or reject jobs submitted by employers.</p>
+</div>
+
+<!-- Status filter tabs -->
+<div class="flex flex-wrap gap-2 mb-5">
+    <a href="{% url 'dashboard:admin_jobs' %}" class="px-4 py-2 rounded-xl text-sm font-semibold border transition {% if not current_status %}gradient-primary text-white border-transparent{% else %}bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-primary{% endif %}">
+        <span data-i18n="adm.tab_all">All</span> <span class="opacity-70">({{ counts.all }})</span>
+    </a>
+    <a href="?status=pending" class="px-4 py-2 rounded-xl text-sm font-semibold border transition {% if current_status == 'pending' %}gradient-primary text-white border-transparent{% else %}bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-primary{% endif %}">
+        <span data-i18n="adm.tab_pending">Pending</span> <span class="opacity-70">({{ counts.pending }})</span>
+    </a>
+    <a href="?status=published" class="px-4 py-2 rounded-xl text-sm font-semibold border transition {% if current_status == 'published' %}gradient-primary text-white border-transparent{% else %}bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-primary{% endif %}">
+        <span data-i18n="adm.tab_published">Published</span> <span class="opacity-70">({{ counts.published }})</span>
+    </a>
+    <a href="?status=rejected" class="px-4 py-2 rounded-xl text-sm font-semibold border transition {% if current_status == 'rejected' %}gradient-primary text-white border-transparent{% else %}bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-primary{% endif %}">
+        <span data-i18n="adm.tab_rejected">Rejected</span> <span class="opacity-70">({{ counts.rejected }})</span>
+    </a>
+    <a href="?status=draft" class="px-4 py-2 rounded-xl text-sm font-semibold border transition {% if current_status == 'draft' %}gradient-primary text-white border-transparent{% else %}bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-primary{% endif %}">
+        <span data-i18n="adm.tab_draft">Draft</span> <span class="opacity-70">({{ counts.draft }})</span>
+    </a>
+</div>
+
 <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 overflow-hidden">
-    <table class="w-full text-sm">
-        <thead class="text-left text-slate-500 bg-slate-50 dark:bg-slate-700/50"><tr><th class="px-5 py-3" data-i18n="tbl.title">Title</th><th data-i18n="tbl.company">Company</th><th data-i18n="tbl.status">Status</th><th data-i18n="tbl.posted">Posted</th><th></th></tr></thead>
-        <tbody>
-            {% for job in jobs %}
-            <tr class="border-t border-slate-100 dark:border-slate-700">
-                <td class="px-5 py-3 font-medium"><a href="{{ job.get_absolute_url }}" class="hover:text-primary">{{ job.title }}</a></td>
-                <td>{{ job.company.name }}</td>
-                <td><span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-700 capitalize">{{ job.get_status_display }}</span></td>
-                <td class="text-slate-500">{{ job.created_at|date:"M d, Y" }}</td>
-                <td class="text-right pr-5">{% if job.status == 'pending' or job.status == 'draft' %}<a href="{% url 'dashboard:admin_job_approve' job.pk %}" class="text-primary hover:underline" data-i18n="dash.approve">Approve</a>{% endif %}</td>
-            </tr>
-            {% empty %}<tr><td colspan="5" class="px-5 py-12 text-center text-slate-500" data-i18n="adm.no_jobs">No jobs found.</td></tr>{% endfor %}
-        </tbody>
-    </table>
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead class="text-left text-slate-500 bg-slate-50 dark:bg-slate-700/50">
+                <tr>
+                    <th class="px-5 py-3" data-i18n="tbl.title">Title</th>
+                    <th class="px-5 py-3" data-i18n="tbl.company">Company</th>
+                    <th class="px-5 py-3" data-i18n="tbl.status">Status</th>
+                    <th class="px-5 py-3" data-i18n="tbl.posted">Posted</th>
+                    <th class="px-5 py-3 text-right" data-i18n="manage.actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
+                {% for job in jobs %}
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/40">
+                    <td class="px-5 py-3 font-medium"><a href="{{ job.get_absolute_url }}" class="hover:text-primary">{{ job.title }}</a></td>
+                    <td class="px-5 py-3 text-slate-500">{{ job.company.name }}</td>
+                    <td class="px-5 py-3">
+                        {% if job.status == 'published' %}<span class="text-xs px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 capitalize">{{ job.get_status_display }}</span>
+                        {% elif job.status == 'pending' %}<span class="text-xs px-2.5 py-1 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 capitalize">{{ job.get_status_display }}</span>
+                        {% elif job.status == 'rejected' %}<span class="text-xs px-2.5 py-1 rounded-full bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 capitalize">{{ job.get_status_display }}</span>
+                        {% else %}<span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 dark:bg-slate-700 capitalize">{{ job.get_status_display }}</span>{% endif %}
+                    </td>
+                    <td class="px-5 py-3 text-slate-500">{{ job.created_at|date:"M d, Y" }}</td>
+                    <td class="px-5 py-3">
+                        <div class="flex items-center justify-end gap-2">
+                            {% if job.status != 'published' %}
+                            <a href="{% url 'dashboard:admin_job_approve' job.pk %}" class="inline-flex items-center gap-1 text-xs px-3 py-1.5 rounded-lg bg-emerald-500 text-white font-semibold hover:opacity-90"><i data-lucide="check" class="w-3.5 h-3.5"></i> <span data-i18n="dash.approve">Approve</span></a>
+                            {% endif %}
+                            {% if job.status != 'rejected' %}
+                            <a href="{% url 'dashboard:admin_job_reject' job.pk %}" class="inline-flex items-center gap-1 text-xs px-3 py-1.5 rounded-lg bg-red-50 text-danger dark:bg-red-900/20 font-semibold hover:bg-red-100"><i data-lucide="x" class="w-3.5 h-3.5"></i> <span data-i18n="adm.reject">Reject</span></a>
+                            {% endif %}
+                            <a href="{{ job.get_absolute_url }}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700" title="View"><i data-lucide="eye" class="w-4 h-4"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="5" class="px-5 py-12 text-center text-slate-500">
+                    <span class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-700 text-slate-400 flex items-center justify-center mx-auto mb-3"><i data-lucide="briefcase" class="w-6 h-6"></i></span>
+                    <span data-i18n="adm.no_jobs">No jobs found.</span>
+                </td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}

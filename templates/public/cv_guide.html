@@ -1,18 +1,40 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}CV & Resume Tips — {{ SITE_NAME }}{% endblock %}
+
+{% block head %}
+<style>
+    @keyframes cvRise { 0% { opacity:0; transform: translateY(40px); } 100% { opacity:1; transform: translateY(0); } }
+    @keyframes cvOrb { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(40px,-30px) scale(1.15); } 66% { transform: translate(-30px,25px) scale(.9); } }
+    .cv-rise { opacity:0; animation: cvRise .9s cubic-bezier(.22,1,.36,1) forwards; }
+    .cv-rise.d1{animation-delay:.15s}.cv-rise.d2{animation-delay:.3s}.cv-rise.d3{animation-delay:.45s}
+    .cv-orb { position:absolute; border-radius:9999px; filter: blur(60px); opacity:.5; pointer-events:none; }
+</style>
+{% endblock %}
 
 {% block content %}
 <!-- Hero -->
-<section class="relative overflow-hidden gradient-primary text-white">
-    <div class="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-white/10 blur-3xl"></div>
-    <div class="absolute -bottom-24 -left-16 w-80 h-80 rounded-full bg-accent/20 blur-3xl"></div>
-    <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-        <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 text-sm font-medium backdrop-blur">
-            <i data-lucide="file-text" class="w-4 h-4"></i> <span data-i18n="career.cv_badge">Career Advice</span>
+<section class="relative overflow-hidden"
+         x-data="{ active: 0, slides: 4 }"
+         x-init="setInterval(() => active = (active + 1) % slides, 5000)">
+    {% for img in "1234" %}
+    <div class="absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-in-out"
+         style="background-image:url('{% static 'images/hero-bg' %}{{ img }}.png')"
+         :class="active === {{ forloop.counter0 }} ? 'opacity-100 scale-105' : 'opacity-0 scale-100'"></div>
+    {% endfor %}
+    <div class="absolute inset-0 gradient-primary opacity-80 mix-blend-multiply"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-slate-900/75 via-slate-900/50 to-slate-900/85"></div>
+
+    <div class="cv-orb w-72 h-72 bg-accent/60 -top-10 -right-10" style="animation: cvOrb 14s ease-in-out infinite;"></div>
+    <div class="cv-orb w-80 h-80 bg-secondary/60 bottom-0 left-0" style="animation: cvOrb 18s ease-in-out infinite reverse;"></div>
+
+    <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center text-white">
+        <span class="cv-rise inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 text-sm font-medium backdrop-blur border border-white/20">
+            <i data-lucide="file-text" class="w-4 h-4 text-accent"></i> <span data-i18n="career.cv_badge">Career Advice</span>
         </span>
-        <h1 class="mt-5 text-4xl sm:text-5xl font-extrabold tracking-tight" data-i18n="career.cv_title">Build a CV that gets you hired</h1>
-        <p class="mt-4 text-lg text-white/85 max-w-2xl mx-auto" data-i18n="career.cv_sub">A practical, step-by-step guide to writing a modern, ATS-friendly resume that stands out to recruiters and hiring managers.</p>
-        <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <h1 class="cv-rise d1 mt-5 text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight" style="text-shadow:0 12px 40px rgba(0,0,0,.45)" data-i18n="career.cv_title">Build a CV that gets you hired</h1>
+        <p class="cv-rise d2 mt-4 text-lg text-white/90 max-w-2xl mx-auto" data-i18n="career.cv_sub">A practical, step-by-step guide to writing a modern, ATS-friendly resume that stands out to recruiters and hiring managers.</p>
+        <div class="cv-rise d3 mt-8 flex flex-wrap justify-center gap-3">
             <a href="{% url 'ai:resume_checker' %}" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white text-primary font-semibold shadow hover:opacity-90">
                 <i data-lucide="scan-line" class="w-4 h-4"></i> <span data-i18n="career.cv_check_btn">Check my resume with AI</span>
             </a>
@@ -21,22 +43,27 @@
             </a>
         </div>
     </div>
+    <div class="relative">
+        <svg class="w-full h-12 sm:h-16 text-slate-50 dark:text-slate-900" viewBox="0 0 1440 80" preserveAspectRatio="none" fill="currentColor">
+            <path d="M0,40 C360,90 1080,-10 1440,40 L1440,80 L0,80 Z"></path>
+        </svg>
+    </div>
 </section>
 
 <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
     <!-- Steps -->
     <div class="grid md:grid-cols-3 gap-6">
-        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
+        <div data-aos="fade-up" class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 hover:shadow-lg transition">
             <span class="w-11 h-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center"><i data-lucide="layout-template" class="w-5 h-5"></i></span>
             <h3 class="font-bold mt-4" data-i18n="career.cv_s1_t">1. Pick a clean structure</h3>
             <p class="text-sm text-slate-500 mt-1" data-i18n="career.cv_s1_d">Use clear sections: contact, summary, experience, education and skills. Keep it to 1–2 pages.</p>
         </div>
-        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
+        <div data-aos="fade-up" data-aos-delay="80" class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 hover:shadow-lg transition">
             <span class="w-11 h-11 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center"><i data-lucide="target" class="w-5 h-5"></i></span>
             <h3 class="font-bold mt-4" data-i18n="career.cv_s2_t">2. Tailor to the job</h3>
             <p class="text-sm text-slate-500 mt-1" data-i18n="career.cv_s2_d">Mirror keywords from the job description so your CV passes ATS filters and reaches a human.</p>
         </div>
-        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
+        <div data-aos="fade-up" data-aos-delay="160" class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 hover:shadow-lg transition">
             <span class="w-11 h-11 rounded-xl bg-accent/10 text-accent flex items-center justify-center"><i data-lucide="trending-up" class="w-5 h-5"></i></span>
             <h3 class="font-bold mt-4" data-i18n="career.cv_s3_t">3. Show impact, not duties</h3>
             <p class="text-sm text-slate-500 mt-1" data-i18n="career.cv_s3_d">Start bullets with action verbs and quantify results: “Increased sales by 30%”.</p>

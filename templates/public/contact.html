@@ -1,19 +1,123 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Contact — {{ SITE_NAME }}{% endblock %}
 
+{% block head %}
+<style>
+    @keyframes ctRise { 0% { opacity:0; transform: translateY(40px); } 100% { opacity:1; transform: translateY(0); } }
+    @keyframes ctOrb { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(40px,-30px) scale(1.15); } 66% { transform: translate(-30px,25px) scale(.9); } }
+    .ct-rise { opacity:0; animation: ctRise .9s cubic-bezier(.22,1,.36,1) forwards; }
+    .ct-rise.d1{animation-delay:.15s}.ct-rise.d2{animation-delay:.3s}
+    .ct-orb { position:absolute; border-radius:9999px; filter: blur(60px); opacity:.5; pointer-events:none; }
+    .ct-card { transition: transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s ease; }
+    .ct-card:hover { transform: translateY(-6px); box-shadow: 0 24px 50px -22px rgba(15,23,42,.4); }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <h1 class="text-4xl font-extrabold text-center" data-i18n="contact.title">Get in touch</h1>
-    <p class="text-center text-slate-500 mt-2" data-i18n="contact.sub">We'd love to hear from you.</p>
-    <form method="post" class="mt-8 bg-white dark:bg-slate-800 rounded-2xl p-8 border border-slate-100 dark:border-slate-700 space-y-4">
-        {% csrf_token %}
-        <div class="grid sm:grid-cols-2 gap-4">
-            <input name="name" required placeholder="Your name" data-i18n-placeholder="contact.name" class="rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 px-4 py-3 outline-none focus:ring-2 focus:ring-primary/30">
-            <input name="email" type="email" required placeholder="Email" data-i18n-placeholder="contact.email" class="rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 px-4 py-3 outline-none focus:ring-2 focus:ring-primary/30">
+<!-- Hero -->
+<section class="relative overflow-hidden"
+         x-data="{ active: 0, slides: 4 }"
+         x-init="setInterval(() => active = (active + 1) % slides, 5000)">
+    {% for img in "1234" %}
+    <div class="absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-in-out"
+         style="background-image:url('{% static 'images/hero-bg' %}{{ img }}.png')"
+         :class="active === {{ forloop.counter0 }} ? 'opacity-100 scale-105' : 'opacity-0 scale-100'"></div>
+    {% endfor %}
+    <div class="absolute inset-0 gradient-primary opacity-80 mix-blend-multiply"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-slate-900/75 via-slate-900/50 to-slate-900/85"></div>
+
+    <div class="ct-orb w-72 h-72 bg-accent/60 -top-10 -left-10" style="animation: ctOrb 14s ease-in-out infinite;"></div>
+    <div class="ct-orb w-80 h-80 bg-secondary/60 bottom-0 right-0" style="animation: ctOrb 18s ease-in-out infinite reverse;"></div>
+
+    <div class="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-28 text-center text-white">
+        <span class="ct-rise inline-flex items-center gap-2 bg-white/15 backdrop-blur px-4 py-1.5 rounded-full text-sm font-medium mb-6 border border-white/20">
+            <i data-lucide="message-square" class="w-4 h-4 text-accent"></i> <span data-i18n="contact.badge">Contact Us</span>
+        </span>
+        <h1 class="ct-rise d1 text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight" style="text-shadow:0 12px 40px rgba(0,0,0,.45)" data-i18n="contact.title">Get in touch</h1>
+        <p class="ct-rise d2 mt-6 text-lg text-white/90" data-i18n="contact.sub">We'd love to hear from you.</p>
+    </div>
+    <div class="relative">
+        <svg class="w-full h-12 sm:h-16 text-slate-50 dark:text-slate-900" viewBox="0 0 1440 80" preserveAspectRatio="none" fill="currentColor">
+            <path d="M0,40 C360,90 1080,-10 1440,40 L1440,80 L0,80 Z"></path>
+        </svg>
+    </div>
+</section>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 -mt-2">
+    <div class="grid lg:grid-cols-5 gap-8">
+        <!-- Info column -->
+        <div class="lg:col-span-2 space-y-4">
+            <div data-aos="fade-up" class="ct-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 flex items-start gap-4">
+                <span class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0"><i data-lucide="mail" class="w-5 h-5"></i></span>
+                <div>
+                    <h3 class="font-bold" data-i18n="contact.email_t">Email us</h3>
+                    <p class="text-sm text-slate-500 mt-1" data-i18n="contact.email_d">Our team replies within 24 hours.</p>
+                    <a href="mailto:support@airecruitment.com" class="text-sm font-semibold text-primary mt-1 inline-block">support@airecruitment.com</a>
+                </div>
+            </div>
+            <div data-aos="fade-up" data-aos-delay="80" class="ct-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 flex items-start gap-4">
+                <span class="w-12 h-12 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center shrink-0"><i data-lucide="phone" class="w-5 h-5"></i></span>
+                <div>
+                    <h3 class="font-bold" data-i18n="contact.phone_t">Call us</h3>
+                    <p class="text-sm text-slate-500 mt-1" data-i18n="contact.phone_d">Mon–Fri, 9am to 6pm.</p>
+                    <a href="tel:+252610000000" class="text-sm font-semibold text-secondary mt-1 inline-block">+252 61 000 0000</a>
+                </div>
+            </div>
+            <div data-aos="fade-up" data-aos-delay="160" class="ct-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 flex items-start gap-4">
+                <span class="w-12 h-12 rounded-xl bg-accent/10 text-accent flex items-center justify-center shrink-0"><i data-lucide="map-pin" class="w-5 h-5"></i></span>
+                <div>
+                    <h3 class="font-bold" data-i18n="contact.address_t">Visit us</h3>
+                    <p class="text-sm text-slate-500 mt-1" data-i18n="contact.address_d">Mogadishu, Somalia</p>
+                </div>
+            </div>
+            <!-- Socials -->
+            <div data-aos="fade-up" data-aos-delay="240" class="ct-card bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
+                <h3 class="font-bold" data-i18n="contact.follow">Follow us</h3>
+                <div class="flex gap-3 mt-3">
+                    <a href="#" aria-label="Twitter" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500 hover:text-primary transition"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                    <a href="#" aria-label="LinkedIn" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500 hover:text-primary transition"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                    <a href="#" aria-label="Facebook" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500 hover:text-primary transition"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                    <a href="#" aria-label="GitHub" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500 hover:text-primary transition"><i data-lucide="github" class="w-5 h-5"></i></a>
+                </div>
+            </div>
         </div>
-        <input name="subject" placeholder="Subject" data-i18n-placeholder="contact.subject" class="w-full rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 px-4 py-3 outline-none focus:ring-2 focus:ring-primary/30">
-        <textarea name="message" rows="5" required placeholder="Your message" data-i18n-placeholder="contact.message" class="w-full rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 px-4 py-3 outline-none focus:ring-2 focus:ring-primary/30"></textarea>
-        <button class="w-full gradient-primary text-white font-semibold py-3 rounded-xl" data-i18n="contact.send">Send Message</button>
-    </form>
+
+        <!-- Form column -->
+        <div class="lg:col-span-3" data-aos="fade-left">
+            <form method="post" class="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-slate-100 dark:border-slate-700 space-y-4">
+                {% csrf_token %}
+                <h2 class="text-xl font-extrabold" data-i18n="contact.form_title">Send us a message</h2>
+                <p class="text-sm text-slate-500" data-i18n="contact.form_sub">Fill in the form and we'll get back to you shortly.</p>
+                <div class="grid sm:grid-cols-2 gap-4 pt-2">
+                    <div>
+                        <label class="text-sm font-medium text-slate-600 dark:text-slate-300" data-i18n="contact.name">Your name</label>
+                        <input name="name" required placeholder="Your name" data-i18n-placeholder="contact.name" class="mt-1.5 w-full rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-900/40 px-4 py-3 outline-none focus:ring-2 focus:ring-primary/30">
+                    </div>
+                    <div>
+                        <label class="text-sm font-medium text-slate-600 dark:text-slate-300" data-i18n="contact.email">Email</label>
+                        <input name="email" type="email" required placeholder="Email" data-i18n-placeholder="contact.email" class="mt-1.5 w-full rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-900/40 px-4 py-3 outline-none focus:ring-2 focus:ring-primary/30">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-slate-600 dark:text-slate-300" data-i18n="contact.subject">Subject</label>
+                    <input name="subject" placeholder="Subject" data-i18n-placeholder="contact.subject" class="mt-1.5 w-full rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-900/40 px-4 py-3 outline-none focus:ring-2 focus:ring-primary/30">
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-slate-600 dark:text-slate-300" data-i18n="contact.message">Your message</label>
+                    <textarea name="message" rows="6" required placeholder="Your message" data-i18n-placeholder="contact.message" class="mt-1.5 w-full rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-900/40 px-4 py-3 outline-none focus:ring-2 focus:ring-primary/30"></textarea>
+                </div>
+                <button class="w-full gradient-primary text-white font-semibold py-3.5 rounded-xl hover:opacity-90 transition inline-flex items-center justify-center gap-2">
+                    <i data-lucide="send" class="w-4 h-4"></i> <span data-i18n="contact.send">Send Message</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Map -->
+    <div class="mt-8 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 shadow-sm" data-aos="fade-up">
+        <iframe title="Map" class="w-full h-72" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                src="https://www.google.com/maps?q=Mogadishu,Somalia&output=embed"></iframe>
+    </div>
 </div>
 {% endblock %}
