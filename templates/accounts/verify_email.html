@@ -1,0 +1,14 @@
+{% extends "accounts/_auth_base.html" %}
+{% block title %}Verify email — {{ SITE_NAME }}{% endblock %}
+
+{% block auth_content %}
+<h1 class="text-3xl font-extrabold">Verify your email</h1>
+<p class="text-slate-500 mt-1">We sent a 6-digit code to your inbox.</p>
+<form method="post" class="mt-8 space-y-4">
+    {% csrf_token %}
+    <input name="code" placeholder="Enter 6-digit code" maxlength="6"
+           class="w-full text-center tracking-[0.5em] text-2xl font-bold rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 px-4 py-4 outline-none focus:ring-2 focus:ring-primary/30">
+    <button class="w-full gradient-primary text-white font-semibold py-3 rounded-xl hover:opacity-90">Verify</button>
+</form>
+<a href="{% url 'dashboard:home' %}" class="block text-center text-sm text-slate-500 mt-6 hover:text-primary">Skip for now</a>
+{% endblock %}

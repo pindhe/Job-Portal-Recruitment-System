@@ -1,0 +1,81 @@
+{% extends "dashboard/base.html" %}
+{% block page_title %}Employer Dashboard{% endblock %}
+
+{% block dashboard %}
+<div class="flex items-center justify-between mb-6">
+    <div>
+        <h2 class="text-2xl font-extrabold">Employer Overview</h2>
+        <p class="text-slate-500">Manage your jobs, candidates and hiring pipeline.</p>
+    </div>
+    <a href="{% url 'dashboard:job_create' %}" class="gradient-primary text-white font-semibold px-5 py-2.5 rounded-xl inline-flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i> Post a Job</a>
+</div>
+
+{% if not companies %}
+<div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-2xl p-5 mb-6 flex items-center gap-3">
+    <i data-lucide="alert-triangle" class="w-6 h-6 text-amber-600"></i>
+    <div class="flex-1"><p class="font-semibold">Set up your company profile</p><p class="text-sm text-slate-500">You need a company before posting jobs.</p></div>
+    <a href="{% url 'dashboard:company_edit' %}" class="px-4 py-2 rounded-lg gradient-primary text-white text-sm font-semibold">Create now</a>
+</div>
+{% endif %}
+
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    {% include "dashboard/_stat_card.html" with icon="briefcase" value=jobs_count label="Total Jobs" color="bg-primary/10 text-primary" %}
+    {% include "dashboard/_stat_card.html" with icon="users" value=applications_count label="Applications" color="bg-secondary/10 text-secondary" %}
+    {% include "dashboard/_stat_card.html" with icon="star" value=shortlisted_count label="Shortlisted" color="bg-amber-100 text-amber-600" %}
+    {% include "dashboard/_stat_card.html" with icon="check-circle" value=hired_count label="Hired" color="bg-emerald-100 text-emerald-600" %}
+</div>
+
+<div class="grid lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
+        <h3 class="font-bold mb-4">Hiring Pipeline</h3>
+        <canvas id="pipelineChart" height="120"></canvas>
+    </div>
+    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
+        <h3 class="font-bold mb-4">Recent Applicants</h3>
+        <div class="space-y-3">
+            {% for app in recent_applications %}
+            <div class="flex items-center gap-3">
+                <span class="w-9 h-9 rounded-full gradient-primary text-white text-xs flex items-center justify-center font-semibold">{{ app.candidate.initials }}</span>
+                <div class="min-w-0 flex-1"><p class="text-sm font-medium truncate">{{ app.candidate.full_name }}</p><p class="text-xs text-slate-500 truncate">{{ app.job.title }}</p></div>
+                <span class="text-xs text-primary font-bold">{{ app.ai_match_score }}%</span>
+            </div>
+            {% empty %}<p class="text-slate-500 text-sm">No applicants yet.</p>{% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 mt-6">
+    <div class="flex items-center justify-between mb-4"><h3 class="font-bold">Recent Jobs</h3><a href="{% url 'dashboard:employer_jobs' %}" class="text-sm text-primary hover:underline">View all</a></div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead class="text-left text-slate-500 border-b border-slate-100 dark:border-slate-700">
+                <tr><th class="py-2">Title</th><th>Status</th><th>Applicants</th><th></th></tr>
+            </thead>
+            <tbody>
+                {% for job in recent_jobs %}
+                <tr class="border-b border-slate-50 dark:border-slate-700/50">
+                    <td class="py-3 font-medium">{{ job.title }}</td>
+                    <td><span class="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 capitalize">{{ job.get_status_display }}</span></td>
+                    <td>{{ job.applications_count }}</td>
+                    <td class="text-right"><a href="{% url 'dashboard:job_applicants' job.pk %}" class="text-primary hover:underline">View</a></td>
+                </tr>
+                {% empty %}<tr><td colspan="4" class="py-6 text-center text-slate-500">No jobs posted yet.</td></tr>{% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ pipeline|json_script:"pipeline-data" }}
+<script>
+    const pipeline = JSON.parse(document.getElementById('pipeline-data').textContent);
+    const labels = pipeline.map(p => p.status);
+    const data = pipeline.map(p => p.n);
+    new Chart(document.getElementById('pipelineChart'), {
+        type: 'bar',
+        data: { labels: labels.length ? labels : ['No data'], datasets: [{ label: 'Applications', data: data.length ? data : [0], backgroundColor: '{{ THEME.primary }}', borderRadius: 8 }] },
+        options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+    });
+</script>
+{% endblock %}

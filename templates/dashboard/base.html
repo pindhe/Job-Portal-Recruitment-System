@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div x-data="{ sidebar: false }" class="min-h-screen bg-slate-100 dark:bg-slate-900">
+    {% include "dashboard/_sidebar.html" %}
+
+    <div class="lg:pl-64">
+        <!-- Top bar -->
+        <header class="sticky top-0 z-30 glass border-b border-slate-200 dark:border-slate-800">
+            <div class="flex items-center justify-between h-16 px-4 sm:px-6">
+                <div class="flex items-center gap-3">
+                    <button @click="sidebar = !sidebar" class="lg:hidden p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800"><i data-lucide="menu" class="w-5 h-5"></i></button>
+                    <h1 class="text-lg font-bold">{% block page_title %}Dashboard{% endblock %}</h1>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button @click="dark = !dark" class="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800">
+                        <i data-lucide="moon" class="w-5 h-5" x-show="!dark"></i><i data-lucide="sun" class="w-5 h-5" x-show="dark" x-cloak></i>
+                    </button>
+                    <a href="{% url 'notifications:list' %}" class="relative p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800">
+                        <i data-lucide="bell" class="w-5 h-5"></i>
+                        {% if unread_count %}<span class="absolute top-1 right-1 bg-danger text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">{{ unread_count }}</span>{% endif %}
+                    </a>
+                    <a href="{% url 'public:home' %}" class="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800" title="View site"><i data-lucide="external-link" class="w-5 h-5"></i></a>
+                    <span class="w-9 h-9 rounded-full gradient-primary text-white text-sm flex items-center justify-center font-semibold">{{ user.initials }}</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="p-4 sm:p-6 lg:p-8">
+            {% include "partials/messages.html" %}
+            {% block dashboard %}{% endblock %}
+        </main>
+    </div>
+</div>
+{% endblock %}

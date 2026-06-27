@@ -1,0 +1,58 @@
+{% load dashboard_extras %}
+<aside class="fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 transform transition-transform lg:translate-x-0"
+       :class="sidebar ? 'translate-x-0' : '-translate-x-full'">
+    <div class="h-16 flex items-center gap-2 px-6 border-b border-slate-200 dark:border-slate-700">
+        <a href="{% url 'public:home' %}" class="flex items-center gap-2">
+            <span class="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center text-white font-bold">T</span>
+            <span class="text-lg font-extrabold">{{ SITE_NAME }}</span>
+        </a>
+        <button @click="sidebar = false" class="lg:hidden ml-auto p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
+    </div>
+
+    <nav class="p-4 space-y-1 text-sm overflow-y-auto" style="height: calc(100vh - 4rem)">
+        {% nav_link 'dashboard:home' 'layout-dashboard' 'Dashboard' request %}
+
+        {% if user.role == 'candidate' %}
+            <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase">Job Search</p>
+            {% nav_link 'jobs:list' 'search' 'Browse Jobs' request %}
+            {% nav_link 'dashboard:applied_jobs' 'send' 'Applied Jobs' request %}
+            {% nav_link 'dashboard:saved_jobs' 'bookmark' 'Saved Jobs' request %}
+            <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase">My Profile</p>
+            {% nav_link 'dashboard:resume_builder' 'file-text' 'Resume Builder' request %}
+            {% nav_link 'dashboard:resume_preview' 'file-search' 'Preview Resume' request %}
+            <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase">AI Tools</p>
+            {% nav_link 'ai:resume_checker' 'file-check-2' 'ATS Checker' request %}
+            {% nav_link 'ai:cover_letter' 'pen-line' 'Cover Letter' request %}
+            {% nav_link 'ai:career_advisor' 'compass' 'Career Advisor' request %}
+
+        {% elif user.role == 'employer' or user.role == 'hr_manager' %}
+            <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase">Recruiting</p>
+            {% nav_link 'dashboard:employer_jobs' 'briefcase' 'My Jobs' request %}
+            {% nav_link 'dashboard:job_create' 'plus-circle' 'Post a Job' request %}
+            {% nav_link 'dashboard:company_edit' 'building-2' 'Company Profile' request %}
+            <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase">Account</p>
+            {% nav_link 'dashboard:billing' 'credit-card' 'Billing' request %}
+            {% nav_link 'payments:pricing' 'gem' 'Plans' request %}
+
+        {% elif user.role == 'recruiter' %}
+            <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase">Recruiting</p>
+            {% nav_link 'dashboard:recruiter' 'users' 'Pipeline' request %}
+            {% nav_link 'jobs:list' 'search' 'Browse Jobs' request %}
+
+        {% endif %}
+
+        {% if user.is_admin_side %}
+            <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase">Administration</p>
+            {% nav_link 'dashboard:admin' 'gauge' 'Admin Panel' request %}
+            {% nav_link 'dashboard:admin_users' 'users' 'Users' request %}
+            {% nav_link 'dashboard:admin_jobs' 'briefcase' 'Jobs' request %}
+            <a href="/admin/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700"><i data-lucide="shield" class="w-5 h-5"></i> Django Admin</a>
+        {% endif %}
+
+        <p class="px-3 pt-4 pb-1 text-xs font-semibold text-slate-400 uppercase">Settings</p>
+        {% nav_link 'accounts:settings' 'settings' 'Settings' request %}
+        {% nav_link 'notifications:list' 'bell' 'Notifications' request %}
+        <a href="{% url 'accounts:logout' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-danger hover:bg-red-50 dark:hover:bg-red-900/20"><i data-lucide="log-out" class="w-5 h-5"></i> Sign out</a>
+    </nav>
+</aside>
+<div x-show="sidebar" @click="sidebar = false" x-cloak class="fixed inset-0 z-30 bg-black/40 lg:hidden"></div>

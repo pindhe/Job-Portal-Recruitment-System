@@ -1,0 +1,85 @@
+{% extends "dashboard/base.html" %}
+{% load humanize %}
+{% block page_title %}Admin Panel{% endblock %}
+
+{% block dashboard %}
+<div class="mb-6"><h2 class="text-2xl font-extrabold">Platform Analytics</h2><p class="text-slate-500">Real-time overview of the entire platform.</p></div>
+
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    {% include "dashboard/_stat_card.html" with icon="users" value=users_count label="Total Users" color="bg-primary/10 text-primary" %}
+    {% include "dashboard/_stat_card.html" with icon="building-2" value=companies_count label="Companies" color="bg-secondary/10 text-secondary" %}
+    {% include "dashboard/_stat_card.html" with icon="briefcase" value=jobs_count label="Jobs" color="bg-amber-100 text-amber-600" %}
+    {% include "dashboard/_stat_card.html" with icon="send" value=applications_count label="Applications" color="bg-emerald-100 text-emerald-600" %}
+</div>
+
+<div class="grid lg:grid-cols-3 gap-6 mb-6">
+    <div class="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
+        <h3 class="font-bold mb-4">Growth (last 6 months)</h3>
+        <canvas id="growth" height="100"></canvas>
+    </div>
+    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
+        <h3 class="font-bold mb-4">Users by Role</h3>
+        <canvas id="roles" height="160"></canvas>
+    </div>
+</div>
+
+<div class="grid lg:grid-cols-3 gap-6 mb-6">
+    <div class="rounded-2xl p-6 gradient-primary text-white">
+        <i data-lucide="dollar-sign" class="w-8 h-8 mb-2 opacity-80"></i>
+        <p class="text-3xl font-extrabold">${{ revenue|floatformat:0|intcomma }}</p>
+        <p class="text-white/80 text-sm">Total Revenue</p>
+    </div>
+    {% include "dashboard/_stat_card.html" with icon="gem" value=subscriptions_count label="Active Subscriptions" color="bg-primary/10 text-primary" %}
+    {% include "dashboard/_stat_card.html" with icon="user-check" value=candidates_count label="Candidates" color="bg-secondary/10 text-secondary" %}
+</div>
+
+<div class="grid lg:grid-cols-2 gap-6">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
+        <div class="flex items-center justify-between mb-4"><h3 class="font-bold">Pending Job Approvals</h3></div>
+        <div class="space-y-3">
+            {% for job in pending_jobs %}
+            <div class="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                <div><p class="text-sm font-medium">{{ job.title }}</p><p class="text-xs text-slate-500">{{ job.company.name }}</p></div>
+                <a href="{% url 'dashboard:admin_job_approve' job.pk %}" class="text-xs px-3 py-1.5 rounded-lg gradient-primary text-white font-semibold">Approve</a>
+            </div>
+            {% empty %}<p class="text-slate-500 text-sm text-center py-6">No pending approvals 🎉</p>{% endfor %}
+        </div>
+    </div>
+    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
+        <div class="flex items-center justify-between mb-4"><h3 class="font-bold">New Users</h3><a href="{% url 'dashboard:admin_users' %}" class="text-sm text-primary hover:underline">All users</a></div>
+        <div class="space-y-3">
+            {% for u in recent_users %}
+            <div class="flex items-center gap-3">
+                <span class="w-9 h-9 rounded-full gradient-primary text-white text-xs flex items-center justify-center font-semibold">{{ u.initials }}</span>
+                <div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">{{ u.full_name }}</p><p class="text-xs text-slate-500">{{ u.email }}</p></div>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 capitalize">{{ u.get_role_display }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ monthly_users|json_script:"mu" }}
+{{ monthly_jobs|json_script:"mj" }}
+{{ role_breakdown|json_script:"rb" }}
+<script>
+    const mu = JSON.parse(document.getElementById('mu').textContent);
+    const mj = JSON.parse(document.getElementById('mj').textContent);
+    const rb = JSON.parse(document.getElementById('rb').textContent);
+    new Chart(document.getElementById('growth'), {
+        type: 'line',
+        data: { labels: mu.labels, datasets: [
+            { label: 'Users', data: mu.values, borderColor: '{{ THEME.primary }}', backgroundColor: 'rgba(15,76,129,.1)', fill: true, tension: .4 },
+            { label: 'Jobs', data: mj.values, borderColor: '{{ THEME.secondary }}', backgroundColor: 'rgba(20,184,166,.1)', fill: true, tension: .4 }
+        ]},
+        options: { plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true } } }
+    });
+    new Chart(document.getElementById('roles'), {
+        type: 'doughnut',
+        data: { labels: rb.map(r=>r.role), datasets: [{ data: rb.map(r=>r.n), backgroundColor: ['{{ THEME.primary }}','{{ THEME.secondary }}','{{ THEME.accent }}','{{ THEME.success }}','{{ THEME.danger }}','#94a3b8','#a78bfa','#f472b6'] }] },
+        options: { plugins: { legend: { position: 'bottom' } } }
+    });
+</script>
+{% endblock %}

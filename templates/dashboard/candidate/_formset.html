@@ -1,0 +1,22 @@
+<section class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700"
+         x-data="{ count: {{ formset.total_form_count }} }">
+    <h3 class="font-bold mb-4 flex items-center gap-2"><i data-lucide="{{ icon }}" class="w-5 h-5 text-primary"></i> {{ title }}</h3>
+    {{ formset.management_form }}
+    <div class="space-y-4" id="forms-{{ formset.prefix }}">
+        {% for f in formset %}
+        <div class="rounded-xl border border-slate-200 dark:border-slate-700 p-4 grid sm:grid-cols-2 gap-3">
+            {{ f.id }}
+            {% for field in f.visible_fields %}
+                {% if field.name != 'DELETE' %}
+                <div class="{% if field.field.widget.input_type == 'textarea' %}sm:col-span-2{% endif %}">
+                    <label class="text-xs font-medium text-slate-500">{{ field.label }}</label>
+                    {{ field }}
+                </div>
+                {% endif %}
+            {% endfor %}
+            {% if formset.can_delete %}<label class="flex items-center gap-2 text-xs text-danger sm:col-span-2">{{ f.DELETE }} Remove</label>{% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    <p class="text-xs text-slate-400 mt-3">Tip: fill blank rows to add new entries, tick "Remove" to delete.</p>
+</section>

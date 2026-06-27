@@ -1,0 +1,56 @@
+{% extends "dashboard/base.html" %}
+{% block page_title %}Resume Builder{% endblock %}
+
+{% block head %}
+<style>
+    form input:not([type=checkbox]):not([type=radio]), form select, form textarea {
+        width: 100%; border-radius: .75rem; border: 1px solid #cbd5e1;
+        background: #fff; padding: .6rem .9rem; outline: none; color: #1e293b;
+    }
+    .dark form input:not([type=checkbox]):not([type=radio]), .dark form select, .dark form textarea {
+        background: #1e293b; border-color: #475569; color: #f1f5f9;
+    }
+    form input:focus, form select:focus, form textarea:focus { border-color: {{ THEME.primary }}; box-shadow: 0 0 0 3px rgba(15,76,129,.15); }
+</style>
+{% endblock %}
+
+{% block dashboard %}
+<form method="post" enctype="multipart/form-data" class="max-w-4xl space-y-6">
+    {% csrf_token %}
+    <div class="flex items-center justify-between">
+        <div><h2 class="text-2xl font-extrabold">Resume Builder</h2><p class="text-slate-500">Build a profile recruiters love.</p></div>
+        <div class="flex gap-2">
+            <a href="{% url 'dashboard:resume_preview' %}" class="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 font-semibold text-sm">Preview</a>
+            <button class="gradient-primary text-white font-semibold px-5 py-2.5 rounded-xl text-sm">Save Resume</button>
+        </div>
+    </div>
+
+    <section class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
+        <h3 class="font-bold mb-4 flex items-center gap-2"><i data-lucide="user" class="w-5 h-5 text-primary"></i> Basic Information</h3>
+        <div class="grid sm:grid-cols-2 gap-4">
+            <div class="sm:col-span-2"><label class="text-sm font-medium">Headline</label>{{ form.headline }}</div>
+            <div class="sm:col-span-2"><label class="text-sm font-medium">Summary</label>{{ form.summary }}</div>
+            <div><label class="text-sm font-medium">Current Title</label>{{ form.current_title }}</div>
+            <div><label class="text-sm font-medium">Location</label>{{ form.location }}</div>
+            <div><label class="text-sm font-medium">Experience (years)</label>{{ form.experience_years }}</div>
+            <div><label class="text-sm font-medium">Expected Salary</label>{{ form.expected_salary }}</div>
+            <div><label class="text-sm font-medium">Availability</label>{{ form.availability }}</div>
+            <div><label class="text-sm font-medium">Date of Birth</label>{{ form.date_of_birth }}</div>
+            <div><label class="text-sm font-medium">LinkedIn</label>{{ form.linkedin }}</div>
+            <div><label class="text-sm font-medium">GitHub</label>{{ form.github }}</div>
+            <div class="sm:col-span-2"><label class="text-sm font-medium">Resume File (PDF)</label>{{ form.resume_file }}</div>
+            <label class="flex items-center gap-2 text-sm">{{ form.open_to_remote }} Open to remote work</label>
+            <label class="flex items-center gap-2 text-sm">{{ form.is_public }} Public profile</label>
+        </div>
+    </section>
+
+    {% include "dashboard/candidate/_formset.html" with formset=skills title="Skills" icon="award" %}
+    {% include "dashboard/candidate/_formset.html" with formset=experience title="Experience" icon="briefcase" %}
+    {% include "dashboard/candidate/_formset.html" with formset=education title="Education" icon="graduation-cap" %}
+    {% include "dashboard/candidate/_formset.html" with formset=certs title="Certificates" icon="medal" %}
+    {% include "dashboard/candidate/_formset.html" with formset=langs title="Languages" icon="languages" %}
+    {% include "dashboard/candidate/_formset.html" with formset=projects title="Projects" icon="folder-git-2" %}
+
+    <div class="flex justify-end"><button class="gradient-primary text-white font-semibold px-8 py-3 rounded-xl">Save Resume</button></div>
+</form>
+{% endblock %}
