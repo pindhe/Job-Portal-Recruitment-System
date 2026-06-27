@@ -6,18 +6,24 @@ register = template.Library()
 
 
 @register.simple_tag
-def manage_menu():
-    """Return content-management menu items grouped for the sidebar."""
+def manage_menu(active_key=None):
+    """Return content-management menu items grouped for the sidebar.
+
+    Marks the active item and auto-opens the group that contains it.
+    """
     from apps.dashboard.manage import manage_menu_items
 
     items = manage_menu_items()
     groups = []
     for item in items:
+        item = {**item, "active": item["key"] == active_key}
         group = next((g for g in groups if g["name"] == item["group"]), None)
         if group is None:
-            group = {"name": item["group"], "items": []}
+            group = {"name": item["group"], "items": [], "open": False}
             groups.append(group)
         group["items"].append(item)
+        if item["active"]:
+            group["open"] = True
     return groups
 
 

@@ -26,6 +26,17 @@
                 {{ field }}
                 <span class="text-sm font-semibold">{{ field.label }}</span>
             </label>
+            {% elif field.field.widget.input_type == 'file' %}
+            <label class="block text-sm font-semibold mb-1.5">{{ field.label }}{% if field.field.required %} <span class="text-danger">*</span>{% endif %}</label>
+            <div x-data="{ preview: '{% if field.value %}{{ field.value.url }}{% endif %}' }"
+                 @change="if ($event.target.files && $event.target.files[0]) preview = URL.createObjectURL($event.target.files[0])"
+                 class="flex items-center gap-4">
+                <div class="w-16 h-16 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/40 flex items-center justify-center overflow-hidden shrink-0">
+                    <img x-show="preview" :src="preview" class="w-full h-full object-cover" alt="preview">
+                    <i x-show="!preview" data-lucide="image" class="w-6 h-6 text-slate-400"></i>
+                </div>
+                <div class="flex-1 min-w-0 text-sm">{{ field }}</div>
+            </div>
             {% else %}
             <label class="block text-sm font-semibold mb-1.5">{{ field.label }}{% if field.field.required %} <span class="text-danger">*</span>{% endif %}</label>
             {{ field }}
