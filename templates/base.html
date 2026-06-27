@@ -36,6 +36,12 @@
         .glass{backdrop-filter:blur(12px);background:rgba(255,255,255,.7)}
         .dark .glass{background:rgba(15,23,42,.7)}
         .gradient-primary{background:linear-gradient(135deg,{{ THEME.primary }} 0%,{{ THEME.secondary }} 100%)}
+        /* i18n language switch animation */
+        [data-i18n],[data-i18n-placeholder]{transition:opacity .15s ease}
+        .lang-switching [data-i18n]{opacity:.25}
+        .lang-toggle{display:inline-flex;align-items:center;background:rgba(148,163,184,.18);border-radius:9999px;padding:2px}
+        .lang-toggle button{font-size:.72rem;font-weight:700;padding:.2rem .6rem;border-radius:9999px;color:#64748b;transition:all .25s ease}
+        .lang-toggle button.lang-active{background:linear-gradient(135deg,{{ THEME.primary }} 0%,{{ THEME.secondary }} 100%);color:#fff;box-shadow:0 1px 4px rgba(15,76,129,.35)}
     </style>
     {% block head %}{% endblock %}
 </head>
@@ -49,6 +55,7 @@
     {% include "partials/footer.html" %}
 {% endblock %}
 
+<script src="{% static 'js/i18n.js' %}"></script>
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
