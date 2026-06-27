@@ -6,10 +6,10 @@
 <div class="relative text-white py-12 bg-cover bg-center overflow-hidden" style="background-image:url('{% static 'images/cta-bg.png' %}')">
     <div class="absolute inset-0 gradient-primary opacity-80 mix-blend-multiply"></div>
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 class="text-3xl font-extrabold">Explore Companies</h1>
+        <h1 class="text-3xl font-extrabold" data-i18n="comp.explore">Explore Companies</h1>
         <form method="get" class="mt-4 max-w-md flex gap-2">
-            <input name="q" value="{{ request.GET.q }}" placeholder="Search companies" class="flex-1 rounded-xl px-4 py-3 text-slate-800 outline-none">
-            <button class="bg-white text-primary font-semibold px-6 rounded-xl">Search</button>
+            <input name="q" value="{{ request.GET.q }}" placeholder="Search companies" data-i18n-placeholder="comp.search_ph" class="flex-1 rounded-xl px-4 py-3 text-slate-800 outline-none">
+            <button class="bg-white text-primary font-semibold px-6 rounded-xl" data-i18n="common.search">Search</button>
         </form>
     </div>
 </div>
@@ -25,16 +25,16 @@
             <p class="text-sm text-slate-500 mt-3 line-clamp-2">{{ company.tagline }}</p>
             <div class="mt-4 flex items-center justify-between text-sm">
                 <span class="text-slate-500"><i data-lucide="map-pin" class="w-4 h-4 inline"></i> {{ company.location|default:"—" }}</span>
-                <span class="text-primary font-semibold">{{ company.open_jobs_count }} jobs</span>
+                <span class="text-primary font-semibold">{{ company.open_jobs_count }} <span data-i18n="comp.jobs">jobs</span></span>
             </div>
         </a>
-        {% empty %}<p class="text-slate-500 col-span-3 text-center py-12">No companies yet.</p>{% endfor %}
+        {% empty %}<p class="text-slate-500 col-span-3 text-center py-12" data-i18n="comp.no_positions">No companies yet.</p>{% endfor %}
     </div>
     {% if is_paginated %}
     <div class="flex justify-center gap-1 mt-8">
-        {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}" class="px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Prev</a>{% endif %}
+        {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}" class="px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700" data-i18n="common.prev">Prev</a>{% endif %}
         <span class="px-4 py-2 rounded-lg gradient-primary text-white">{{ page_obj.number }}</span>
-        {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}" class="px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Next</a>{% endif %}
+        {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}" class="px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700" data-i18n="common.next">Next</a>{% endif %}
     </div>
     {% endif %}
 </div>

@@ -2,8 +2,8 @@
 {% block title %}Create account — {{ SITE_NAME }}{% endblock %}
 
 {% block auth_content %}
-<h1 class="text-3xl font-extrabold">Create your account</h1>
-<p class="text-slate-500 mt-1">Join thousands building their future.</p>
+<h1 class="text-3xl font-extrabold" data-i18n="auth.create_account">Create your account</h1>
+<p class="text-slate-500 mt-1" data-i18n="auth.create_sub">Join thousands building their future.</p>
 
 <form method="post" class="mt-6 space-y-4">
     {% csrf_token %}
@@ -26,7 +26,7 @@
     <div>{{ form.phone }}</div>
     <div>{{ form.password1 }}{{ form.password1.errors }}</div>
     <div>{{ form.password2 }}{{ form.password2.errors }}</div>
-    <button class="w-full gradient-primary text-white font-semibold py-3 rounded-xl hover:opacity-90">Create Account</button>
+    <button class="w-full gradient-primary text-white font-semibold py-3 rounded-xl hover:opacity-90" data-i18n="auth.create_btn">Create Account</button>
 </form>
-<p class="text-center text-sm text-slate-500 mt-6">Already have an account? <a href="{% url 'accounts:login' %}" class="text-primary font-semibold hover:underline">Sign in</a></p>
+<p class="text-center text-sm text-slate-500 mt-6"><span data-i18n="auth.have_account">Already have an account?</span> <a href="{% url 'accounts:login' %}" class="text-primary font-semibold hover:underline" data-i18n="auth.signin_link">Sign in</a></p>
 {% endblock %}

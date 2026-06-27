@@ -4,14 +4,14 @@
     <div class="border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col lg:flex-row items-center justify-between gap-6">
             <div>
-                <h3 class="text-2xl font-extrabold text-white">Get the latest jobs in your inbox</h3>
-                <p class="text-slate-400 text-sm mt-1">Join our newsletter — no spam, unsubscribe anytime.</p>
+                <h3 class="text-2xl font-extrabold text-white" data-i18n="footer.newsletter_title">Get the latest jobs in your inbox</h3>
+                <p class="text-slate-400 text-sm mt-1" data-i18n="footer.newsletter_sub">Join our newsletter — no spam, unsubscribe anytime.</p>
             </div>
             <form method="post" action="{% url 'public:newsletter' %}" class="flex gap-2 w-full max-w-md">
                 {% csrf_token %}
-                <input type="email" name="email" required placeholder="Enter your email"
+                <input type="email" name="email" required placeholder="Enter your email" data-i18n-placeholder="footer.email_placeholder"
                        class="flex-1 rounded-xl bg-slate-800 border border-slate-700 px-4 py-3 text-sm text-white outline-none focus:border-secondary">
-                <button class="px-5 py-3 rounded-xl gradient-primary text-white text-sm font-semibold whitespace-nowrap">Subscribe</button>
+                <button class="px-5 py-3 rounded-xl gradient-primary text-white text-sm font-semibold whitespace-nowrap" data-i18n="footer.subscribe">Subscribe</button>
             </form>
         </div>
     </div>
@@ -23,7 +23,7 @@
                 <span class="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center text-white font-bold">T</span>
                 <span class="text-xl font-extrabold text-white">{{ SITE_NAME }}</span>
             </a>
-            <p class="text-sm text-slate-400 max-w-xs">The AI-powered recruitment platform connecting world-class talent with companies, recruiters, universities, NGOs and governments.</p>
+            <p class="text-sm text-slate-400 max-w-xs" data-i18n="footer.desc">The AI-powered recruitment platform connecting world-class talent with companies, recruiters, universities, NGOs and governments.</p>
             <div class="mt-5 space-y-2 text-sm text-slate-400">
                 <p class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-secondary"></i> support@{{ SITE_NAME|lower }}.com</p>
                 <p class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4 text-secondary"></i> +252 61 000 0000</p>
@@ -41,39 +41,39 @@
         </div>
 
         <div>
-            <h4 class="text-white font-semibold mb-3 text-sm">For Candidates</h4>
+            <h4 class="text-white font-semibold mb-3 text-sm" data-i18n="footer.for_candidates">For Candidates</h4>
             <ul class="space-y-2 text-sm">
-                <li><a href="{% url 'jobs:list' %}" class="hover:text-white">Browse Jobs</a></li>
-                <li><a href="{% url 'jobs:list' %}?work_mode=remote" class="hover:text-white">Remote Jobs</a></li>
-                <li><a href="{% url 'ai:resume_checker' %}" class="hover:text-white">Resume Checker</a></li>
-                <li><a href="{% url 'ai:career_advisor' %}" class="hover:text-white">Career Advisor</a></li>
-                <li><a href="{% url 'accounts:register' %}" class="hover:text-white">Create Profile</a></li>
+                <li><a href="{% url 'jobs:list' %}" class="hover:text-white" data-i18n="footer.browse_jobs">Browse Jobs</a></li>
+                <li><a href="{% url 'jobs:list' %}?work_mode=remote" class="hover:text-white" data-i18n="footer.remote_jobs">Remote Jobs</a></li>
+                <li><a href="{% url 'ai:resume_checker' %}" class="hover:text-white" data-i18n="footer.resume_checker">Resume Checker</a></li>
+                <li><a href="{% url 'ai:career_advisor' %}" class="hover:text-white" data-i18n="footer.career_advisor">Career Advisor</a></li>
+                <li><a href="{% url 'accounts:register' %}" class="hover:text-white" data-i18n="footer.create_profile">Create Profile</a></li>
             </ul>
         </div>
         <div>
-            <h4 class="text-white font-semibold mb-3 text-sm">For Employers</h4>
+            <h4 class="text-white font-semibold mb-3 text-sm" data-i18n="footer.for_employers">For Employers</h4>
             <ul class="space-y-2 text-sm">
-                <li><a href="{% url 'accounts:register' %}" class="hover:text-white">Post a Job</a></li>
-                <li><a href="{% url 'companies:list' %}" class="hover:text-white">Companies</a></li>
-                <li><a href="{% url 'payments:pricing' %}" class="hover:text-white">Pricing</a></li>
-                <li><a href="{% url 'api:docs' %}" class="hover:text-white">API Docs</a></li>
+                <li><a href="{% url 'accounts:register' %}" class="hover:text-white" data-i18n="footer.post_job">Post a Job</a></li>
+                <li><a href="{% url 'companies:list' %}" class="hover:text-white" data-i18n="nav.companies">Companies</a></li>
+                <li><a href="{% url 'payments:pricing' %}" class="hover:text-white" data-i18n="footer.pricing">Pricing</a></li>
+                <li><a href="{% url 'api:docs' %}" class="hover:text-white" data-i18n="footer.api_docs">API Docs</a></li>
             </ul>
         </div>
         <div>
-            <h4 class="text-white font-semibold mb-3 text-sm">Company</h4>
+            <h4 class="text-white font-semibold mb-3 text-sm" data-i18n="footer.company">Company</h4>
             <ul class="space-y-2 text-sm">
-                <li><a href="{% url 'public:about' %}" class="hover:text-white">About Us</a></li>
-                <li><a href="{% url 'public:blog_list' %}" class="hover:text-white">Blog</a></li>
-                <li><a href="{% url 'public:faqs' %}" class="hover:text-white">FAQs</a></li>
-                <li><a href="{% url 'public:contact' %}" class="hover:text-white">Contact</a></li>
+                <li><a href="{% url 'public:about' %}" class="hover:text-white" data-i18n="footer.about">About Us</a></li>
+                <li><a href="{% url 'public:blog_list' %}" class="hover:text-white" data-i18n="footer.blog">Blog</a></li>
+                <li><a href="{% url 'public:faqs' %}" class="hover:text-white" data-i18n="footer.faqs">FAQs</a></li>
+                <li><a href="{% url 'public:contact' %}" class="hover:text-white" data-i18n="footer.contact">Contact</a></li>
             </ul>
         </div>
         <div>
-            <h4 class="text-white font-semibold mb-3 text-sm">Categories</h4>
+            <h4 class="text-white font-semibold mb-3 text-sm" data-i18n="footer.categories">Categories</h4>
             <ul class="space-y-2 text-sm">
                 {% for cat in nav_categories|slice:":5" %}
                 <li><a href="{% url 'jobs:list' %}?category={{ cat.slug }}" class="hover:text-white">{{ cat.name }}</a></li>
-                {% empty %}<li><a href="{% url 'jobs:list' %}" class="hover:text-white">All Jobs</a></li>{% endfor %}
+                {% empty %}<li><a href="{% url 'jobs:list' %}" class="hover:text-white" data-i18n="footer.all_jobs">All Jobs</a></li>{% endfor %}
             </ul>
         </div>
     </div>
@@ -83,8 +83,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-400">
             <p>&copy; {% now "Y" %} {{ SITE_NAME }}. All rights reserved.</p>
             <div class="flex items-center gap-4">
-                <a href="#" class="hover:text-white">Privacy</a>
-                <a href="#" class="hover:text-white">Terms</a>
+                <a href="#" class="hover:text-white" data-i18n="footer.privacy">Privacy</a>
+                <a href="#" class="hover:text-white" data-i18n="footer.terms">Terms</a>
                 <span class="text-slate-600">|</span>
                 <a href="#" class="hover:text-white transition" aria-label="Twitter"><i data-lucide="twitter" class="w-5 h-5"></i></a>
                 <a href="#" class="hover:text-white transition" aria-label="LinkedIn"><i data-lucide="linkedin" class="w-5 h-5"></i></a>

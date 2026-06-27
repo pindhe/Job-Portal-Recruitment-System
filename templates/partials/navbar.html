@@ -151,16 +151,23 @@
         <div x-show="open" x-transition x-cloak class="lg:hidden pb-4 space-y-1 text-sm font-medium border-t border-slate-200 dark:border-slate-800 pt-3">
             <form action="{% url 'jobs:list' %}" method="get" class="flex items-center bg-slate-100 dark:bg-slate-800 rounded-xl px-3 mb-2">
                 <i data-lucide="search" class="w-4 h-4 text-slate-400"></i>
-                <input name="q" placeholder="Search jobs..." class="w-full bg-transparent px-2 py-2.5 text-sm outline-none">
+                <input name="q" placeholder="Search jobs..." data-i18n-placeholder="nav.search_placeholder" class="w-full bg-transparent px-2 py-2.5 text-sm outline-none">
             </form>
-            <a href="{% url 'jobs:list' %}" class="block px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Find Jobs</a>
-            <a href="{% url 'companies:list' %}" class="block px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Companies</a>
-            <a href="{% url 'public:blog_list' %}" class="block px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Career Advice</a>
-            <a href="{% url 'payments:pricing' %}" class="block px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Pricing</a>
+            <a href="{% url 'jobs:list' %}" class="block px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav.find_jobs">Find Jobs</a>
+            <a href="{% url 'companies:list' %}" class="block px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav.companies">Companies</a>
+            <a href="{% url 'public:blog_list' %}" class="block px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav.career">Career Advice</a>
+            <a href="{% url 'payments:pricing' %}" class="block px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav.pricing">Pricing</a>
+            <div class="flex items-center justify-between px-3 pt-2">
+                <span class="text-xs text-slate-400 uppercase tracking-wider" data-i18n="nav.language">Language</span>
+                <div class="lang-toggle">
+                    <button type="button" data-lang-btn="en" onclick="setLanguage('en')">EN</button>
+                    <button type="button" data-lang-btn="so" onclick="setLanguage('so')">SO</button>
+                </div>
+            </div>
             {% if not user.is_authenticated %}
             <div class="flex gap-2 pt-2">
-                <a href="{% url 'accounts:login' %}" class="flex-1 text-center px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-600">Sign in</a>
-                <a href="{% url 'accounts:register' %}" class="flex-1 text-center px-4 py-2.5 rounded-lg gradient-primary text-white font-semibold">Get Started</a>
+                <a href="{% url 'accounts:login' %}" class="flex-1 text-center px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-600" data-i18n="nav.signin">Sign in</a>
+                <a href="{% url 'accounts:register' %}" class="flex-1 text-center px-4 py-2.5 rounded-lg gradient-primary text-white font-semibold" data-i18n="nav.get_started">Get Started</a>
             </div>
             {% endif %}
         </div>

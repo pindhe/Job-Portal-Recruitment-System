@@ -16,7 +16,7 @@
                         <span class="inline-flex items-center gap-1"><i data-lucide="map-pin" class="w-4 h-4"></i>{{ job.location|default:"Remote" }}</span>
                         <span class="inline-flex items-center gap-1"><i data-lucide="briefcase" class="w-4 h-4"></i>{{ job.get_job_type_display }}</span>
                         <span class="inline-flex items-center gap-1"><i data-lucide="clock" class="w-4 h-4"></i>{% if job.published_at %}{{ job.published_at|naturaltime }}{% endif %}</span>
-                        <span class="inline-flex items-center gap-1"><i data-lucide="eye" class="w-4 h-4"></i>{{ job.views_count }} views</span>
+                        <span class="inline-flex items-center gap-1"><i data-lucide="eye" class="w-4 h-4"></i>{{ job.views_count }} <span data-i18n="blog.views">views</span></span>
                     </div>
                 </div>
             </div>
@@ -26,19 +26,19 @@
                     <svg class="w-14 h-14 -rotate-90"><circle cx="28" cy="28" r="24" stroke="#e2e8f0" stroke-width="6" fill="none"/><circle cx="28" cy="28" r="24" stroke="{{ THEME.secondary }}" stroke-width="6" fill="none" stroke-dasharray="151" stroke-dashoffset="{{ my_match_score|add:'-100'|stringformat:'d' }}" style="stroke-dashoffset: calc(151 - (151 * {{ my_match_score }} / 100))"/></svg>
                     <span class="absolute inset-0 flex items-center justify-center text-sm font-bold">{{ my_match_score }}%</span>
                 </div>
-                <div><p class="font-semibold text-sm">Your AI Match Score</p><p class="text-xs text-slate-500">Based on your profile & skills</p></div>
+                <div><p class="font-semibold text-sm" data-i18n="jobs.your_match">Your AI Match Score</p><p class="text-xs text-slate-500" data-i18n="jobs.match_based">Based on your profile & skills</p></div>
             </div>
             {% endif %}
         </div>
 
         <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 prose dark:prose-invert max-w-none">
-            <h2 class="text-lg font-bold">Job Description</h2>
+            <h2 class="text-lg font-bold" data-i18n="jobs.description">Job Description</h2>
             <p class="whitespace-pre-line text-slate-600 dark:text-slate-300">{{ job.description }}</p>
-            {% if job.responsibilities %}<h2 class="text-lg font-bold mt-6">Responsibilities</h2><p class="whitespace-pre-line text-slate-600 dark:text-slate-300">{{ job.responsibilities }}</p>{% endif %}
-            {% if job.requirements %}<h2 class="text-lg font-bold mt-6">Requirements</h2><p class="whitespace-pre-line text-slate-600 dark:text-slate-300">{{ job.requirements }}</p>{% endif %}
-            {% if job.qualifications %}<h2 class="text-lg font-bold mt-6">Qualifications</h2><p class="whitespace-pre-line text-slate-600 dark:text-slate-300">{{ job.qualifications }}</p>{% endif %}
-            {% if job.benefits %}<h2 class="text-lg font-bold mt-6">Benefits</h2><p class="whitespace-pre-line text-slate-600 dark:text-slate-300">{{ job.benefits }}</p>{% endif %}
-            {% if job.skill_list %}<h2 class="text-lg font-bold mt-6">Skills</h2>
+            {% if job.responsibilities %}<h2 class="text-lg font-bold mt-6" data-i18n="jobs.responsibilities">Responsibilities</h2><p class="whitespace-pre-line text-slate-600 dark:text-slate-300">{{ job.responsibilities }}</p>{% endif %}
+            {% if job.requirements %}<h2 class="text-lg font-bold mt-6" data-i18n="jobs.requirements">Requirements</h2><p class="whitespace-pre-line text-slate-600 dark:text-slate-300">{{ job.requirements }}</p>{% endif %}
+            {% if job.qualifications %}<h2 class="text-lg font-bold mt-6" data-i18n="jobs.qualifications">Qualifications</h2><p class="whitespace-pre-line text-slate-600 dark:text-slate-300">{{ job.qualifications }}</p>{% endif %}
+            {% if job.benefits %}<h2 class="text-lg font-bold mt-6" data-i18n="jobs.benefits">Benefits</h2><p class="whitespace-pre-line text-slate-600 dark:text-slate-300">{{ job.benefits }}</p>{% endif %}
+            {% if job.skill_list %}<h2 class="text-lg font-bold mt-6" data-i18n="jobs.skills">Skills</h2>
             <div class="flex flex-wrap gap-2 not-prose">{% for s in job.skill_list %}<span class="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm">{{ s }}</span>{% endfor %}</div>{% endif %}
         </div>
     </div>
@@ -48,21 +48,21 @@
         <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 sticky top-20">
             <p class="text-2xl font-extrabold text-primary">{{ job.salary_display }}</p>
             <dl class="mt-4 space-y-3 text-sm">
-                <div class="flex justify-between"><dt class="text-slate-500">Experience</dt><dd class="font-medium">{{ job.get_experience_level_display }}</dd></div>
-                <div class="flex justify-between"><dt class="text-slate-500">Work Mode</dt><dd class="font-medium">{{ job.get_work_mode_display }}</dd></div>
-                <div class="flex justify-between"><dt class="text-slate-500">Vacancies</dt><dd class="font-medium">{{ job.vacancies }}</dd></div>
-                {% if job.deadline %}<div class="flex justify-between"><dt class="text-slate-500">Deadline</dt><dd class="font-medium">{{ job.deadline }}</dd></div>{% endif %}
-                {% if job.education_required %}<div class="flex justify-between"><dt class="text-slate-500">Education</dt><dd class="font-medium">{{ job.education_required }}</dd></div>{% endif %}
+                <div class="flex justify-between"><dt class="text-slate-500" data-i18n="jobs.experience">Experience</dt><dd class="font-medium">{{ job.get_experience_level_display }}</dd></div>
+                <div class="flex justify-between"><dt class="text-slate-500" data-i18n="jobs.work_mode">Work Mode</dt><dd class="font-medium">{{ job.get_work_mode_display }}</dd></div>
+                <div class="flex justify-between"><dt class="text-slate-500" data-i18n="jobs.vacancies">Vacancies</dt><dd class="font-medium">{{ job.vacancies }}</dd></div>
+                {% if job.deadline %}<div class="flex justify-between"><dt class="text-slate-500" data-i18n="jobs.deadline">Deadline</dt><dd class="font-medium">{{ job.deadline }}</dd></div>{% endif %}
+                {% if job.education_required %}<div class="flex justify-between"><dt class="text-slate-500" data-i18n="jobs.education">Education</dt><dd class="font-medium">{{ job.education_required }}</dd></div>{% endif %}
             </dl>
             <div class="mt-6 space-y-2">
                 {% if already_applied %}
-                    <span class="block text-center w-full py-3 rounded-xl bg-emerald-100 text-emerald-700 font-semibold">✓ Applied</span>
+                    <span class="block text-center w-full py-3 rounded-xl bg-emerald-100 text-emerald-700 font-semibold">✓ <span data-i18n="jobs.applied">Applied</span></span>
                 {% else %}
-                    <a href="{% url 'jobs:apply' job.slug %}" class="block text-center w-full py-3 rounded-xl gradient-primary text-white font-semibold hover:opacity-90">Apply Now</a>
+                    <a href="{% url 'jobs:apply' job.slug %}" class="block text-center w-full py-3 rounded-xl gradient-primary text-white font-semibold hover:opacity-90" data-i18n="jobs.apply_now">Apply Now</a>
                 {% endif %}
                 {% if user.is_authenticated %}
                 <a href="{% url 'jobs:toggle_save' job.slug %}" class="block text-center w-full py-3 rounded-xl border border-slate-300 dark:border-slate-600 font-semibold hover:border-primary">
-                    {% if is_saved %}Saved ✓{% else %}Save Job{% endif %}
+                    {% if is_saved %}<span data-i18n="jobs.saved">Saved</span> ✓{% else %}<span data-i18n="jobs.save_job">Save Job</span>{% endif %}
                 </a>
                 {% endif %}
             </div>
@@ -72,7 +72,7 @@
 
 {% if related_jobs %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-    <h2 class="text-2xl font-extrabold mb-6">Similar Jobs</h2>
+    <h2 class="text-2xl font-extrabold mb-6" data-i18n="jobs.similar">Similar Jobs</h2>
     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
         {% for job in related_jobs %}{% include "jobs/_job_card.html" with job=job %}{% endfor %}
     </div>
