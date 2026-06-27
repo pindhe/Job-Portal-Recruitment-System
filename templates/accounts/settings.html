@@ -1,0 +1,32 @@
+{% extends "dashboard/base.html" %}
+{% load humanize %}
+{% block page_title %}Settings{% endblock %}
+
+{% block dashboard %}
+<div class="max-w-3xl space-y-6">
+    <h2 class="text-2xl font-extrabold">Account Settings</h2>
+
+    <form method="post" enctype="multipart/form-data" class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 grid sm:grid-cols-2 gap-4">
+        {% csrf_token %}
+        <h3 class="font-bold sm:col-span-2">Profile</h3>
+        <div><label class="text-sm font-medium">First name</label>{{ form.first_name }}</div>
+        <div><label class="text-sm font-medium">Last name</label>{{ form.last_name }}</div>
+        <div><label class="text-sm font-medium">Phone</label>{{ form.phone }}</div>
+        <div><label class="text-sm font-medium">Language</label>{{ form.locale }}</div>
+        <div class="sm:col-span-2"><label class="text-sm font-medium">Avatar</label>{{ form.avatar }}</div>
+        <div class="sm:col-span-2"><button class="gradient-primary text-white font-semibold px-6 py-2.5 rounded-xl">Save changes</button></div>
+    </form>
+
+    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
+        <h3 class="font-bold mb-4">Login History</h3>
+        <div class="space-y-2">
+            {% for h in history %}
+            <div class="flex items-center justify-between text-sm py-2 border-b border-slate-50 dark:border-slate-700/50">
+                <span class="flex items-center gap-2"><i data-lucide="{% if h.successful %}check-circle{% else %}alert-circle{% endif %}" class="w-4 h-4 {% if h.successful %}text-emerald-500{% else %}text-red-400{% endif %}"></i>{{ h.ip_address|default:"Unknown IP" }}</span>
+                <span class="text-slate-400">{{ h.created_at|naturaltime }}</span>
+            </div>
+            {% empty %}<p class="text-slate-500 text-sm">No login history.</p>{% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

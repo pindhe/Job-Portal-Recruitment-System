@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}About — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <h1 class="text-4xl font-extrabold">About {{ SITE_NAME }}</h1>
+    <p class="mt-4 text-lg text-slate-600 dark:text-slate-300">{{ SITE_NAME }} is a world-class AI-powered recruitment platform built to connect candidates with companies, recruiters, universities, NGOs and government organizations across the globe.</p>
+    <div class="grid sm:grid-cols-3 gap-6 mt-10">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700"><i data-lucide="target" class="w-8 h-8 text-primary"></i><h3 class="font-bold mt-3">Our Mission</h3><p class="text-sm text-slate-500 mt-1">Make hiring fair, fast and intelligent for everyone.</p></div>
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700"><i data-lucide="sparkles" class="w-8 h-8 text-secondary"></i><h3 class="font-bold mt-3">AI First</h3><p class="text-sm text-slate-500 mt-1">Smart matching, resume tools and analytics built in.</p></div>
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700"><i data-lucide="shield-check" class="w-8 h-8 text-accent"></i><h3 class="font-bold mt-3">Enterprise Grade</h3><p class="text-sm text-slate-500 mt-1">Secure, scalable and compliant by design.</p></div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Companies — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<div class="gradient-primary text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-3xl font-extrabold">Explore Companies</h1>
+        <form method="get" class="mt-4 max-w-md flex gap-2">
+            <input name="q" value="{{ request.GET.q }}" placeholder="Search companies" class="flex-1 rounded-xl px-4 py-3 text-slate-800 outline-none">
+            <button class="bg-white text-primary font-semibold px-6 rounded-xl">Search</button>
+        </form>
+    </div>
+</div>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {% for company in companies %}
+        <a href="{{ company.get_absolute_url }}" class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 hover:shadow-lg hover:border-primary/40 transition">
+            <div class="flex items-center gap-3">
+                {% if company.logo %}<img src="{{ company.logo.url }}" class="w-14 h-14 rounded-xl object-cover">
+                {% else %}<span class="w-14 h-14 rounded-xl gradient-primary text-white flex items-center justify-center font-bold text-xl">{{ company.name|first }}</span>{% endif %}
+                <div><p class="font-bold">{{ company.name }}</p><p class="text-sm text-slate-500">{{ company.industry|default:company.get_org_type_display }}</p></div>
+            </div>
+            <p class="text-sm text-slate-500 mt-3 line-clamp-2">{{ company.tagline }}</p>
+            <div class="mt-4 flex items-center justify-between text-sm">
+                <span class="text-slate-500"><i data-lucide="map-pin" class="w-4 h-4 inline"></i> {{ company.location|default:"—" }}</span>
+                <span class="text-primary font-semibold">{{ company.open_jobs_count }} jobs</span>
+            </div>
+        </a>
+        {% empty %}<p class="text-slate-500 col-span-3 text-center py-12">No companies yet.</p>{% endfor %}
+    </div>
+    {% if is_paginated %}
+    <div class="flex justify-center gap-1 mt-8">
+        {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}" class="px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Prev</a>{% endif %}
+        <span class="px-4 py-2 rounded-lg gradient-primary text-white">{{ page_obj.number }}</span>
+        {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}" class="px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">Next</a>{% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

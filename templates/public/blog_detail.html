@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }} — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    {% if post.category %}<span class="text-sm font-semibold text-secondary">{{ post.category.name }}</span>{% endif %}
+    <h1 class="text-4xl font-extrabold mt-2">{{ post.title }}</h1>
+    <p class="text-slate-500 mt-2">{% if post.author %}By {{ post.author.full_name }} · {% endif %}{{ post.created_at|date:"M d, Y" }} · {{ post.views_count }} views</p>
+    {% if post.cover %}<img src="{{ post.cover.url }}" class="w-full rounded-2xl mt-6">{% endif %}
+    <div class="prose dark:prose-invert max-w-none mt-6 text-slate-700 dark:text-slate-300 whitespace-pre-line">{{ post.content }}</div>
+</article>
+{% if related %}
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+    <h2 class="text-xl font-extrabold mb-4">Related Posts</h2>
+    <div class="grid sm:grid-cols-3 gap-4">
+        {% for p in related %}<a href="{{ p.get_absolute_url }}" class="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-100 dark:border-slate-700 hover:shadow"><p class="font-semibold text-sm">{{ p.title }}</p></a>{% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

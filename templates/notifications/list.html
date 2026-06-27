@@ -1,0 +1,25 @@
+{% extends "dashboard/base.html" %}
+{% load humanize %}
+{% block page_title %}Notifications{% endblock %}
+
+{% block dashboard %}
+<div class="max-w-2xl">
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-extrabold">Notifications</h2>
+        <form method="post" action="{% url 'notifications:mark_all_read' %}">{% csrf_token %}<button class="text-sm text-primary hover:underline">Mark all read</button></form>
+    </div>
+    <div class="space-y-2">
+        {% for n in notifications %}
+        <a href="{% url 'notifications:mark_read' n.pk %}" class="flex items-start gap-3 p-4 rounded-2xl border {% if n.is_read %}bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700{% else %}bg-primary/5 border-primary/20{% endif %}">
+            <span class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0"><i data-lucide="{{ n.icon }}" class="w-5 h-5"></i></span>
+            <div class="flex-1 min-w-0"><p class="font-semibold text-sm">{{ n.title }}</p><p class="text-sm text-slate-500">{{ n.body }}</p><p class="text-xs text-slate-400 mt-1">{{ n.created_at|naturaltime }}</p></div>
+            {% if not n.is_read %}<span class="w-2.5 h-2.5 rounded-full bg-primary mt-1"></span>{% endif %}
+        </a>
+        {% empty %}
+        <div class="text-center py-16 bg-white dark:bg-slate-800 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700">
+            <i data-lucide="bell-off" class="w-12 h-12 mx-auto text-slate-300"></i><p class="mt-3 font-semibold">No notifications</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

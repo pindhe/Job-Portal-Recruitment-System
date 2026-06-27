@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Checkout — {{ plan.name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-lg mx-auto px-4 py-12">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-slate-100 dark:border-slate-700">
+        <h1 class="text-2xl font-extrabold">Checkout</h1>
+        <div class="flex items-center justify-between mt-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-700/50">
+            <div><p class="font-semibold">{{ plan.name }}</p><p class="text-sm text-slate-500">{{ plan.get_billing_cycle_display }}</p></div>
+            <p class="text-2xl font-extrabold">{{ plan.currency }}{{ plan.price|floatformat:0 }}</p>
+        </div>
+        <form method="post" class="mt-6 space-y-4">
+            {% csrf_token %}
+            <label class="text-sm font-medium">Payment method</label>
+            <select name="gateway" class="w-full rounded-xl border border-slate-300 dark:border-slate-600 dark:bg-slate-800 px-4 py-3">
+                <option value="stripe">Stripe (Card)</option>
+                <option value="paypal">PayPal</option>
+                <option value="zaad">Zaad</option>
+                <option value="evc">EVC Plus</option>
+                <option value="sahal">Sahal</option>
+                <option value="premier">Premier Wallet</option>
+            </select>
+            <p class="text-xs text-slate-400">This is a demo checkout — no real charge is made.</p>
+            <button class="w-full gradient-primary text-white font-semibold py-3 rounded-xl">Pay {{ plan.currency }}{{ plan.price|floatformat:0 }}</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

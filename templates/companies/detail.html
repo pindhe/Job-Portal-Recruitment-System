@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}{{ company.name }} — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<div class="h-48 gradient-primary relative">
+    {% if company.cover %}<img src="{{ company.cover.url }}" class="w-full h-full object-cover">{% endif %}
+</div>
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 shadow-lg">
+        <div class="flex items-start gap-4">
+            {% if company.logo %}<img src="{{ company.logo.url }}" class="w-20 h-20 rounded-2xl object-cover border-4 border-white dark:border-slate-800">
+            {% else %}<span class="w-20 h-20 rounded-2xl gradient-primary text-white flex items-center justify-center font-bold text-3xl">{{ company.name|first }}</span>{% endif %}
+            <div class="flex-1">
+                <div class="flex items-center gap-2"><h1 class="text-2xl font-extrabold">{{ company.name }}</h1>{% if company.is_verified %}<i data-lucide="badge-check" class="w-5 h-5 text-primary"></i>{% endif %}</div>
+                <p class="text-slate-500">{{ company.tagline }}</p>
+                <div class="flex flex-wrap gap-3 mt-2 text-sm text-slate-500">
+                    <span><i data-lucide="briefcase" class="w-4 h-4 inline"></i> {{ company.get_org_type_display }}</span>
+                    {% if company.industry %}<span><i data-lucide="layers" class="w-4 h-4 inline"></i> {{ company.industry }}</span>{% endif %}
+                    {% if company.location %}<span><i data-lucide="map-pin" class="w-4 h-4 inline"></i> {{ company.location }}</span>{% endif %}
+                    {% if company.website %}<a href="{{ company.website }}" class="text-primary hover:underline"><i data-lucide="globe" class="w-4 h-4 inline"></i> Website</a>{% endif %}
+                </div>
+            </div>
+        </div>
+        {% if company.about %}<p class="mt-5 text-slate-600 dark:text-slate-300 whitespace-pre-line">{{ company.about }}</p>{% endif %}
+    </div>
+
+    <h2 class="text-xl font-extrabold mt-8 mb-4">Open Positions ({{ jobs|length }})</h2>
+    <div class="grid sm:grid-cols-2 gap-5 pb-12">
+        {% for job in jobs %}{% include "jobs/_job_card.html" with job=job %}{% empty %}<p class="text-slate-500">No open positions right now.</p>{% endfor %}
+    </div>
+</div>
+{% endblock %}
