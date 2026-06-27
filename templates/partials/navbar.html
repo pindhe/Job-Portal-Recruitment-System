@@ -64,18 +64,6 @@
 
             <!-- Right cluster -->
             <div class="flex items-center gap-1.5">
-                <!-- EN / SO language toggle (instant, no reload) -->
-                <div class="lang-toggle" role="group" aria-label="Language switch">
-                    <button type="button" data-lang-btn="en" onclick="setLanguage('en')" aria-pressed="true">EN</button>
-                    <button type="button" data-lang-btn="so" onclick="setLanguage('so')" aria-pressed="false">SO</button>
-                </div>
-
-                <!-- Theme toggle -->
-                <button @click="dark = !dark" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" title="Toggle theme">
-                    <i data-lucide="moon" class="w-5 h-5" x-show="!dark"></i>
-                    <i data-lucide="sun" class="w-5 h-5" x-show="dark" x-cloak></i>
-                </button>
-
                 {% if user.is_authenticated %}
                     <!-- Post a job (employers) -->
                     {% if user.is_employer_side %}
@@ -157,13 +145,6 @@
             <a href="{% url 'companies:list' %}" class="block px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav.companies">Companies</a>
             <a href="{% url 'public:blog_list' %}" class="block px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav.career">Career Advice</a>
             <a href="{% url 'payments:pricing' %}" class="block px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav.pricing">Pricing</a>
-            <div class="flex items-center justify-between px-3 pt-2">
-                <span class="text-xs text-slate-400 uppercase tracking-wider" data-i18n="nav.language">Language</span>
-                <div class="lang-toggle">
-                    <button type="button" data-lang-btn="en" onclick="setLanguage('en')">EN</button>
-                    <button type="button" data-lang-btn="so" onclick="setLanguage('so')">SO</button>
-                </div>
-            </div>
             {% if not user.is_authenticated %}
             <div class="flex gap-2 pt-2">
                 <a href="{% url 'accounts:login' %}" class="flex-1 text-center px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-600" data-i18n="nav.signin">Sign in</a>

@@ -97,9 +97,11 @@
       "footer.faqs": "FAQs",
       "footer.contact": "Contact",
       "footer.all_jobs": "All Jobs",
-      "footer.rights": "All rights reserved.",
-      "footer.privacy": "Privacy",
-      "footer.terms": "Terms",
+          "footer.rights": "All rights reserved.",
+          "footer.privacy": "Privacy",
+          "footer.terms": "Terms",
+          "fab.dark": "Dark mode",
+          "fab.light": "Light mode",
 
       // Common
       "common.search": "Search",
@@ -562,6 +564,8 @@
       "footer.rights": "Dhammaan xuquuqdu way xf-an tahay.",
       "footer.privacy": "Asturnaanta",
       "footer.terms": "Shuruudaha",
+      "fab.dark": "Habka madow",
+      "fab.light": "Habka iftiinka",
 
       // Common
       "common.search": "Raadi",
@@ -964,6 +968,14 @@
       btn.classList.toggle("lang-active", active);
       btn.setAttribute("aria-pressed", active ? "true" : "false");
     });
+    // Floating language button shows the CURRENT language code.
+    document.querySelectorAll("[data-lang-current]").forEach(function (el) {
+      el.textContent = lang.toUpperCase();
+    });
+  }
+
+  function toggleLanguage() {
+    setLanguage(getLanguage() === "en" ? "so" : "en");
   }
 
   function setLanguage(lang) {
@@ -984,6 +996,7 @@
 
   // Public API
   window.setLanguage = setLanguage;
+  window.toggleLanguage = toggleLanguage;
   window.getLanguage = getLanguage;
   window.t = t;
 

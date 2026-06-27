@@ -2,32 +2,73 @@
 {% load humanize static %}
 {% block title %}{{ SITE_NAME }} — AI-Powered Recruitment & Job Portal{% endblock %}
 
+{% block head %}
+<style>
+    /* ===== Hero animations & 3D ===== */
+    @keyframes heroRise { 0% { opacity:0; transform: translateY(40px); } 100% { opacity:1; transform: translateY(0); } }
+    @keyframes heroFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-16px); } }
+    @keyframes heroOrb { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(40px,-30px) scale(1.15); } 66% { transform: translate(-30px,25px) scale(.9); } }
+    @keyframes heroShimmer { to { background-position: 200% center; } }
+    @keyframes heroGlow { 0%,100% { text-shadow: 0 0 24px rgba(245,158,11,.35); } 50% { text-shadow: 0 0 40px rgba(245,158,11,.65); } }
+
+    .hero-rise { opacity:0; animation: heroRise .9s cubic-bezier(.22,1,.36,1) forwards; }
+    .hero-rise.d1 { animation-delay:.15s; } .hero-rise.d2 { animation-delay:.3s; }
+    .hero-rise.d3 { animation-delay:.45s; } .hero-rise.d4 { animation-delay:.6s; }
+
+    .hero-stage { perspective: 1200px; }
+    .hero-3d { transform-style: preserve-3d; transition: transform .25s ease-out; will-change: transform; }
+    .hero-layer-back { transform: translateZ(-40px); }
+    .hero-layer-mid  { transform: translateZ(30px); }
+    .hero-layer-front{ transform: translateZ(70px); }
+
+    .hero-accent {
+        background: linear-gradient(90deg,#fbbf24,#f59e0b,#fff,#f59e0b,#fbbf24);
+        background-size: 200% auto;
+        -webkit-background-clip: text; background-clip: text;
+        -webkit-text-fill-color: transparent; color: transparent;
+        animation: heroShimmer 4s linear infinite, heroGlow 3s ease-in-out infinite;
+    }
+    .hero-orb { position:absolute; border-radius:9999px; filter: blur(60px); opacity:.5; pointer-events:none; }
+    .hero-search { transition: transform .3s ease, box-shadow .3s ease; }
+    .hero-search:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 30px 60px -15px rgba(0,0,0,.45); }
+</style>
+{% endblock %}
+
 {% block content %}
 <!-- Hero -->
-<section class="relative overflow-hidden"
-         x-data="{ active: 0, slides: 3 }"
-         x-init="setInterval(() => active = (active + 1) % slides, 5000)">
+<section class="relative overflow-hidden hero-stage"
+         x-data="{ active: 0, slides: 3, rx: 0, ry: 0 }"
+         x-init="setInterval(() => active = (active + 1) % slides, 5000)"
+         @mousemove="ry = ((($event.clientX / window.innerWidth) - .5) * 12); rx = ((($event.clientY / window.innerHeight) - .5) * -12)"
+         @mouseleave="rx = 0; ry = 0">
     <!-- Rotating background slides: 1 -> 2 -> 3 -> back to 1 -->
     {% for img in "123" %}
-    <div class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
+    <div class="absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-in-out"
          style="background-image:url('{% static 'images/hero-bg' %}{{ img }}.png')"
-         x-show="active === {{ forloop.counter0 }}" x-transition.opacity.duration.1000ms></div>
+         :class="active === {{ forloop.counter0 }} ? 'opacity-100 scale-105' : 'opacity-0 scale-100'"></div>
     {% endfor %}
     <div class="absolute inset-0 gradient-primary opacity-80 mix-blend-multiply"></div>
-    <div class="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/40 to-transparent"></div>
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 text-white">
-        <div class="max-w-3xl" data-aos="fade-up">
-            <span class="inline-flex items-center gap-2 bg-white/15 px-4 py-1.5 rounded-full text-sm font-medium mb-6">
-                <i data-lucide="sparkles" class="w-4 h-4"></i> <span data-i18n="hero.badge">AI-powered matching & resume tools</span>
+    <div class="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-900/45 to-slate-900/80"></div>
+
+    <!-- Floating decorative orbs -->
+    <div class="hero-orb w-72 h-72 bg-accent/60 -top-10 -left-10" style="animation: heroOrb 14s ease-in-out infinite;"></div>
+    <div class="hero-orb w-80 h-80 bg-secondary/60 bottom-0 right-0" style="animation: heroOrb 18s ease-in-out infinite reverse;"></div>
+    <div class="hero-orb w-56 h-56 bg-primary/50 top-1/3 right-1/4" style="animation: heroOrb 22s ease-in-out infinite;"></div>
+
+    <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32 text-white text-center">
+        <div class="hero-3d" :style="`transform: rotateX(${rx}deg) rotateY(${ry}deg)`">
+            <span class="hero-rise hero-layer-mid inline-flex items-center gap-2 bg-white/15 backdrop-blur px-4 py-1.5 rounded-full text-sm font-medium mb-6 border border-white/20">
+                <i data-lucide="sparkles" class="w-4 h-4 text-accent"></i> <span data-i18n="hero.badge">AI-powered matching & resume tools</span>
             </span>
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
-                <span data-i18n="hero.title_1">Find your</span> <span class="text-accent" data-i18n="hero.title_dream">dream job</span> <span data-i18n="hero.title_2">or your next</span> <span class="text-accent" data-i18n="hero.title_hire">great hire</span>
+            <h1 class="hero-rise d1 hero-layer-front text-4xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight" style="text-shadow:0 12px 40px rgba(0,0,0,.45)">
+                <span data-i18n="hero.title_1">Find your</span> <span class="hero-accent" data-i18n="hero.title_dream">dream job</span><br class="hidden sm:block">
+                <span data-i18n="hero.title_2">or your next</span> <span class="hero-accent" data-i18n="hero.title_hire">great hire</span>
             </h1>
-            <p class="mt-6 text-lg text-white/90 max-w-2xl" data-i18n="hero.subtitle">
+            <p class="hero-rise d2 hero-layer-mid mt-6 text-lg sm:text-xl text-white/90 max-w-2xl mx-auto" data-i18n="hero.subtitle">
                 The enterprise recruitment platform for companies, recruiters, universities, NGOs and governments — powered by intelligent candidate matching.
             </p>
 
-            <form action="{% url 'jobs:list' %}" method="get" class="mt-8 bg-white rounded-2xl p-2 flex flex-col sm:flex-row gap-2 shadow-2xl">
+            <form action="{% url 'jobs:list' %}" method="get" class="hero-rise d3 hero-layer-front hero-search mt-10 bg-white rounded-2xl p-2 flex flex-col sm:flex-row gap-2 shadow-2xl max-w-3xl mx-auto text-left">
                 <div class="flex items-center flex-1 px-3">
                     <i data-lucide="search" class="w-5 h-5 text-slate-400"></i>
                     <input name="q" placeholder="Job title, keyword or company" data-i18n-placeholder="hero.job_placeholder" class="w-full px-3 py-3 text-slate-800 outline-none">
@@ -36,9 +77,10 @@
                     <i data-lucide="map-pin" class="w-5 h-5 text-slate-400"></i>
                     <input name="location" placeholder="Location" data-i18n-placeholder="hero.location_placeholder" class="w-full px-3 py-3 text-slate-800 outline-none">
                 </div>
-                <button class="gradient-primary text-white font-semibold px-8 py-3 rounded-xl hover:opacity-90" data-i18n="hero.search_jobs">Search Jobs</button>
+                <button class="gradient-primary text-white font-semibold px-8 py-3 rounded-xl hover:opacity-90 transition" data-i18n="hero.search_jobs">Search Jobs</button>
             </form>
-            <div class="mt-6 flex flex-wrap gap-4 text-sm text-white/80">
+
+            <div class="hero-rise d4 mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-white/80">
                 <span data-i18n="hero.popular">Popular:</span>
                 <a href="{% url 'jobs:list' %}?q=developer" class="hover:text-white underline" data-i18n="hero.developer">Developer</a>
                 <a href="{% url 'jobs:list' %}?q=designer" class="hover:text-white underline" data-i18n="hero.designer">Designer</a>
@@ -46,8 +88,9 @@
                 <a href="{% url 'jobs:list' %}?job_type=internship" class="hover:text-white underline" data-i18n="nav.internships">Internships</a>
             </div>
         </div>
+
         <!-- Slide indicators -->
-        <div class="flex gap-2 mt-10">
+        <div class="flex justify-center gap-2 mt-12">
             {% for img in "123" %}
             <button type="button" @click="active = {{ forloop.counter0 }}"
                     class="h-1.5 rounded-full transition-all duration-300"

@@ -45,6 +45,17 @@
         .lang-toggle{display:inline-flex;align-items:center;background:rgba(148,163,184,.18);border-radius:9999px;padding:2px}
         .lang-toggle button{font-size:.72rem;font-weight:700;padding:.2rem .6rem;border-radius:9999px;color:#64748b;transition:all .25s ease}
         .lang-toggle button.lang-active{background:linear-gradient(135deg,{{ THEME.primary }} 0%,{{ THEME.secondary }} 100%);color:#fff;box-shadow:0 1px 4px rgba(15,76,129,.35)}
+        /* Floating action buttons (theme + language) */
+        .fab-btn{position:relative;width:3rem;height:3rem;border-radius:9999px;display:flex;align-items:center;justify-content:center;
+            box-shadow:0 8px 24px rgba(15,23,42,.18);transition:transform .2s ease,box-shadow .2s ease}
+        .fab-btn:hover{transform:scale(1.1);box-shadow:0 12px 30px rgba(15,23,42,.28)}
+        .fab-btn:active{transform:scale(.95)}
+        .fab-tip{position:absolute;right:calc(100% + .65rem);top:50%;transform:translateY(-50%);
+            background:#0f172a;color:#fff;font-size:.72rem;font-weight:600;white-space:nowrap;
+            padding:.3rem .6rem;border-radius:.5rem;opacity:0;pointer-events:none;transition:opacity .2s ease}
+        .fab-btn:hover .fab-tip{opacity:1}
+        .fab-tip::after{content:"";position:absolute;left:100%;top:50%;transform:translateY(-50%);
+            border:5px solid transparent;border-left-color:#0f172a}
     </style>
     {% block head %}{% endblock %}
 </head>
@@ -57,6 +68,29 @@
     </main>
     {% include "partials/footer.html" %}
 {% endblock %}
+
+<!-- Floating controls: dark mode + language (instant, no reload) -->
+<div class="fixed right-4 sm:right-5 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3">
+    <!-- Dark / light mode -->
+    <button @click="dark = !dark" type="button"
+            class="fab-btn group bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200"
+            aria-label="Toggle dark mode">
+        <i data-lucide="moon" class="w-5 h-5" x-show="!dark"></i>
+        <i data-lucide="sun" class="w-5 h-5 text-amber-400" x-show="dark" x-cloak></i>
+        <span class="fab-tip">
+            <span x-show="!dark" data-i18n="fab.dark">Dark mode</span><span x-show="dark" x-cloak data-i18n="fab.light">Light mode</span>
+        </span>
+    </button>
+
+    <!-- EN / SO language switch -->
+    <button onclick="toggleLanguage()" type="button"
+            class="fab-btn group gradient-primary text-white"
+            aria-label="Switch language">
+        <i data-lucide="languages" class="w-5 h-5"></i>
+        <span data-lang-current class="absolute -bottom-1 -right-1 px-1.5 py-[1px] rounded-full bg-white text-primary text-[10px] font-extrabold border border-primary shadow">EN</span>
+        <span class="fab-tip" data-i18n="nav.language">Language</span>
+    </button>
+</div>
 
 <script src="{% static 'js/i18n.js' %}"></script>
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>

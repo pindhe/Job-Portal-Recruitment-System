@@ -13,9 +13,6 @@
                     <h1 class="text-lg font-bold">{% block page_title %}Dashboard{% endblock %}</h1>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button @click="dark = !dark" class="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800">
-                        <i data-lucide="moon" class="w-5 h-5" x-show="!dark"></i><i data-lucide="sun" class="w-5 h-5" x-show="dark" x-cloak></i>
-                    </button>
                     <a href="{% url 'notifications:list' %}" class="relative p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800">
                         <i data-lucide="bell" class="w-5 h-5"></i>
                         {% if unread_count %}<span class="absolute top-1 right-1 bg-danger text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">{{ unread_count }}</span>{% endif %}
