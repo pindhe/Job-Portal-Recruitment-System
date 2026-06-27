@@ -1,5 +1,5 @@
 {% load static %}
-<header x-data="{ open: false, mega: false, scrolled: false }"
+<header x-data="{ open: false, mega: false, career: false, careerM: false, scrolled: false }"
         @scroll.window="scrolled = window.scrollY > 8"
         class="sticky top-0 z-40 glass border-b transition-shadow"
         :class="scrolled ? 'border-slate-200 dark:border-slate-800 shadow-sm' : 'border-transparent'">
@@ -51,7 +51,38 @@
                         </div>
                     </div>
                     <a href="{% url 'companies:list' %}" class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav.companies">Companies</a>
-                    <a href="{% url 'public:blog_list' %}" class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav.career">Career Advice</a>
+
+                    <!-- Career Advice dropdown -->
+                    <div @mouseenter="career = true" @mouseleave="career = false" class="relative">
+                        <a href="{% url 'public:blog_list' %}" class="flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+                            <span data-i18n="nav.career">Career Advice</span> <i data-lucide="chevron-down" class="w-4 h-4 transition" :class="career && 'rotate-180'"></i>
+                        </a>
+                        <div x-show="career" x-transition x-cloak
+                             class="absolute left-0 mt-1 w-64 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 p-2">
+                            <a href="{% url 'public:cv_guide' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700">
+                                <span class="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0"><i data-lucide="file-text" class="w-4 h-4"></i></span>
+                                <span><span class="block font-medium" data-i18n="nav.cv_tips">CV & Resume Tips</span><span class="block text-xs text-slate-400" data-i18n="nav.cv_tips_sub">Write a winning resume</span></span>
+                            </a>
+                            <a href="{% url 'public:interview_guide' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700">
+                                <span class="w-8 h-8 rounded-lg bg-secondary/10 text-secondary flex items-center justify-center shrink-0"><i data-lucide="messages-square" class="w-4 h-4"></i></span>
+                                <span><span class="block font-medium" data-i18n="nav.interview_tips">Interview Tips</span><span class="block text-xs text-slate-400" data-i18n="nav.interview_tips_sub">Ace your interview</span></span>
+                            </a>
+                            <div class="my-1 border-t border-slate-100 dark:border-slate-700"></div>
+                            <a href="{% url 'public:faqs' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700">
+                                <span class="w-8 h-8 rounded-lg bg-accent/10 text-accent flex items-center justify-center shrink-0"><i data-lucide="help-circle" class="w-4 h-4"></i></span>
+                                <span class="font-medium" data-i18n="nav.faqs">FAQ</span>
+                            </a>
+                            <a href="{% url 'public:about' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700">
+                                <span class="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0"><i data-lucide="info" class="w-4 h-4"></i></span>
+                                <span class="font-medium" data-i18n="nav.about">About</span>
+                            </a>
+                            <a href="{% url 'public:contact' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700">
+                                <span class="w-8 h-8 rounded-lg bg-secondary/10 text-secondary flex items-center justify-center shrink-0"><i data-lucide="mail" class="w-4 h-4"></i></span>
+                                <span class="font-medium" data-i18n="nav.contact">Contact</span>
+                            </a>
+                        </div>
+                    </div>
+
                     <a href="{% url 'payments:pricing' %}" class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav.pricing">Pricing</a>
                 </div>
             </div>
@@ -143,7 +174,19 @@
             </form>
             <a href="{% url 'jobs:list' %}" class="block px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav.find_jobs">Find Jobs</a>
             <a href="{% url 'companies:list' %}" class="block px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav.companies">Companies</a>
-            <a href="{% url 'public:blog_list' %}" class="block px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav.career">Career Advice</a>
+
+            <!-- Career Advice (mobile) -->
+            <button @click="careerM = !careerM" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+                <span data-i18n="nav.career">Career Advice</span> <i data-lucide="chevron-down" class="w-4 h-4 transition" :class="careerM && 'rotate-180'"></i>
+            </button>
+            <div x-show="careerM" x-transition x-cloak class="pl-3 space-y-1 border-l border-slate-200 dark:border-slate-700 ml-3">
+                <a href="{% url 'public:cv_guide' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"><i data-lucide="file-text" class="w-4 h-4 text-primary"></i> <span data-i18n="nav.cv_tips">CV & Resume Tips</span></a>
+                <a href="{% url 'public:interview_guide' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"><i data-lucide="messages-square" class="w-4 h-4 text-secondary"></i> <span data-i18n="nav.interview_tips">Interview Tips</span></a>
+                <a href="{% url 'public:faqs' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"><i data-lucide="help-circle" class="w-4 h-4 text-accent"></i> <span data-i18n="nav.faqs">FAQ</span></a>
+                <a href="{% url 'public:about' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"><i data-lucide="info" class="w-4 h-4 text-primary"></i> <span data-i18n="nav.about">About</span></a>
+                <a href="{% url 'public:contact' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"><i data-lucide="mail" class="w-4 h-4 text-secondary"></i> <span data-i18n="nav.contact">Contact</span></a>
+            </div>
+
             <a href="{% url 'payments:pricing' %}" class="block px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav.pricing">Pricing</a>
             {% if not user.is_authenticated %}
             <div class="flex gap-2 pt-2">

@@ -161,6 +161,11 @@
       "auth.save_changes": "Save changes",
       "auth.login_history": "Login History",
       "auth.no_history": "No login history.",
+      "auth.feature_match": "Smart AI candidate–job matching",
+      "auth.feature_ats": "Instant resume & ATS scoring",
+      "auth.feature_secure": "Enterprise-grade security",
+      "auth.back_home": "Back to home",
+      "auth.secure_note": "Your information is encrypted and secure.",
 
       // Jobs
       "jobs.find_title": "Find Your Next Role",
@@ -625,6 +630,11 @@
       "auth.save_changes": "Kaydi isbeddelka",
       "auth.login_history": "Taariikhda Soo Galitaanka",
       "auth.no_history": "Taariikh soo galitaan ma jirto.",
+      "auth.feature_match": "Is-barbardhig caqli leh oo AI ah",
+      "auth.feature_ats": "Qiimayn CV & ATS degdeg ah",
+      "auth.feature_secure": "Amniga heer shirkadeed",
+      "auth.back_home": "Ku noqo bogga hore",
+      "auth.secure_note": "Macluumaadkaagu waa la sireeyay oo waa ammaan.",
 
       // Jobs
       "jobs.find_title": "Hel Doorkaaga Xiga",

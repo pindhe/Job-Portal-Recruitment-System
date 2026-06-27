@@ -55,6 +55,14 @@ def faqs(request):
     return render(request, "public/faqs.html", {"faqs": FAQ.objects.filter(is_active=True)})
 
 
+def cv_guide(request):
+    return render(request, "public/cv_guide.html")
+
+
+def interview_guide(request):
+    return render(request, "public/interview_guide.html")
+
+
 def contact(request):
     if request.method == "POST":
         ContactMessage.objects.create(

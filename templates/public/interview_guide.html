@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Interview Tips — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="relative overflow-hidden gradient-primary text-white">
+    <div class="absolute -top-20 -left-20 w-72 h-72 rounded-full bg-white/10 blur-3xl"></div>
+    <div class="absolute -bottom-24 -right-16 w-80 h-80 rounded-full bg-secondary/20 blur-3xl"></div>
+    <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+        <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 text-sm font-medium backdrop-blur">
+            <i data-lucide="messages-square" class="w-4 h-4"></i> <span data-i18n="career.iv_badge">Career Advice</span>
+        </span>
+        <h1 class="mt-5 text-4xl sm:text-5xl font-extrabold tracking-tight" data-i18n="career.iv_title">Ace your next interview</h1>
+        <p class="mt-4 text-lg text-white/85 max-w-2xl mx-auto" data-i18n="career.iv_sub">Prepare with confidence using proven frameworks, common questions, and expert tips for before, during and after the interview.</p>
+        <div class="mt-8 flex flex-wrap justify-center gap-3">
+            <a href="{% url 'ai:career_advisor' %}" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white text-primary font-semibold shadow hover:opacity-90">
+                <i data-lucide="bot" class="w-4 h-4"></i> <span data-i18n="career.iv_advisor_btn">Ask the AI Career Advisor</span>
+            </a>
+            <a href="{% url 'jobs:list' %}" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/15 hover:bg-white/25 font-semibold backdrop-blur">
+                <i data-lucide="briefcase" class="w-4 h-4"></i> <span data-i18n="career.iv_jobs_btn">Browse open jobs</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <!-- Phases -->
+    <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
+            <span class="w-11 h-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center"><i data-lucide="book-open" class="w-5 h-5"></i></span>
+            <h3 class="font-bold mt-4" data-i18n="career.iv_p1_t">Before — Research</h3>
+            <p class="text-sm text-slate-500 mt-1" data-i18n="career.iv_p1_d">Study the company, role and interviewer. Prepare questions and rehearse your key stories out loud.</p>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
+            <span class="w-11 h-11 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center"><i data-lucide="mic" class="w-5 h-5"></i></span>
+            <h3 class="font-bold mt-4" data-i18n="career.iv_p2_t">During — Communicate</h3>
+            <p class="text-sm text-slate-500 mt-1" data-i18n="career.iv_p2_d">Listen carefully, stay concise, and use the STAR method to structure your answers with real examples.</p>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
+            <span class="w-11 h-11 rounded-xl bg-accent/10 text-accent flex items-center justify-center"><i data-lucide="mail-check" class="w-5 h-5"></i></span>
+            <h3 class="font-bold mt-4" data-i18n="career.iv_p3_t">After — Follow up</h3>
+            <p class="text-sm text-slate-500 mt-1" data-i18n="career.iv_p3_d">Send a short thank-you note within 24 hours, reaffirming your interest and a key strength.</p>
+        </div>
+    </div>
+
+    <!-- STAR method -->
+    <div class="mt-10 bg-white dark:bg-slate-800 rounded-2xl p-6 sm:p-8 border border-slate-100 dark:border-slate-700">
+        <h3 class="text-xl font-bold" data-i18n="career.iv_star_t">The STAR method</h3>
+        <p class="text-sm text-slate-500 mt-1" data-i18n="career.iv_star_d">A simple framework for answering behavioral questions clearly and convincingly.</p>
+        <div class="grid sm:grid-cols-4 gap-4 mt-6">
+            <div class="rounded-xl bg-slate-50 dark:bg-slate-900/40 p-4"><p class="font-bold text-primary">S</p><p class="text-sm font-semibold mt-1" data-i18n="career.iv_star_s">Situation</p><p class="text-xs text-slate-500 mt-1" data-i18n="career.iv_star_s_d">Set the context.</p></div>
+            <div class="rounded-xl bg-slate-50 dark:bg-slate-900/40 p-4"><p class="font-bold text-primary">T</p><p class="text-sm font-semibold mt-1" data-i18n="career.iv_star_t2">Task</p><p class="text-xs text-slate-500 mt-1" data-i18n="career.iv_star_t_d">Your responsibility.</p></div>
+            <div class="rounded-xl bg-slate-50 dark:bg-slate-900/40 p-4"><p class="font-bold text-primary">A</p><p class="text-sm font-semibold mt-1" data-i18n="career.iv_star_a">Action</p><p class="text-xs text-slate-500 mt-1" data-i18n="career.iv_star_a_d">What you did.</p></div>
+            <div class="rounded-xl bg-slate-50 dark:bg-slate-900/40 p-4"><p class="font-bold text-primary">R</p><p class="text-sm font-semibold mt-1" data-i18n="career.iv_star_r">Result</p><p class="text-xs text-slate-500 mt-1" data-i18n="career.iv_star_r_d">The measurable outcome.</p></div>
+        </div>
+    </div>
+
+    <!-- Common questions -->
+    <div class="mt-10" x-data="{ open: 0 }">
+        <h3 class="text-xl font-bold mb-4" data-i18n="career.iv_q_title">Common interview questions</h3>
+        <div class="space-y-3">
+            <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 overflow-hidden">
+                <button @click="open = open === 1 ? 0 : 1" class="w-full flex items-center justify-between px-5 py-4 text-left font-medium">
+                    <span data-i18n="career.iv_q1">Tell me about yourself.</span>
+                    <i data-lucide="chevron-down" class="w-4 h-4 transition" :class="open === 1 && 'rotate-180'"></i>
+                </button>
+                <div x-show="open === 1" x-transition x-cloak><p class="px-5 pb-4 text-sm text-slate-500" data-i18n="career.iv_a1">Give a 60-second pitch: present role, relevant achievements, and why this job is your next step.</p></div>
+            </div>
+            <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 overflow-hidden">
+                <button @click="open = open === 2 ? 0 : 2" class="w-full flex items-center justify-between px-5 py-4 text-left font-medium">
+                    <span data-i18n="career.iv_q2">What is your greatest weakness?</span>
+                    <i data-lucide="chevron-down" class="w-4 h-4 transition" :class="open === 2 && 'rotate-180'"></i>
+                </button>
+                <div x-show="open === 2" x-transition x-cloak><p class="px-5 pb-4 text-sm text-slate-500" data-i18n="career.iv_a2">Pick a real area you're improving, and explain the concrete steps you're taking to grow.</p></div>
+            </div>
+            <div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 overflow-hidden">
+                <button @click="open = open === 3 ? 0 : 3" class="w-full flex items-center justify-between px-5 py-4 text-left font-medium">
+                    <span data-i18n="career.iv_q3">Why do you want this job?</span>
+                    <i data-lucide="chevron-down" class="w-4 h-4 transition" :class="open === 3 && 'rotate-180'"></i>
+                </button>
+                <div x-show="open === 3" x-transition x-cloak><p class="px-5 pb-4 text-sm text-slate-500" data-i18n="career.iv_a3">Connect your skills and goals to the company's mission and the specific role's impact.</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="mt-12 rounded-3xl gradient-primary text-white p-8 sm:p-10 text-center">
+        <h3 class="text-2xl font-extrabold" data-i18n="career.iv_cta_t">Need personalized guidance?</h3>
+        <p class="mt-2 text-white/85" data-i18n="career.iv_cta_d">Our AI Career Advisor can prepare you for any role with tailored questions and feedback.</p>
+        <a href="{% url 'ai:career_advisor' %}" class="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-primary font-semibold shadow hover:opacity-90">
+            <i data-lucide="sparkles" class="w-4 h-4"></i> <span data-i18n="career.iv_cta_btn">Open AI Career Advisor</span>
+        </a>
+    </div>
+</div>
+{% endblock %}
