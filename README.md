@@ -152,3 +152,11 @@ notifications.
   API keys**. It is isolated behind a service interface so you can drop in an LLM provider.
 - Payment gateways and WhatsApp/SMS are stubbed at the integration boundary; flows and data
   models are complete and ready for real credentials.
+
+
+admin@jobportal.local
+Admin@12345
+
+Employer Employer@123
+Recruiter Recruiter@123
+Candidate Candidate@123
