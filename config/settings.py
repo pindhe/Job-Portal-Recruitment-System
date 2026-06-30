@@ -275,13 +275,14 @@ X_FRAME_OPTIONS = "SAMEORIGIN"
 # Branding / theme tokens surfaced to templates
 SITE_NAME = os.getenv("SITE_NAME", "AI Recruitment Platform")
 THEME = {
-    "primary": "#0F4C81",
-    "secondary": "#14B8A6",
-    "accent": "#F59E0B",
-    "success": "#10B981",
+    "primary": "#22C55E",
+    "secondary": "#0A0A0A",
+    "accent": "#4ADE80",
+    "success": "#16A34A",
     "danger": "#EF4444",
-    "background": "#F8FAFC",
+    "background": "#FFFFFF",
     "card": "#FFFFFF",
-    "text": "#1E293B",
-    "border": "#E2E8F0",
+    "text": "#0A0A0A",
+    "border": "#E5E7EB",
+    "primary_rgb": "34,197,94",
 }

@@ -159,7 +159,7 @@
     new Chart(document.getElementById('growth'), {
         type: 'line',
         data: { labels: mu.labels, datasets: [
-            { label: 'Users', data: mu.values, borderColor: '{{ THEME.primary }}', backgroundColor: 'rgba(15,76,129,.1)', fill: true, tension: .4 },
+            { label: 'Users', data: mu.values, borderColor: '{{ THEME.primary }}', backgroundColor: 'rgba(34,197,94,.1)', fill: true, tension: .4 },
             { label: 'Jobs', data: mj.values, borderColor: '{{ THEME.secondary }}', backgroundColor: 'rgba(20,184,166,.1)', fill: true, tension: .4 }
         ]},
         options: { plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true } } }

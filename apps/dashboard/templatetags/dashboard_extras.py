@@ -39,7 +39,7 @@ def nav_link(url_name, icon, label, request, i18n_key=""):
     if active:
         cls = f"{base} gradient-primary text-white font-semibold shadow"
     else:
-        cls = f"{base} hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300"
+        cls = f"{base} hover:bg-neutral-800 text-neutral-300 hover:text-white"
     attr = f' data-i18n="{i18n_key}"' if i18n_key else ""
     return mark_safe(
         f'<a href="{url}" class="{cls}"><i data-lucide="{icon}" class="w-5 h-5"></i> '

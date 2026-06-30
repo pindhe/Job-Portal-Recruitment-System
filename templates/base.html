@@ -39,27 +39,33 @@
         .glass{backdrop-filter:blur(12px);background:rgba(255,255,255,.7)}
         .dark .glass{background:rgba(15,23,42,.7)}
         .gradient-primary{background:linear-gradient(135deg,{{ THEME.primary }} 0%,{{ THEME.secondary }} 100%)}
+        .gradient-green{background:linear-gradient(135deg,#4ADE80 0%,{{ THEME.primary }} 50%,#15803D 100%)}
+        .brand-nav{background:{{ THEME.secondary }};color:#fff;border-color:#262626}
+        .brand-nav a,.brand-nav button{color:inherit}
+        .brand-nav .nav-muted{color:#a3a3a3}
+        .brand-nav .nav-muted:hover{color:#fff;background:rgba(255,255,255,.08)}
+        .brand-sidebar{background:{{ THEME.secondary }};color:#e5e5e5;border-color:#262626}
         /* i18n language switch animation */
         [data-i18n],[data-i18n-placeholder]{transition:opacity .15s ease}
         .lang-switching [data-i18n]{opacity:.25}
         .lang-toggle{display:inline-flex;align-items:center;background:rgba(148,163,184,.18);border-radius:9999px;padding:2px}
         .lang-toggle button{font-size:.72rem;font-weight:700;padding:.2rem .6rem;border-radius:9999px;color:#64748b;transition:all .25s ease}
-        .lang-toggle button.lang-active{background:linear-gradient(135deg,{{ THEME.primary }} 0%,{{ THEME.secondary }} 100%);color:#fff;box-shadow:0 1px 4px rgba(15,76,129,.35)}
+        .lang-toggle button.lang-active{background:linear-gradient(135deg,{{ THEME.primary }} 0%,#15803D 100%);color:#fff;box-shadow:0 1px 4px rgba({{ THEME.primary_rgb }},.35)}
         /* Floating action buttons (theme + language) */
         .fab-btn{position:relative;width:3rem;height:3rem;border-radius:9999px;display:flex;align-items:center;justify-content:center;
-            box-shadow:0 8px 24px rgba(15,23,42,.18);transition:transform .2s ease,box-shadow .2s ease}
-        .fab-btn:hover{transform:scale(1.1);box-shadow:0 12px 30px rgba(15,23,42,.28)}
+            box-shadow:0 8px 24px rgba(0,0,0,.25);transition:transform .2s ease,box-shadow .2s ease}
+        .fab-btn:hover{transform:scale(1.1);box-shadow:0 12px 30px rgba({{ THEME.primary_rgb }},.35)}
         .fab-btn:active{transform:scale(.95)}
         .fab-tip{position:absolute;right:calc(100% + .65rem);top:50%;transform:translateY(-50%);
-            background:#0f172a;color:#fff;font-size:.72rem;font-weight:600;white-space:nowrap;
+            background:{{ THEME.secondary }};color:#fff;font-size:.72rem;font-weight:600;white-space:nowrap;
             padding:.3rem .6rem;border-radius:.5rem;opacity:0;pointer-events:none;transition:opacity .2s ease}
         .fab-btn:hover .fab-tip{opacity:1}
         .fab-tip::after{content:"";position:absolute;left:100%;top:50%;transform:translateY(-50%);
-            border:5px solid transparent;border-left-color:#0f172a}
+            border:5px solid transparent;border-left-color:{{ THEME.secondary }}}
     </style>
     {% block head %}{% endblock %}
 </head>
-<body class="font-sans bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 antialiased min-h-screen flex flex-col">
+<body class="font-sans bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 antialiased min-h-screen flex flex-col">
 {% block body %}
     {% include "partials/navbar.html" %}
     <main class="flex-1">

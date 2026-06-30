@@ -6,7 +6,7 @@
          class="flex items-start gap-3 rounded-xl border p-4 shadow-lg
                 {% if message.tags == 'success' %}bg-emerald-50 border-emerald-200 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200
                 {% elif message.tags == 'error' %}bg-red-50 border-red-200 text-red-800 dark:bg-red-900/40 dark:text-red-200
-                {% else %}bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-900/40 dark:text-blue-200{% endif %}">
+                {% else %}bg-primary/10 border-primary/30 text-green-800 dark:bg-green-900/40 dark:text-green-200{% endif %}">
         <i data-lucide="{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}alert-circle{% else %}info{% endif %}" class="w-5 h-5 shrink-0 mt-0.5"></i>
         <p class="text-sm flex-1">{{ message }}</p>
         <button @click="visible = false"><i data-lucide="x" class="w-4 h-4"></i></button>

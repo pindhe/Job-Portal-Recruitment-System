@@ -1,8 +1,8 @@
 {% load static %}
 <header x-data="{ open: false, mega: false, career: false, careerM: false, scrolled: false }"
         @scroll.window="scrolled = window.scrollY > 8"
-        class="sticky top-0 z-40 glass border-b transition-shadow"
-        :class="scrolled ? 'border-slate-200 dark:border-slate-800 shadow-sm' : 'border-transparent'">
+        class="sticky top-0 z-40 brand-nav border-b transition-shadow"
+        :class="scrolled ? 'shadow-lg shadow-black/20' : ''">
     <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16 gap-4">
             <!-- Brand + primary links -->
@@ -15,7 +15,7 @@
                 <div class="hidden lg:flex items-center gap-1 text-sm font-medium">
                     <!-- Find Jobs mega menu -->
                     <div @mouseenter="mega = true" @mouseleave="mega = false" class="relative">
-                        <a href="{% url 'jobs:list' %}" class="flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+                        <a href="{% url 'jobs:list' %}" class="flex items-center gap-1 px-3 py-2 rounded-lg nav-muted">
                             <span data-i18n="nav.find_jobs">Find Jobs</span> <i data-lucide="chevron-down" class="w-4 h-4 transition" :class="mega && 'rotate-180'"></i>
                         </a>
                         <div x-show="mega" x-transition x-cloak
@@ -50,11 +50,11 @@
                             </div>
                         </div>
                     </div>
-                    <a href="{% url 'companies:list' %}" class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav.companies">Companies</a>
+                    <a href="{% url 'companies:list' %}" class="px-3 py-2 rounded-lg nav-muted" data-i18n="nav.companies">Companies</a>
 
                     <!-- Career Advice dropdown -->
                     <div @mouseenter="career = true" @mouseleave="career = false" class="relative">
-                        <a href="{% url 'public:blog_list' %}" class="flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+                        <a href="{% url 'public:blog_list' %}" class="flex items-center gap-1 px-3 py-2 rounded-lg nav-muted">
                             <span data-i18n="nav.career">Career Advice</span> <i data-lucide="chevron-down" class="w-4 h-4 transition" :class="career && 'rotate-180'"></i>
                         </a>
                         <div x-show="career" x-transition x-cloak
@@ -83,14 +83,14 @@
                         </div>
                     </div>
 
-                    <a href="{% url 'payments:pricing' %}" class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav.pricing">Pricing</a>
+                    <a href="{% url 'payments:pricing' %}" class="px-3 py-2 rounded-lg nav-muted" data-i18n="nav.pricing">Pricing</a>
                 </div>
             </div>
 
             <!-- Global search (desktop) -->
-            <form action="{% url 'jobs:list' %}" method="get" class="hidden xl:flex items-center flex-1 max-w-xs bg-slate-100 dark:bg-slate-800 rounded-xl px-3">
-                <i data-lucide="search" class="w-4 h-4 text-slate-400"></i>
-                <input name="q" placeholder="Search jobs..." data-i18n-placeholder="nav.search_placeholder" class="w-full bg-transparent px-2 py-2 text-sm outline-none">
+            <form action="{% url 'jobs:list' %}" method="get" class="hidden xl:flex items-center flex-1 max-w-xs bg-neutral-900 rounded-xl px-3 border border-neutral-800">
+                <i data-lucide="search" class="w-4 h-4 text-neutral-500"></i>
+                <input name="q" placeholder="Search jobs..." data-i18n-placeholder="nav.search_placeholder" class="w-full bg-transparent px-2 py-2 text-sm outline-none text-white placeholder:text-neutral-500">
             </form>
 
             <!-- Right cluster -->
@@ -105,7 +105,7 @@
 
                     <!-- Notifications dropdown -->
                     <div x-data="{ notif: false }" class="relative">
-                        <button @click="notif = !notif" class="relative p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+                        <button @click="notif = !notif" class="relative p-2 rounded-lg nav-muted">
                             <i data-lucide="bell" class="w-5 h-5"></i>
                             {% if unread_count %}<span class="absolute top-1 right-1 bg-danger text-white text-[10px] rounded-full min-w-4 h-4 px-1 flex items-center justify-center">{{ unread_count }}</span>{% endif %}
                         </button>
@@ -129,7 +129,7 @@
 
                     <!-- User menu -->
                     <div x-data="{ menu: false }" class="relative">
-                        <button @click="menu = !menu" class="flex items-center gap-2 p-1 pr-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800">
+                        <button @click="menu = !menu" class="flex items-center gap-2 p-1 pr-2 rounded-full nav-muted">
                             {% if user.avatar %}
                                 <img src="{{ user.avatar.url }}" class="w-8 h-8 rounded-full object-cover">
                             {% else %}
@@ -155,11 +155,11 @@
                         </div>
                     </div>
                 {% else %}
-                    <a href="{% url 'accounts:login' %}" class="hidden sm:inline-flex px-4 py-2 text-sm font-medium rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav.signin">Sign in</a>
+                    <a href="{% url 'accounts:login' %}" class="hidden sm:inline-flex px-4 py-2 text-sm font-medium rounded-lg nav-muted" data-i18n="nav.signin">Sign in</a>
                     <a href="{% url 'accounts:register' %}" class="px-4 py-2 text-sm font-semibold rounded-lg gradient-primary text-white shadow hover:opacity-90" data-i18n="nav.get_started">Get Started</a>
                 {% endif %}
 
-                <button @click="open = !open" class="lg:hidden p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+                <button @click="open = !open" class="lg:hidden p-2 rounded-lg nav-muted">
                     <i data-lucide="menu" class="w-5 h-5" x-show="!open"></i>
                     <i data-lucide="x" class="w-5 h-5" x-show="open" x-cloak></i>
                 </button>
@@ -167,27 +167,27 @@
         </div>
 
         <!-- Mobile menu -->
-        <div x-show="open" x-transition x-cloak class="lg:hidden pb-4 space-y-1 text-sm font-medium border-t border-slate-200 dark:border-slate-800 pt-3">
-            <form action="{% url 'jobs:list' %}" method="get" class="flex items-center bg-slate-100 dark:bg-slate-800 rounded-xl px-3 mb-2">
-                <i data-lucide="search" class="w-4 h-4 text-slate-400"></i>
-                <input name="q" placeholder="Search jobs..." data-i18n-placeholder="nav.search_placeholder" class="w-full bg-transparent px-2 py-2.5 text-sm outline-none">
+        <div x-show="open" x-transition x-cloak class="lg:hidden pb-4 space-y-1 text-sm font-medium border-t border-neutral-800 pt-3">
+            <form action="{% url 'jobs:list' %}" method="get" class="flex items-center bg-neutral-900 rounded-xl px-3 mb-2 border border-neutral-800">
+                <i data-lucide="search" class="w-4 h-4 text-neutral-500"></i>
+                <input name="q" placeholder="Search jobs..." data-i18n-placeholder="nav.search_placeholder" class="w-full bg-transparent px-2 py-2.5 text-sm outline-none text-white placeholder:text-neutral-500">
             </form>
-            <a href="{% url 'jobs:list' %}" class="block px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav.find_jobs">Find Jobs</a>
-            <a href="{% url 'companies:list' %}" class="block px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav.companies">Companies</a>
+            <a href="{% url 'jobs:list' %}" class="block px-3 py-2.5 rounded-lg nav-muted" data-i18n="nav.find_jobs">Find Jobs</a>
+            <a href="{% url 'companies:list' %}" class="block px-3 py-2.5 rounded-lg nav-muted" data-i18n="nav.companies">Companies</a>
 
             <!-- Career Advice (mobile) -->
-            <button @click="careerM = !careerM" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+            <button @click="careerM = !careerM" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg nav-muted">
                 <span data-i18n="nav.career">Career Advice</span> <i data-lucide="chevron-down" class="w-4 h-4 transition" :class="careerM && 'rotate-180'"></i>
             </button>
-            <div x-show="careerM" x-transition x-cloak class="pl-3 space-y-1 border-l border-slate-200 dark:border-slate-700 ml-3">
-                <a href="{% url 'public:cv_guide' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"><i data-lucide="file-text" class="w-4 h-4 text-primary"></i> <span data-i18n="nav.cv_tips">CV & Resume Tips</span></a>
-                <a href="{% url 'public:interview_guide' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"><i data-lucide="messages-square" class="w-4 h-4 text-secondary"></i> <span data-i18n="nav.interview_tips">Interview Tips</span></a>
-                <a href="{% url 'public:faqs' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"><i data-lucide="help-circle" class="w-4 h-4 text-accent"></i> <span data-i18n="nav.faqs">FAQ</span></a>
-                <a href="{% url 'public:about' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"><i data-lucide="info" class="w-4 h-4 text-primary"></i> <span data-i18n="nav.about">About</span></a>
-                <a href="{% url 'public:contact' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"><i data-lucide="mail" class="w-4 h-4 text-secondary"></i> <span data-i18n="nav.contact">Contact</span></a>
+            <div x-show="careerM" x-transition x-cloak class="pl-3 space-y-1 border-l border-neutral-700 ml-3">
+                <a href="{% url 'public:cv_guide' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg nav-muted"><i data-lucide="file-text" class="w-4 h-4 text-primary"></i> <span data-i18n="nav.cv_tips">CV & Resume Tips</span></a>
+                <a href="{% url 'public:interview_guide' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg nav-muted"><i data-lucide="messages-square" class="w-4 h-4 text-primary"></i> <span data-i18n="nav.interview_tips">Interview Tips</span></a>
+                <a href="{% url 'public:faqs' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg nav-muted"><i data-lucide="help-circle" class="w-4 h-4 text-primary"></i> <span data-i18n="nav.faqs">FAQ</span></a>
+                <a href="{% url 'public:about' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg nav-muted"><i data-lucide="info" class="w-4 h-4 text-primary"></i> <span data-i18n="nav.about">About</span></a>
+                <a href="{% url 'public:contact' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg nav-muted"><i data-lucide="mail" class="w-4 h-4 text-primary"></i> <span data-i18n="nav.contact">Contact</span></a>
             </div>
 
-            <a href="{% url 'payments:pricing' %}" class="block px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-i18n="nav.pricing">Pricing</a>
+            <a href="{% url 'payments:pricing' %}" class="block px-3 py-2.5 rounded-lg nav-muted" data-i18n="nav.pricing">Pricing</a>
             {% if not user.is_authenticated %}
             <div class="flex gap-2 pt-2">
                 <a href="{% url 'accounts:login' %}" class="flex-1 text-center px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-600" data-i18n="nav.signin">Sign in</a>
