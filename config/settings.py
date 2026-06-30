@@ -28,6 +28,7 @@ def env_list(key: str, default: str = "") -> list[str]:
 SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-dev-key-change-me")
 DEBUG = env_bool("DEBUG", True)
 ALLOWED_HOSTS = env_list("ALLOWED_HOSTS", "127.0.0.1,localhost,*") or ["*"]
+CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS", "")
 
 # ---------------------------------------------------------------------------
 # Applications
@@ -105,9 +106,19 @@ WSGI_APPLICATION = "config.wsgi.application"
 ASGI_APPLICATION = "config.asgi.application"
 
 # ---------------------------------------------------------------------------
-# Database (SQLite by default, MySQL via env)
+# Database (SQLite default, PostgreSQL via DATABASE_URL, MySQL via env)
 # ---------------------------------------------------------------------------
-if os.getenv("DB_ENGINE"):
+if os.getenv("DATABASE_URL"):
+    import dj_database_url
+
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=os.getenv("DATABASE_URL"),
+            conn_max_age=600,
+            ssl_require=not DEBUG,
+        )
+    }
+elif os.getenv("DB_ENGINE"):
     DATABASES = {
         "default": {
             "ENGINE": os.getenv("DB_ENGINE"),
